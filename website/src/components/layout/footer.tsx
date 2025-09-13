@@ -14,27 +14,11 @@ export function Footer() {
             {/* Brand Column */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 100 100"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M50 20 C30 30, 20 50, 50 80 C80 50, 70 30, 50 20 Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  <path
-                    d="M50 20 C40 35, 35 50, 50 65 C65 50, 60 35, 50 20 Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
-                <span className="font-serif text-xl font-semibold">UDAYA</span>
+                <img 
+                  src="/uploads/logo footer.png" 
+                  alt="Udaya" 
+                  className="h-16 w-auto"
+                />
               </div>
               <p className="text-sm opacity-90">{SITE_CONFIG.tagline}</p>
             </div>

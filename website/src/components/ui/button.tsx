@@ -4,16 +4,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95 relative overflow-hidden magnetic-button',
   {
     variants: {
       variant: {
         default:
-          'bg-udaya-sage text-white hover:bg-udaya-sage/90 focus-visible:ring-udaya-sage',
+          'bg-gradient-to-r from-udaya-sage to-udaya-sage/90 text-white hover:from-udaya-sage/90 hover:to-udaya-sage focus-visible:ring-udaya-sage shadow-lg hover:shadow-xl hover:scale-105 before:absolute before:inset-0 before:bg-white/20 before:opacity-0 hover:before:opacity-100 before:transition-opacity',
         secondary:
-          'bg-udaya-cream text-udaya-charcoal hover:bg-udaya-cream/80 focus-visible:ring-udaya-cream',
+          'bg-udaya-cream text-udaya-charcoal hover:bg-udaya-cream/80 focus-visible:ring-udaya-cream shadow-md hover:shadow-lg',
         outline:
-          'border border-udaya-sage bg-transparent text-udaya-sage hover:bg-udaya-sage hover:text-white focus-visible:ring-udaya-sage',
+          'border-2 border-udaya-sage bg-transparent text-udaya-sage hover:bg-udaya-sage hover:text-white focus-visible:ring-udaya-sage hover:shadow-lg hover:scale-105',
         ghost:
           'hover:bg-udaya-sage/10 text-udaya-sage focus-visible:ring-udaya-sage',
         link:

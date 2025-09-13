@@ -24,6 +24,7 @@ export const NAVIGATION_ITEMS = [
     ],
   },
   { label: 'About', href: '/about' },
+  { label: 'Blog', href: '/blog' },
   { label: 'For Clinicians', href: '/clinicians' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },

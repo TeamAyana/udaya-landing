@@ -32,17 +32,23 @@ export function MethodOverview() {
           {UDAYA_METHOD_PILLARS.map((pillar, index) => {
             const Icon = iconMap[pillar.icon as keyof typeof iconMap]
             return (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300">
+              <Card 
+                key={index} 
+                hover3d
+                className="group relative overflow-hidden border-0 shadow-lg animate-fade-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-udaya-sage/10 to-transparent rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500" />
                 <CardHeader>
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-udaya-sage/10 text-udaya-sage group-hover:bg-udaya-sage group-hover:text-white transition-all">
-                    <Icon className="h-6 w-6" />
+                  <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-udaya-sage/20 to-udaya-gold/20 text-udaya-sage group-hover:from-udaya-sage group-hover:to-udaya-sage/80 group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                    <Icon className="h-7 w-7" />
                   </div>
-                  <CardTitle className="text-udaya-sage">
+                  <CardTitle className="text-udaya-sage group-hover:text-udaya-sage/90 transition-colors">
                     {pillar.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base">
+                  <CardDescription className="text-base leading-relaxed">
                     {pillar.description}
                   </CardDescription>
                 </CardContent>
