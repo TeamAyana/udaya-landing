@@ -180,7 +180,7 @@ This project is proprietary and confidential. All rights reserved by Team Ayana.
 
 <div align="center">
   <p>Built with ❤️ by Team Ayana</p>
-  <p>
+  <p> 
     <a href="https://github.com/TeamAyana/udaya-landing">GitHub</a> •
     <a href="https://udaya.health">Website</a> •
     <a href="mailto:info@udaya.health">Contact</a>
