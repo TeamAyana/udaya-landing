@@ -49,7 +49,7 @@ const config: Config = {
         'body-sm': ['0.875rem', { lineHeight: '1.5' }],
       },
       spacing: {
-        'section': 'clamp(3rem, 10vw, 6rem)',
+        'section': 'clamp(5rem, 12vw, 8rem)',
         'container': '90rem', // 1440px
       },
       animation: {

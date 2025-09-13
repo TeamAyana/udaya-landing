@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;          /* white */
+    --background: 43 29% 93%;          /* cream */
     --foreground: 0 0% 17%;           /* charcoal */
     
     --primary: 143 16% 38%;           /* sage green */
     --primary-foreground: 0 0% 100%;  /* white */
     
-    --secondary: 43 29% 93%;          /* cream */
+    --secondary: 0 0% 100%;          /* white */
     --secondary-foreground: 0 0% 17%; /* charcoal */
     
     --accent: 38 55% 54%;             /* gold */
