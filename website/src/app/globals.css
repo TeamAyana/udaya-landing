@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;          /* white */
+    --foreground: 0 0% 17%;           /* charcoal */
+    
+    --primary: 143 16% 38%;           /* sage green */
+    --primary-foreground: 0 0% 100%;  /* white */
+    
+    --secondary: 43 29% 93%;          /* cream */
+    --secondary-foreground: 0 0% 17%; /* charcoal */
+    
+    --accent: 38 55% 54%;             /* gold */
+    --accent-foreground: 0 0% 17%;    /* charcoal */
+    
+    --muted: 43 29% 93%;              /* cream */
+    --muted-foreground: 0 0% 45%;     /* medium gray */
+    
+    --card: 0 0% 100%;                /* white */
+    --card-foreground: 0 0% 17%;      /* charcoal */
+    
+    --border: 0 0% 90%;               /* light gray */
+    --radius: 0.5rem;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgb(92 123 101 / 0.2);
+    color: rgb(92 123 101);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .section-padding {
+    @apply px-5 sm:px-8 lg:px-16 xl:px-20;
+  }
+  
+  .container-width {
+    @apply mx-auto w-full max-w-container;
+  }
+  
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+}
+
+/* Loading spinner */
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top-color: #5C7B65;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F6F2E6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5C7B65;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4A6353;
+}
+
+/* Lotus animation for logo */
+.lotus-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLotus 2s ease-out forwards;
+}
+
+@keyframes drawLotus {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Accordion animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 300ms ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 300ms ease-out;
+}
