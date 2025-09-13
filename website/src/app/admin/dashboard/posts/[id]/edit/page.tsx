@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,11 +9,14 @@ import { Save, ArrowLeft, Search } from 'lucide-react'
 import Link from 'next/link'
 import { BlogPost } from '@/types/blog'
 
-export default function EditPostPage({ params }: { params: { id: string } }) {
+type FormData = Omit<BlogPost, 'tags'> & { tags: string | string[] }
+
+export default function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<any[]>([])
-  const [formData, setFormData] = useState<BlogPost | null>(null)
+  const [formData, setFormData] = useState<FormData | null>(null)
 
   useEffect(() => {
     fetchPost()
@@ -22,7 +25,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`/api/blog/posts/${params.id}`)
+      const response = await fetch(`/api/blog/posts/${id}`)
       const data = await response.json()
       if (data.post) {
         setFormData({
@@ -74,12 +77,12 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     setLoading(true)
 
     try {
-      const response = await fetch(`/api/blog/posts/${params.id}`, {
+      const response = await fetch(`/api/blog/posts/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+          tags: typeof formData.tags === 'string' ? formData.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean) : formData.tags
         })
       })
 
