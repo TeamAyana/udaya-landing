@@ -38,18 +38,18 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 export async function getPublishedPosts(): Promise<BlogPost[]> {
   try {
     const postsCol = collection(db, POSTS_COLLECTION)
-    const snapshot = await getDocs(postsCol)
+    // Query only published posts at the database level
+    const q = query(
+      postsCol, 
+      where('status', '==', 'published'),
+      orderBy('publishedAt', 'desc')
+    )
+    const snapshot = await getDocs(q)
     
-    // Filter and sort in memory to avoid compound index requirement
-    const posts = snapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as BlogPost))
-      .filter(post => post.status === 'published')
-      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    
-    return posts
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as BlogPost))
   } catch (error) {
     console.error('Error fetching published posts:', error)
     return []
