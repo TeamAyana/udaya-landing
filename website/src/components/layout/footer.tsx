@@ -25,11 +25,10 @@ export function Footer() {
           {/* Brand Section */}
           <div className="text-center mb-12">
             <img 
-              src="/uploads/logo footer.png" 
+              src="/uploads/logo_mid.png" 
               alt="Udaya" 
-              className="h-16 w-auto mx-auto mb-3"
+              className="h-28 w-28 mx-auto rounded-lg object-contain"
             />
-            <p className="text-base font-serif opacity-90">{SITE_CONFIG.tagline}</p>
           </div>
 
           {/* Main Footer Content */}

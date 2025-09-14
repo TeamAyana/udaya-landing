@@ -14,11 +14,11 @@ const Card = React.forwardRef<
       'relative rounded-lg transition-all duration-300 ease-out',
       glass 
         ? 'bg-white/80 backdrop-blur-sm border border-white/20' 
-        : 'bg-white',
+        : 'bg-white border border-gray-200 shadow-sm',
       hover3d 
         ? 'hover:shadow-2xl hover:scale-[1.02] transform-gpu perspective-1000' 
         : 'hover:shadow-xl',
-      'before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-udaya-sage/0 before:to-udaya-gold/0 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-10',
+      'before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-udaya-sage/0 before:to-udaya-gold/0 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-10 before:pointer-events-none',
       className
     )}
     style={{

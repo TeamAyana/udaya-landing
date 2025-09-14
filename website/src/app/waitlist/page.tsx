@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Metadata } from 'next'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -32,24 +32,6 @@ const waitlistSchema = z.object({
   
   // Program Interest
   retreatInterest: z.enum(['cancer-q2-2026', 'future-programs']),
-  programDuration: z.enum(['yes-10-days', 'need-shorter', 'need-longer']),
-  extensionInterest: z.enum(['yes', 'no', 'maybe']),
-  preferredTiming: z.string(),
-  caregiverJoining: z.enum(['yes', 'no', 'maybe']),
-  accommodationPreference: z.enum(['private', 'shared', 'no-preference']),
-  
-  // Support Needs
-  travelCapability: z.enum(['independent', 'need-assistance', 'wheelchair']),
-  mobilityLevel: z.enum(['fully-mobile', 'some-limitations', 'significant-limitations']),
-  painLevel: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 10, {
-    message: 'Please enter a number between 0-10'
-  }),
-  healingGoal: z.string().min(10, 'Please share your primary goal'),
-  
-  // Additional
-  howHeard: z.string(),
-  scholarshipInterest: z.enum(['yes', 'no']),
-  additionalInfo: z.string().optional(),
   
   // Agreement
   agreement: z.boolean().refine((val) => val === true, {
@@ -62,22 +44,50 @@ type WaitlistFormData = z.infer<typeof waitlistSchema>
 export default function WaitlistPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    watch
   } = useForm<WaitlistFormData>({
     resolver: zodResolver(waitlistSchema)
   })
 
+  // Debug: Log form errors
+  React.useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.log('Form validation errors:', errors)
+    }
+  }, [errors])
+
   const onSubmit = async (data: WaitlistFormData) => {
     setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    console.log('Form submitted:', data)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+    setError(null)
+    
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form')
+      }
+
+      const result = await response.json()
+      console.log('Form submitted successfully:', result)
+      setIsSubmitted(true)
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setError('There was an error submitting your application. Please try again or contact us directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {
@@ -341,11 +351,19 @@ export default function WaitlistPage() {
                     )}
                   </div>
 
+                  {/* Error Message */}
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+                      <p className="text-red-600 text-sm">{error}</p>
+                    </div>
+                  )}
+
                   <Button 
                     type="submit" 
                     size="lg" 
                     className="w-full"
                     disabled={isSubmitting}
+                    onClick={() => console.log('Button clicked, errors:', errors)}
                   >
                     {isSubmitting ? (
                       <>

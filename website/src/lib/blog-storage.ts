@@ -38,17 +38,18 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 export async function getPublishedPosts(): Promise<BlogPost[]> {
   try {
     const postsCol = collection(db, POSTS_COLLECTION)
-    const q = query(
-      postsCol, 
-      where('status', '==', 'published'),
-      orderBy('publishedAt', 'desc')
-    )
-    const snapshot = await getDocs(q)
+    const snapshot = await getDocs(postsCol)
     
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as BlogPost))
+    // Filter and sort in memory to avoid compound index requirement
+    const posts = snapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as BlogPost))
+      .filter(post => post.status === 'published')
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    
+    return posts
   } catch (error) {
     console.error('Error fetching published posts:', error)
     return []
@@ -186,6 +187,24 @@ export async function initializeStorage() {
   }
 }
 
+// Create new category
+export async function createCategory(name: string): Promise<BlogCategory> {
+  const slug = generateSlug(name)
+  const newCategory = {
+    name,
+    slug,
+    description: ''
+  }
+  
+  const docRef = doc(collection(db, CATEGORIES_COLLECTION))
+  await setDoc(docRef, newCategory)
+  
+  return {
+    id: docRef.id,
+    ...newCategory
+  }
+}
+
 // Helper functions
 export function generateSlug(title: string): string {
   return title
@@ -198,4 +217,20 @@ export function calculateReadingTime(content: string): number {
   const wordsPerMinute = 200
   const words = content.split(/\s+/).length
   return Math.ceil(words / wordsPerMinute)
+}
+
+// Create alias for getCategories
+export const getCategories = getAllCategories
+
+// Also create aliases for common functions
+export const getPost = getPostById
+export const deleteCategory = async (id: string): Promise<boolean> => {
+  try {
+    const categoryDoc = doc(db, CATEGORIES_COLLECTION, id)
+    await deleteDoc(categoryDoc)
+    return true
+  } catch (error) {
+    console.error('Error deleting category:', error)
+    return false
+  }
 }

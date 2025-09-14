@@ -30,6 +30,13 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.ico', type: 'image/x-icon' },
+    ],
+    shortcut: [{ url: '/favicon.ico', type: 'image/x-icon' }],
+  },
 }
 
 export default function RootLayout({
@@ -39,6 +46,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >

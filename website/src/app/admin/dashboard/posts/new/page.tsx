@@ -6,14 +6,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RichTextEditor } from '@/components/admin/rich-text-editor-simple'
 import { generateSlug } from '@/lib/utils/slug'
-import { Save, ArrowLeft, Search } from 'lucide-react'
+import { Save, ArrowLeft, Search, Plus } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NewPostPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<any[]>([])
+  const [authors, setAuthors] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
+  const [showNewCategory, setShowNewCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [addingCategory, setAddingCategory] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -36,6 +40,7 @@ export default function NewPostPage() {
   useEffect(() => {
     setMounted(true)
     fetchCategories()
+    fetchAuthors()
   }, [])
 
   const fetchCategories = async () => {
@@ -45,6 +50,20 @@ export default function NewPostPage() {
       setCategories(data.categories || [])
     } catch (error) {
       console.error('Failed to fetch categories:', error)
+    }
+  }
+
+  const fetchAuthors = async () => {
+    try {
+      const response = await fetch('/api/blog/authors')
+      const data = await response.json()
+      setAuthors(data.authors || [])
+      // Set default author if available
+      if (data.authors && data.authors.length > 0 && !formData.author) {
+        setFormData(prev => ({ ...prev, author: data.authors[0].name }))
+      }
+    } catch (error) {
+      console.error('Failed to fetch authors:', error)
     }
   }
 
@@ -169,30 +188,101 @@ export default function NewPostPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Category</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
-                  required
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.slug}>
-                      {cat.name}
+                <div className="flex gap-2">
+                  <select
+                    value={formData.category}
+                    onChange={(e) => {
+                      if (e.target.value === '__new__') {
+                        setShowNewCategory(true)
+                      } else {
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                    }}
+                    className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
+                    required={!showNewCategory}
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.slug}>
+                        {cat.name}
+                      </option>
+                    ))}
+                    <option value="__new__" className="font-medium text-udaya-sage">
+                      + Add New Category
                     </option>
-                  ))}
-                </select>
+                  </select>
+                </div>
+                {showNewCategory && (
+                  <div className="mt-2 flex gap-2">
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="Enter new category name"
+                      className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                      autoFocus
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={async () => {
+                        if (newCategoryName.trim()) {
+                          setAddingCategory(true)
+                          try {
+                            const response = await fetch('/api/blog/categories', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ name: newCategoryName.trim() })
+                            })
+                            
+                            if (response.ok) {
+                              const data = await response.json()
+                              setCategories([...categories, data.category])
+                              setFormData({ ...formData, category: data.category.slug })
+                              setNewCategoryName('')
+                              setShowNewCategory(false)
+                            }
+                          } catch (error) {
+                            console.error('Failed to create category:', error)
+                          } finally {
+                            setAddingCategory(false)
+                          }
+                        }
+                      }}
+                      disabled={!newCategoryName.trim() || addingCategory}
+                    >
+                      {addingCategory ? 'Adding...' : 'Add'}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setShowNewCategory(false)
+                        setNewCategoryName('')
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Author</label>
-                <input
-                  type="text"
+                <select
                   value={formData.author}
                   onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                   required
-                />
+                >
+                  <option value="">Select an author</option>
+                  {authors.map((author) => (
+                    <option key={author.id} value={author.name}>
+                      {author.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

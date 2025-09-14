@@ -11,6 +11,7 @@ import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import CodeBlock from '@tiptap/extension-code-block'
 import Placeholder from '@tiptap/extension-placeholder'
+import FontFamily from '@tiptap/extension-font-family'
 import { 
   Bold, 
   Italic, 
@@ -61,7 +62,27 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           HTMLAttributes: {
             class: 'font-serif'
           }
-        }
+        },
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false
+        },
+        listItem: {},
+        blockquote: {
+          HTMLAttributes: {
+            class: 'border-l-4 border-udaya-sage/30 pl-4 italic'
+          }
+        },
+        code: {
+          HTMLAttributes: {
+            class: 'bg-gray-100 px-1 py-0.5 rounded text-sm'
+          }
+        },
+        codeBlock: false // We'll use the extension below
       }),
       ResizableImage.configure({
         HTMLAttributes: {
@@ -83,15 +104,21 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
       TextStyle,
       Color,
       Highlight.configure({
-        multicolor: true
+        multicolor: true,
+        HTMLAttributes: {
+          class: 'px-1 py-0.5 rounded'
+        }
       }),
       CodeBlock.configure({
         HTMLAttributes: {
-          class: 'bg-gray-100 rounded p-4 font-mono text-sm'
+          class: 'bg-gray-900 text-gray-100 rounded p-4 font-mono text-sm overflow-x-auto'
         }
       }),
       Placeholder.configure({
         placeholder: placeholder || 'Start writing your post...'
+      }),
+      FontFamily.configure({
+        types: ['textStyle']
       })
     ],
     content,
@@ -100,7 +127,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-lg max-w-none min-h-[500px] p-6 focus:outline-none cursor-text [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:font-serif [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:font-serif [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:font-serif [&_h3]:mb-2'
+        class: 'prose prose-udaya max-w-none min-h-[500px] p-6 focus:outline-none cursor-text'
       }
     },
     immediatelyRender: false
@@ -169,35 +196,42 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
     setShowColorPicker(false)
   }
 
-  const changeFontStyle = (className: string) => {
-    const selection = editor.state.selection
-    editor.chain().focus().setMark('textStyle', { class: className }).run()
+  const changeFontStyle = (fontFamily: string) => {
+    editor.chain().focus().setFontFamily(fontFamily).run()
     setShowFontPicker(false)
   }
 
   // Theme-aligned colors
   const colors = [
-    '#2B2B2B', // charcoal
-    '#5C7B65', // sage
-    '#D9A441', // gold
-    '#C98A6D', // terracotta
-    '#F6F2E6', // cream
-    '#6B8E7F', // sage variant
-    '#E5B55B', // gold variant
-    '#8B4513', // brown
-    '#4A6353', // dark sage
-    '#B8860B'  // dark gold
+    { name: 'Default', value: '#2B2B2B' }, // charcoal
+    { name: 'Sage', value: '#5C7B65' }, // sage
+    { name: 'Gold', value: '#D9A441' }, // gold
+    { name: 'Terracotta', value: '#C98A6D' }, // terracotta
+    { name: 'Dark Sage', value: '#4A6353' }, // dark sage
+    { name: 'Dark Gold', value: '#B8860B' }, // dark gold
+    { name: 'Red', value: '#DC2626' },
+    { name: 'Blue', value: '#2563EB' },
+    { name: 'Green', value: '#16A34A' },
+    { name: 'Purple', value: '#9333EA' }
+  ]
+  
+  const highlightColors = [
+    { name: 'Gold', value: '#D9A44140', code: 'gold' },
+    { name: 'Sage', value: '#5C7B6540', code: 'sage' },
+    { name: 'Cream', value: '#F6F2E6', code: 'cream' },
+    { name: 'Terra', value: '#C98A6D40', code: 'terracotta' },
+    { name: 'Yellow', value: '#FEF08A', code: 'yellow' }
   ]
   
   const fonts = [
-    { name: 'Inter', className: 'font-sans' },
-    { name: 'Playfair Display', className: 'font-serif' },
-    { name: 'Space Grotesk', className: 'font-display' },
-    { name: 'Arial', className: 'font-[Arial]' },
-    { name: 'Georgia', className: 'font-[Georgia]' },
-    { name: 'Times New Roman', className: 'font-[Times_New_Roman]' },
-    { name: 'Courier New', className: 'font-[Courier_New]' },
-    { name: 'Verdana', className: 'font-[Verdana]' }
+    { name: 'Inter', value: 'Inter, sans-serif' },
+    { name: 'Playfair Display', value: 'Playfair Display, serif' },
+    { name: 'Space Grotesk', value: 'Space Grotesk, sans-serif' },
+    { name: 'Arial', value: 'Arial, sans-serif' },
+    { name: 'Georgia', value: 'Georgia, serif' },
+    { name: 'Times New Roman', value: 'Times New Roman, serif' },
+    { name: 'Courier New', value: 'Courier New, monospace' },
+    { name: 'Verdana', value: 'Verdana, sans-serif' }
   ]
 
   return (
@@ -222,8 +256,9 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
                 <button
                   key={font.name}
                   type="button"
-                  onClick={() => changeFontStyle(font.className)}
-                  className={cn("block w-full text-left px-3 py-1 hover:bg-gray-100 rounded text-sm", font.className)}
+                  onClick={() => changeFontStyle(font.value)}
+                  className="block w-full text-left px-3 py-1 hover:bg-gray-100 rounded text-sm"
+                  style={{ fontFamily: font.value }}
                 >
                   {font.name}
                 </button>
@@ -239,6 +274,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={cn(editor.isActive('heading', { level: 1 }) && 'bg-gray-200')}
+          title="Heading 1"
         >
           <Heading1 className="w-4 h-4" />
         </Button>
@@ -248,6 +284,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={cn(editor.isActive('heading', { level: 2 }) && 'bg-gray-200')}
+          title="Heading 2"
         >
           <Heading2 className="w-4 h-4" />
         </Button>
@@ -257,6 +294,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           className={cn(editor.isActive('heading', { level: 3 }) && 'bg-gray-200')}
+          title="Heading 3"
         >
           <Heading3 className="w-4 h-4" />
         </Button>
@@ -270,6 +308,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={cn(editor.isActive('bold') && 'bg-gray-200')}
+          title="Bold"
         >
           <Bold className="w-4 h-4" />
         </Button>
@@ -279,6 +318,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={cn(editor.isActive('italic') && 'bg-gray-200')}
+          title="Italic"
         >
           <Italic className="w-4 h-4" />
         </Button>
@@ -288,6 +328,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={cn(editor.isActive('underline') && 'bg-gray-200')}
+          title="Underline"
         >
           <UnderlineIcon className="w-4 h-4" />
         </Button>
@@ -299,34 +340,39 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
             variant="ghost"
             size="sm"
             onClick={() => setShowColorPicker(!showColorPicker)}
+            title="Colors"
           >
             <Palette className="w-4 h-4" />
           </Button>
           {showColorPicker && (
-            <div className="absolute top-full left-0 mt-1 bg-white border rounded-lg shadow-lg p-2 z-20">
+            <div className="absolute top-full left-0 mt-1 bg-white border rounded-lg shadow-lg p-3 z-20 w-64">
               <div className="text-xs font-medium mb-2">Text Color</div>
-              <div className="grid grid-cols-5 gap-1 mb-2">
+              <div className="grid grid-cols-5 gap-1 mb-3">
                 {colors.map(color => (
                   <button
-                    key={color}
+                    key={color.value}
                     type="button"
-                    onClick={() => setColor(color)}
-                    className="w-6 h-6 rounded border hover:scale-110 transition-transform"
-                    style={{ backgroundColor: color }}
+                    onClick={() => setColor(color.value)}
+                    className="w-10 h-10 rounded border-2 border-gray-200 hover:border-gray-400 hover:scale-110 transition-all"
+                    style={{ backgroundColor: color.value }}
+                    title={color.name}
                   />
                 ))}
               </div>
               <div className="text-xs font-medium mb-2">Highlight</div>
               <div className="flex flex-wrap gap-1">
-                {['#D9A44140', '#5C7B6540', '#F6F2E6', '#C98A6D40', '#FFFF0040'].map((color, idx) => (
+                {highlightColors.map((color) => (
                   <button
-                    key={color}
+                    key={color.code}
                     type="button"
-                    onClick={() => setHighlight(['gold', 'sage', 'cream', 'terracotta', 'yellow'][idx])}
-                    className="px-2 py-1 text-xs rounded text-udaya-charcoal"
-                    style={{ backgroundColor: color }}
+                    onClick={() => setHighlight(color.code)}
+                    className="px-3 py-1 text-xs rounded border hover:scale-105 transition-transform"
+                    style={{ 
+                      backgroundColor: color.value,
+                      borderColor: color.value === '#F6F2E6' ? '#e5e7eb' : 'transparent'
+                    }}
                   >
-                    {['gold', 'sage', 'cream', 'terra', 'yellow'][idx]}
+                    {color.name}
                   </button>
                 ))}
               </div>
@@ -343,6 +389,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
           className={cn(editor.isActive({ textAlign: 'left' }) && 'bg-gray-200')}
+          title="Align Left"
         >
           <AlignLeft className="w-4 h-4" />
         </Button>
@@ -352,6 +399,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
           className={cn(editor.isActive({ textAlign: 'center' }) && 'bg-gray-200')}
+          title="Align Center"
         >
           <AlignCenter className="w-4 h-4" />
         </Button>
@@ -361,6 +409,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
           className={cn(editor.isActive({ textAlign: 'right' }) && 'bg-gray-200')}
+          title="Align Right"
         >
           <AlignRight className="w-4 h-4" />
         </Button>
@@ -370,6 +419,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
           className={cn(editor.isActive({ textAlign: 'justify' }) && 'bg-gray-200')}
+          title="Justify"
         >
           <AlignJustify className="w-4 h-4" />
         </Button>
@@ -383,6 +433,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={cn(editor.isActive('bulletList') && 'bg-gray-200')}
+          title="Bullet List"
         >
           <List className="w-4 h-4" />
         </Button>
@@ -392,6 +443,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={cn(editor.isActive('orderedList') && 'bg-gray-200')}
+          title="Numbered List"
         >
           <ListOrdered className="w-4 h-4" />
         </Button>
@@ -401,6 +453,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={cn(editor.isActive('blockquote') && 'bg-gray-200')}
+          title="Blockquote"
         >
           <Quote className="w-4 h-4" />
         </Button>
@@ -410,6 +463,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={cn(editor.isActive('codeBlock') && 'bg-gray-200')}
+          title="Code Block"
         >
           <Code className="w-4 h-4" />
         </Button>
@@ -422,6 +476,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           variant="ghost"
           size="sm"
           onClick={addLink}
+          title="Add Link"
         >
           <LinkIcon className="w-4 h-4" />
         </Button>
@@ -432,6 +487,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
             variant="ghost"
             size="sm"
             asChild
+            title="Upload Image"
           >
             <span>
               <ImageIcon className="w-4 h-4" />
@@ -455,6 +511,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
+          title="Undo"
         >
           <Undo className="w-4 h-4" />
         </Button>
@@ -464,6 +521,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
           size="sm"
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
+          title="Redo"
         >
           <Redo className="w-4 h-4" />
         </Button>
@@ -485,6 +543,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
             }
           }}
           className={cn(showHtmlEditor && 'bg-gray-200')}
+          title="HTML View"
         >
           <FileCode className="w-4 h-4" />
         </Button>

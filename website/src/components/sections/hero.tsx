@@ -49,42 +49,51 @@ export function Hero() {
       {/* Content */}
       <Container className="relative z-20">
         <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-6 animate-fade-up">
+          {/* Logo at the top */}
+          <div className="mb-6 animate-hero-scale-in">
+            <img 
+              src="/uploads/logo_mid.png" 
+              alt="Udaya Logo" 
+              className="w-40 h-40 md:w-48 md:h-48 mx-auto object-contain drop-shadow-2xl animate-breathing"
+            />
+          </div>
+          
+          {/* Tagline after logo */}
+          <p className="mb-6 text-xl md:text-2xl font-light text-white/90 drop-shadow-lg animate-hero-slide-up animation-delay-200">
+            A New Dawn for Your Health
+          </p>
+          
+          <div className="mb-6 animate-hero-slide-up animation-delay-300">
             <span className="inline-block px-4 py-2 text-sm font-medium text-white bg-udaya-sage/80 backdrop-blur-sm rounded-full">
               Thailand's Premier Medical Cannabis Retreat
             </span>
           </div>
           
-          <h1 className="font-serif text-hero font-bold animate-fade-up animation-delay-100">
-            <span className="text-white drop-shadow-2xl">
+          <h1 className="font-serif text-hero font-bold mb-8">
+            <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-400">
               Beyond Treatment.
             </span>
-            <br />
-            <span className="text-white drop-shadow-2xl">
+            <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-500">
               Toward Transformation.
             </span>
           </h1>
           
-          <p className="mt-6 text-h3 font-light text-white drop-shadow-lg animate-fade-up animation-delay-200">
-            <span className="font-display">Udaya</span>. A New Dawn for Your Health.
-          </p>
-          
-          <div className="mt-8 space-y-2 animate-fade-up animation-delay-300">
-            <p className="text-body-lg text-white/90 drop-shadow-lg">
+          <div className="space-y-2">
+            <p className="text-body-lg text-white/90 drop-shadow-lg animate-hero-fade-in animation-delay-600">
               Cannabis-assisted, clinician-guided retreats
             </p>
-            <p className="text-sm text-white/80 drop-shadow-lg">
+            <p className="text-sm text-white/80 drop-shadow-lg animate-hero-fade-in animation-delay-2000">
               จุดเริ่มต้นใหม่ของสุขภาพ • A new beginning for wellness
             </p>
           </div>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-up animation-delay-400">
-            <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90 text-white shadow-2xl">
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-float-in animation-delay-2000">
+            <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90 text-white shadow-2xl transform transition-all duration-300 hover:scale-105">
               <Link href="/waitlist">
                 Join the Cancer Retreat - Hua Hin Waitlist (Q2 2026)
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="bg-white/20 backdrop-blur-sm border-white/50 text-white hover:bg-white/30 shadow-2xl">
+            <Button size="lg" variant="outline" asChild className="bg-white/20 backdrop-blur-sm border-white/50 text-white hover:bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105">
               <Link href="/method">
                 Learn About Our Approach
               </Link>

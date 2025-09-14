@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RichTextEditor } from '@/components/admin/rich-text-editor-simple'
-import { Save, ArrowLeft, Search } from 'lucide-react'
+import { Save, ArrowLeft, Search, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { BlogPost } from '@/types/blog'
 
@@ -16,11 +16,16 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<any[]>([])
+  const [authors, setAuthors] = useState<any[]>([])
   const [formData, setFormData] = useState<FormData | null>(null)
+  const [showNewCategory, setShowNewCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [addingCategory, setAddingCategory] = useState(false)
 
   useEffect(() => {
     fetchPost()
     fetchCategories()
+    fetchAuthors()
   }, [])
 
   const fetchPost = async () => {
@@ -45,6 +50,16 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
       setCategories(data.categories || [])
     } catch (error) {
       console.error('Failed to fetch categories:', error)
+    }
+  }
+
+  const fetchAuthors = async () => {
+    try {
+      const response = await fetch('/api/blog/authors')
+      const data = await response.json()
+      setAuthors(data.authors || [])
+    } catch (error) {
+      console.error('Failed to fetch authors:', error)
     }
   }
 
@@ -117,8 +132,8 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
 
       <h1 className="text-3xl font-serif font-bold">Edit Post</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
+      <form onSubmit={handleSubmit} className="space-y-6 relative">
+        <Card className="relative">
           <CardHeader>
             <CardTitle>Post Details</CardTitle>
           </CardHeader>
@@ -129,7 +144,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 required
               />
             </div>
@@ -140,7 +155,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 type="text"
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 required
               />
             </div>
@@ -151,7 +166,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 required
               />
             </div>
@@ -159,30 +174,101 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Category</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
-                  required
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.slug}>
-                      {cat.name}
+                <div className="flex gap-2">
+                  <select
+                    value={formData.category}
+                    onChange={(e) => {
+                      if (e.target.value === '__new__') {
+                        setShowNewCategory(true)
+                      } else {
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                    }}
+                    className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
+                    required={!showNewCategory}
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.slug}>
+                        {cat.name}
+                      </option>
+                    ))}
+                    <option value="__new__" className="font-medium text-udaya-sage">
+                      + Add New Category
                     </option>
-                  ))}
-                </select>
+                  </select>
+                </div>
+                {showNewCategory && (
+                  <div className="mt-2 flex gap-2">
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="Enter new category name"
+                      className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
+                      autoFocus
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={async () => {
+                        if (newCategoryName.trim()) {
+                          setAddingCategory(true)
+                          try {
+                            const response = await fetch('/api/blog/categories', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ name: newCategoryName.trim() })
+                            })
+                            
+                            if (response.ok) {
+                              const data = await response.json()
+                              setCategories([...categories, data.category])
+                              setFormData({ ...formData, category: data.category.slug })
+                              setNewCategoryName('')
+                              setShowNewCategory(false)
+                            }
+                          } catch (error) {
+                            console.error('Failed to create category:', error)
+                          } finally {
+                            setAddingCategory(false)
+                          }
+                        }
+                      }}
+                      disabled={!newCategoryName.trim() || addingCategory}
+                    >
+                      {addingCategory ? 'Adding...' : 'Add'}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setShowNewCategory(false)
+                        setNewCategoryName('')
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Author</label>
-                <input
-                  type="text"
+                <select
                   value={formData.author}
                   onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                   required
-                />
+                >
+                  <option value="">Select an author</option>
+                  {authors.map((author) => (
+                    <option key={author.id} value={author.name}>
+                      {author.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -193,7 +279,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                 placeholder="wellness, cannabis, health"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
               />
             </div>
 
@@ -221,7 +307,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as 'draft' | 'published' })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -230,7 +316,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="relative">
           <CardHeader>
             <CardTitle>Content</CardTitle>
           </CardHeader>
@@ -243,7 +329,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="relative">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="w-5 h-5" />
@@ -264,7 +350,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
                 placeholder={formData.title || 'Enter meta title for search engines'}
                 maxLength={60}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Appears in search engine results. Leave empty to use post title.
@@ -284,7 +370,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 placeholder={formData.excerpt || 'Enter meta description for search engines'}
                 maxLength={160}
                 rows={3}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Brief summary for search results. Leave empty to use excerpt.
@@ -298,7 +384,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                 value={formData.focusKeyword || ''}
                 onChange={(e) => setFormData({ ...formData, focusKeyword: e.target.value })}
                 placeholder="e.g., medical cannabis retreat Thailand"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Main keyword you want this post to rank for.
@@ -315,7 +401,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                   value={formData.ogTitle || ''}
                   onChange={(e) => setFormData({ ...formData, ogTitle: e.target.value })}
                   placeholder={formData.metaTitle || formData.title || 'Title for social media sharing'}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 />
               </div>
 
@@ -326,7 +412,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setFormData({ ...formData, ogDescription: e.target.value })}
                   placeholder={formData.metaDescription || formData.excerpt || 'Description for social media sharing'}
                   rows={2}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 />
               </div>
 
@@ -337,7 +423,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
                   value={formData.ogImage || ''}
                   onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
                   placeholder={formData.featuredImage || 'Image URL for social media sharing'}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Leave empty to use featured image.

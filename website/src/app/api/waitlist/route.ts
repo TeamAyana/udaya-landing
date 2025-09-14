@@ -6,16 +6,33 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
     
-    const docRef = await addDoc(collection(db, 'waitlist'), {
+    // Add metadata
+    const waitlistEntry = {
       ...data,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      status: 'pending', // pending, reviewed, accepted, rejected
+      source: 'website',
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+      userAgent: request.headers.get('user-agent') || 'unknown'
+    }
+    
+    const docRef = await addDoc(collection(db, 'waitlist'), waitlistEntry)
+    
+    // TODO: Send confirmation email
+    // TODO: Send notification to admin
+    
+    console.log('New waitlist entry:', docRef.id, waitlistEntry.email)
+    
+    return NextResponse.json({ 
+      success: true, 
+      id: docRef.id,
+      message: 'Successfully added to waitlist' 
     })
-    
-    // Optional: Send confirmation email
-    
-    return NextResponse.json({ success: true, id: docRef.id })
   } catch (error) {
     console.error('Waitlist error:', error)
-    return NextResponse.json({ error: 'Failed to join waitlist' }, { status: 500 })
+    return NextResponse.json({ 
+      error: 'Failed to join waitlist',
+      message: 'Please try again or contact us directly' 
+    }, { status: 500 })
   }
 }
