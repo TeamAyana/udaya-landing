@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import { getPublishedPosts, getCategories } from '@/lib/blog-storage'
 import { BlogPageClient } from '@/components/blog/blog-page-client'
 
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: 'Blog - Wellness Insights & Medical Cannabis Education',
   description: 'Explore articles on medical cannabis, wellness practices, and healing journeys from the Udaya community.',

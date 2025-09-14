@@ -10,15 +10,10 @@ import { ArrowLeft, Calendar, Clock, User, Tag } from 'lucide-react'
 import { getPostBySlug, getPublishedPosts, incrementPostViews } from '@/lib/blog-storage'
 import { ScrollAnimation } from '@/components/ui/scroll-animation'
 
+export const revalidate = 0
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const posts = await getPublishedPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
