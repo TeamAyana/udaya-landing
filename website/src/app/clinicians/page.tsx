@@ -206,7 +206,7 @@ export default function CliniciansPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {whyRefer.map((item, index) => {
               const Icon = item.icon
-              const colorClasses = {
+              const colorClasses: Record<string, string> = {
                 sage: 'bg-udaya-sage/10 text-udaya-sage border-udaya-sage/20',
                 gold: 'bg-udaya-gold/10 text-udaya-gold border-udaya-gold/20',
                 terracotta: 'bg-udaya-terracotta/10 text-udaya-terracotta border-udaya-terracotta/20'
