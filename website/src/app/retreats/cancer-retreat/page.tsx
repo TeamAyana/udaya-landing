@@ -88,7 +88,7 @@ export default function CancerRetreatPage() {
       <Section>
         <Container>
           <div className="max-w-4xl mx-auto">
-            <Card className="p-8">
+            <Card className="p-8 border-2 border-udaya-sage/30">
               <CardHeader className="text-center">
                 <CardTitle className="text-h2 font-serif">10-Day Comprehensive Cancer Program</CardTitle>
                 <CardDescription className="text-h3 text-udaya-sage font-bold mt-2">
@@ -269,30 +269,63 @@ export default function CancerRetreatPage() {
             <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-12">
               Medical Requirements
             </h2>
-            <Card>
+            <Card className="border-2 border-udaya-sage/30 overflow-hidden">
+              <CardHeader className="bg-udaya-sage/5 border-b border-udaya-sage/10">
+                <CardTitle className="text-center text-2xl text-udaya-sage">
+                  Required Documentation
+                </CardTitle>
+                <CardDescription className="text-center text-udaya-charcoal/60 mt-2">
+                  Please ensure you have all necessary documentation before applying
+                </CardDescription>
+              </CardHeader>
               <CardContent className="p-8">
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                    <span>Confirmed cancer diagnosis</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                    <span>Medical records from oncologist</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                    <span>Clearance to travel</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                    <span>Current medication list</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                    <span>No active medical emergencies</span>
-                  </li>
-                </ul>
+                <div className="grid gap-4">
+                  <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-udaya-sage/10 hover:border-udaya-sage/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-udaya-sage/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="h-5 w-5 text-udaya-sage" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-udaya-charcoal">Confirmed cancer diagnosis</h4>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Official diagnosis from your healthcare provider</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-udaya-sage/10 hover:border-udaya-sage/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-udaya-sage/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="h-5 w-5 text-udaya-sage" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-udaya-charcoal">Medical records from oncologist</h4>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Recent records including treatment history</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-udaya-sage/10 hover:border-udaya-sage/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-udaya-sage/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="h-5 w-5 text-udaya-sage" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-udaya-charcoal">Clearance to travel</h4>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Written approval from your physician for international travel</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-udaya-sage/10 hover:border-udaya-sage/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-udaya-sage/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="h-5 w-5 text-udaya-sage" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-udaya-charcoal">Current medication list</h4>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Complete list of all current medications and dosages</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-udaya-sage/10 hover:border-udaya-sage/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-udaya-sage/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="h-5 w-5 text-udaya-sage" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-udaya-charcoal">No active medical emergencies</h4>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Stable condition suitable for retreat participation</p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

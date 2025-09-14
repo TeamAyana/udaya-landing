@@ -1,122 +1,188 @@
-import fs from 'fs/promises'
-import path from 'path'
+import { 
+  collection, 
+  doc, 
+  getDocs, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  deleteDoc, 
+  query, 
+  where, 
+  orderBy,
+  increment
+} from 'firebase/firestore'
+import { db } from './firebase'
 import { BlogPost, BlogCategory } from '@/types/blog'
 
-const DATA_DIR = path.join(process.cwd(), 'data')
-const POSTS_FILE = path.join(DATA_DIR, 'posts.json')
-const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json')
-const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads')
-
-// Initialize data directory and files
-export async function initializeStorage() {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true })
-    await fs.mkdir(UPLOADS_DIR, { recursive: true })
-    
-    try {
-      await fs.access(POSTS_FILE)
-    } catch {
-      await fs.writeFile(POSTS_FILE, JSON.stringify([]))
-    }
-    
-    try {
-      await fs.access(CATEGORIES_FILE)
-    } catch {
-      const defaultCategories: BlogCategory[] = [
-        { id: '1', name: 'Health & Wellness', slug: 'health-wellness' },
-        { id: '2', name: 'Medical Cannabis', slug: 'medical-cannabis' },
-        { id: '3', name: 'Retreat Life', slug: 'retreat-life' },
-        { id: '4', name: 'Patient Stories', slug: 'patient-stories' },
-        { id: '5', name: 'Research & Science', slug: 'research-science' },
-      ]
-      await fs.writeFile(CATEGORIES_FILE, JSON.stringify(defaultCategories))
-    }
-  } catch (error) {
-    console.error('Error initializing storage:', error)
-  }
-}
+// Collections
+const POSTS_COLLECTION = 'posts'
+const CATEGORIES_COLLECTION = 'categories'
 
 // Blog post operations
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
-    const data = await fs.readFile(POSTS_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch {
+    const postsCol = collection(db, POSTS_COLLECTION)
+    const q = query(postsCol, orderBy('publishedAt', 'desc'))
+    const snapshot = await getDocs(q)
+    
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as BlogPost))
+  } catch (error) {
+    console.error('Error fetching posts:', error)
     return []
   }
 }
 
 export async function getPublishedPosts(): Promise<BlogPost[]> {
-  const posts = await getAllPosts()
-  return posts
-    .filter(post => post.status === 'published')
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  try {
+    const postsCol = collection(db, POSTS_COLLECTION)
+    const q = query(
+      postsCol, 
+      where('status', '==', 'published'),
+      orderBy('publishedAt', 'desc')
+    )
+    const snapshot = await getDocs(q)
+    
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as BlogPost))
+  } catch (error) {
+    console.error('Error fetching published posts:', error)
+    return []
+  }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const posts = await getAllPosts()
-  return posts.find(post => post.slug === slug) || null
+  try {
+    const postsCol = collection(db, POSTS_COLLECTION)
+    const q = query(postsCol, where('slug', '==', slug))
+    const snapshot = await getDocs(q)
+    
+    if (snapshot.empty) return null
+    
+    const doc = snapshot.docs[0]
+    return {
+      id: doc.id,
+      ...doc.data()
+    } as BlogPost
+  } catch (error) {
+    console.error('Error fetching post by slug:', error)
+    return null
+  }
 }
 
 export async function getPostById(id: string): Promise<BlogPost | null> {
-  const posts = await getAllPosts()
-  return posts.find(post => post.id === id) || null
+  try {
+    const postDoc = doc(db, POSTS_COLLECTION, id)
+    const snapshot = await getDoc(postDoc)
+    
+    if (!snapshot.exists()) return null
+    
+    return {
+      id: snapshot.id,
+      ...snapshot.data()
+    } as BlogPost
+  } catch (error) {
+    console.error('Error fetching post by id:', error)
+    return null
+  }
 }
 
 export async function createPost(post: Omit<BlogPost, 'id' | 'views'>): Promise<BlogPost> {
-  const posts = await getAllPosts()
-  const newPost: BlogPost = {
+  const newPost = {
     ...post,
-    id: Date.now().toString(),
-    views: 0
-  }
-  posts.push(newPost)
-  await fs.writeFile(POSTS_FILE, JSON.stringify(posts, null, 2))
-  return newPost
-}
-
-export async function updatePost(id: string, updates: Partial<BlogPost>): Promise<BlogPost | null> {
-  const posts = await getAllPosts()
-  const index = posts.findIndex(post => post.id === id)
-  
-  if (index === -1) return null
-  
-  posts[index] = {
-    ...posts[index],
-    ...updates,
+    views: 0,
+    publishedAt: post.publishedAt || new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
   
-  await fs.writeFile(POSTS_FILE, JSON.stringify(posts, null, 2))
-  return posts[index]
+  const docRef = doc(collection(db, POSTS_COLLECTION))
+  await setDoc(docRef, newPost)
+  
+  return {
+    id: docRef.id,
+    ...newPost
+  }
+}
+
+export async function updatePost(id: string, updates: Partial<BlogPost>): Promise<BlogPost | null> {
+  try {
+    const postDoc = doc(db, POSTS_COLLECTION, id)
+    
+    await updateDoc(postDoc, {
+      ...updates,
+      updatedAt: new Date().toISOString()
+    })
+    
+    return getPostById(id)
+  } catch (error) {
+    console.error('Error updating post:', error)
+    return null
+  }
 }
 
 export async function deletePost(id: string): Promise<boolean> {
-  const posts = await getAllPosts()
-  const filteredPosts = posts.filter(post => post.id !== id)
-  
-  if (filteredPosts.length === posts.length) return false
-  
-  await fs.writeFile(POSTS_FILE, JSON.stringify(filteredPosts, null, 2))
-  return true
+  try {
+    const postDoc = doc(db, POSTS_COLLECTION, id)
+    await deleteDoc(postDoc)
+    return true
+  } catch (error) {
+    console.error('Error deleting post:', error)
+    return false
+  }
 }
 
 export async function incrementPostViews(id: string): Promise<void> {
-  const posts = await getAllPosts()
-  const post = posts.find(p => p.id === id)
-  if (post) {
-    post.views += 1
-    await fs.writeFile(POSTS_FILE, JSON.stringify(posts, null, 2))
+  try {
+    const postDoc = doc(db, POSTS_COLLECTION, id)
+    await updateDoc(postDoc, {
+      views: increment(1)
+    })
+  } catch (error) {
+    console.error('Error incrementing views:', error)
   }
 }
 
 // Category operations
 export async function getAllCategories(): Promise<BlogCategory[]> {
   try {
-    const data = await fs.readFile(CATEGORIES_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch {
+    const categoriesCol = collection(db, CATEGORIES_COLLECTION)
+    const snapshot = await getDocs(categoriesCol)
+    
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as BlogCategory))
+  } catch (error) {
+    console.error('Error fetching categories:', error)
     return []
+  }
+}
+
+// Initialize categories
+export async function initializeStorage() {
+  try {
+    const categories = await getAllCategories()
+    
+    if (categories.length === 0) {
+      const defaultCategories = [
+        { id: '1', name: 'Health & Wellness', slug: 'health-wellness' },
+        { id: '2', name: 'Medical Cannabis', slug: 'medical-cannabis' },
+        { id: '3', name: 'Retreat Life', slug: 'retreat-life' },
+        { id: '4', name: 'Patient Stories', slug: 'patient-stories' },
+        { id: '5', name: 'Research & Science', slug: 'research-science' },
+      ]
+      
+      for (const category of defaultCategories) {
+        const docRef = doc(db, CATEGORIES_COLLECTION, category.id)
+        await setDoc(docRef, category)
+      }
+    }
+  } catch (error) {
+    console.error('Error initializing storage:', error)
   }
 }
 

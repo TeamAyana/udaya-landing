@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Playfair_Display, Space_Grotesk } from 'next/font/google'
 import { Navigation } from '@/components/layout/navigation'
 import { Footer } from '@/components/layout/footer'
+import { CookieConsent } from '@/components/ui/cookie-consent'
 import { SITE_CONFIG } from '@/lib/constants'
 import './globals.css'
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Navigation />
         <main className="min-h-screen pt-20">{children}</main>
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   )

@@ -31,18 +31,46 @@ const testimonials = [
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = React.useState(0)
   const [mounted, setMounted] = React.useState(false)
+  const [isAutoPlaying, setIsAutoPlaying] = React.useState(true)
+  const [isAnimating, setIsAnimating] = React.useState(false)
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
 
+  // Auto-play effect
+  React.useEffect(() => {
+    if (!isAutoPlaying || !mounted) return
+
+    const interval = setInterval(() => {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+        setTimeout(() => setIsAnimating(false), 50)
+      }, 300)
+    }, 5000) // Change every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, mounted])
+
+  const goToTestimonial = (index: number) => {
+    if (index === currentIndex) return
+    setIsAnimating(true)
+    setTimeout(() => {
+      setCurrentIndex(index)
+      setTimeout(() => setIsAnimating(false), 50)
+    }, 300)
+  }
+
   const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+    setIsAutoPlaying(false)
+    goToTestimonial((currentIndex + 1) % testimonials.length)
   }
 
   const previousTestimonial = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+    setIsAutoPlaying(false)
+    goToTestimonial(
+      (currentIndex - 1 + testimonials.length) % testimonials.length
     )
   }
 
@@ -60,13 +88,20 @@ export function Testimonials() {
 
           <div className="mt-8">
             {/* Testimonial Content */}
-            <div className="text-center min-h-[200px] flex flex-col justify-center">
-              <blockquote className="text-h3 font-serif italic text-udaya-charcoal">
-                "{testimonials[currentIndex].quote}"
-              </blockquote>
-              <p className="mt-6 text-udaya-charcoal/70">
-                — {testimonials[currentIndex].author}, {testimonials[currentIndex].condition}
-              </p>
+            <div className="relative overflow-hidden">
+              <div 
+                className={cn(
+                  "text-center min-h-[200px] flex flex-col justify-center transition-all duration-300",
+                  isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+                )}
+              >
+                <blockquote className="text-h3 font-serif italic text-udaya-charcoal">
+                  "{testimonials[currentIndex].quote}"
+                </blockquote>
+                <p className="mt-6 text-udaya-charcoal/70">
+                  — {testimonials[currentIndex].author}, {testimonials[currentIndex].condition}
+                </p>
+              </div>
             </div>
 
             {/* Navigation */}
@@ -76,24 +111,40 @@ export function Testimonials() {
                 size="icon"
                 onClick={previousTestimonial}
                 aria-label="Previous testimonial"
+                className="hover:bg-udaya-sage/10"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
 
-              {/* Dots */}
+              {/* Dots with progress indicator */}
               <div className="flex gap-2">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setCurrentIndex(index)}
+                    onClick={() => {
+                      setIsAutoPlaying(false)
+                      goToTestimonial(index)
+                    }}
                     className={cn(
-                      'h-2 w-2 rounded-full transition-all',
+                      'relative h-2 overflow-hidden rounded-full transition-all duration-300',
                       index === currentIndex
-                        ? 'w-8 bg-udaya-sage'
-                        : 'bg-udaya-sage/30'
+                        ? 'w-12 bg-udaya-sage/20'
+                        : 'w-2 bg-udaya-sage/20 hover:bg-udaya-sage/30'
                     )}
                     aria-label={`Go to testimonial ${index + 1}`}
-                  />
+                  >
+                    {index === currentIndex && (
+                      <div 
+                        className={cn(
+                          "absolute inset-0 bg-udaya-sage rounded-full",
+                          isAutoPlaying ? "animate-[progress_5s_linear_infinite]" : "w-full"
+                        )}
+                        style={{
+                          animationDelay: '0ms',
+                        }}
+                      />
+                    )}
+                  </button>
                 ))}
               </div>
 
@@ -102,6 +153,7 @@ export function Testimonials() {
                 size="icon"
                 onClick={nextTestimonial}
                 aria-label="Next testimonial"
+                className="hover:bg-udaya-sage/10"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>

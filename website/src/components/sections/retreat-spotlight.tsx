@@ -95,21 +95,14 @@ export function RetreatSpotlight() {
 
             {/* Right Image */}
             <ScrollAnimation animation="scale" delay={300}>
-              <div className="relative h-[400px] overflow-hidden rounded-2xl shadow-xl">
+              <div className="relative h-full min-h-[400px] overflow-hidden rounded-2xl shadow-xl">
                 <img 
-                  src="/uploads/0_2.png"
+                  src="/uploads/cancer_retreat.jpg"
                   alt="Cancer Retreat - Hua Hin"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-udaya-charcoal/80 via-transparent to-transparent" />
-                
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-3xl font-serif font-bold mb-2 drop-shadow-2xl">
-                    {cancerRetreat.price}
-                  </p>
-                  <p className="text-sm opacity-90">All-inclusive transformational journey</p>
-                </div>
               </div>
             </ScrollAnimation>
           </div>

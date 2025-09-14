@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { writeFile } from 'fs/promises'
-import path from 'path'
+import { put } from '@vercel/blob'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,25 +9,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const data = await request.formData()
-    const file: File | null = data.get('file') as unknown as File
+    const formData = await request.formData()
+    const file = formData.get('file') as File
 
     if (!file) {
       return NextResponse.json({ error: 'No file found' }, { status: 400 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    // Upload to Vercel Blob Storage
+    const blob = await put(file.name, file, {
+      access: 'public',
+    })
 
-    // Generate unique filename
-    const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`
-    const filepath = path.join(process.cwd(), 'public', 'uploads', filename)
-
-    await writeFile(filepath, buffer)
-    
     return NextResponse.json({ 
-      url: `/uploads/${filename}`,
-      filename 
+      url: blob.url,
+      filename: file.name
     })
   } catch (error) {
     console.error('Upload error:', error)
