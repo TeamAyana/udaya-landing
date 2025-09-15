@@ -9,6 +9,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
+    // Check if Firebase Admin is initialized
+    if (!adminDb) {
+      console.warn('Firebase Admin SDK not initialized. Returning empty subscribers.')
+      return NextResponse.json({
+        waitlist: [],
+        newsletter: [],
+        stats: {
+          waitlistCount: 0,
+          newsletterCount: 0,
+          totalContacts: 0
+        }
+      })
+    }
+
     // Fetch waitlist entries
     let waitlist: any[] = []
     try {
@@ -41,8 +55,13 @@ export async function GET(request: NextRequest) {
     }
     
     // Get total counts
-    const allContactsSnapshot = await adminDb.collection('contacts').get()
-    const totalContacts = allContactsSnapshot.size
+    let totalContacts = 0
+    try {
+      const allContactsSnapshot = await adminDb.collection('contacts').get()
+      totalContacts = allContactsSnapshot.size
+    } catch (error) {
+      console.error('Error fetching total contacts:', error)
+    }
     
     return NextResponse.json({
       waitlist,
