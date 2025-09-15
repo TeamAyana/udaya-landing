@@ -373,6 +373,18 @@ export default function UserManagementPage() {
                         </select>
                       </div>
                       
+                      {/* Password Change */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">New Password (leave blank to keep current)</label>
+                        <Input
+                          type="password"
+                          value={editedUser.password || ''}
+                          onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })}
+                          placeholder="••••••••"
+                          className="max-w-xs"
+                        />
+                      </div>
+                      
                       {/* Permissions Grid */}
                       <div className="space-y-3">
                         <h5 className="font-medium text-sm">Permissions</h5>
