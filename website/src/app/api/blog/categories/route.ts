@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Category name is required' }, { status: 400 })
     }
     
-    const newCategory = await createCategoryAdmin({ name: data.name })
+    const slug = data.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
+    const newCategory = await createCategoryAdmin({ name: data.name, slug })
     
     return NextResponse.json({ category: newCategory })
   } catch (error) {
