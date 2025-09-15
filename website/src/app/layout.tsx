@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display, Space_Grotesk } from 'next/font/google'
+import Script from 'next/script'
 import { Navigation } from '@/components/layout/navigation'
 import { Footer } from '@/components/layout/footer'
 import { CookieConsent } from '@/components/ui/cookie-consent'
@@ -50,6 +51,19 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
+      {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-F9Z69QGRT9"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-F9Z69QGRT9');
+        `}
+      </Script>
       <body
         className={`${inter.variable} ${playfair.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
