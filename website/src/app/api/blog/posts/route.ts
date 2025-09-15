@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date().toISOString(),
       status: data.status || 'draft',
       readingTime: calculateReadingTime(data.content),
+      views: 0,
       // SEO fields
       metaTitle: data.metaTitle || '',
       metaDescription: data.metaDescription || '',
