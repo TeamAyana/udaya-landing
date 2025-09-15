@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ShareButton } from '@/components/ui/share-button'
 import { ArrowLeft, Calendar, Clock, User, Tag } from 'lucide-react'
-import { getPostBySlug, getPublishedPosts, incrementPostViews } from '@/lib/blog-storage'
+import { getPostBySlugAdmin, getPublishedPostsAdmin, incrementPostViewsAdmin } from '@/lib/blog-storage-admin'
 import { ScrollAnimation } from '@/components/ui/scroll-animation'
 
 export const revalidate = 0
@@ -18,7 +18,7 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const post = await getPostBySlugAdmin(slug)
   
   if (!post) {
     return {
@@ -56,14 +56,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const post = await getPostBySlugAdmin(slug)
   
   if (!post || post.status !== 'published') {
     notFound()
   }
   
   // Increment views
-  await incrementPostViews(post.id)
+  await incrementPostViewsAdmin(post.id)
   
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
   
   // Get related posts
-  const allPosts = await getPublishedPosts()
+  const allPosts = await getPublishedPostsAdmin()
   const relatedPosts = allPosts
     .filter(p => p.id !== post.id && p.category === post.category)
     .slice(0, 3)

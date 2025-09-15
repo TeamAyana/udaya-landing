@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // PRODUCTION RULES WITH ADMIN SDK
+    // Admin SDK bypasses these rules, so we can be very strict
+    
+    // Posts - Public can only read published posts
+    match /posts/{postId} {
+      // Anyone can read published posts
+      allow read: if resource.data.status == 'published';
+      // No client-side writes allowed (Admin SDK only)
+      allow create, update, delete: if false;
+    }
+    
+    // Categories - Public read only
+    match /categories/{categoryId} {
+      allow read: if true;
+      // No client-side writes allowed (Admin SDK only)
+      allow create, update, delete: if false;
+    }
+    
+    // Authors - Public read only
+    match /authors/{authorId} {
+      allow read: if true;
+      // No client-side writes allowed (Admin SDK only)
+      allow create, update, delete: if false;
+    }
+    
+    // Contacts - Write only (no reads for privacy)
+    match /contacts/{contactId} {
+      allow read: if false;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+    
+    // Waitlist - Write only (no reads for privacy)
+    match /waitlist/{entryId} {
+      allow read: if false;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

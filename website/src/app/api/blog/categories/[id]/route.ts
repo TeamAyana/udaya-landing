@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
-
-const CATEGORIES_COLLECTION = 'categories'
+import { updateCategoryAdmin, deleteCategoryAdmin } from '@/lib/blog-storage-admin'
 
 export async function PUT(
   request: NextRequest,
@@ -18,11 +15,7 @@ export async function PUT(
     const { id } = await params
     const data = await request.json()
     
-    const categoryDoc = doc(db, CATEGORIES_COLLECTION, id)
-    await updateDoc(categoryDoc, {
-      ...data,
-      updatedAt: new Date().toISOString()
-    })
+    await updateCategoryAdmin(id, data)
     
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -43,8 +36,7 @@ export async function DELETE(
     
     const { id } = await params
     
-    const categoryDoc = doc(db, CATEGORIES_COLLECTION, id)
-    await deleteDoc(categoryDoc)
+    await deleteCategoryAdmin(id)
     
     return NextResponse.json({ success: true })
   } catch (error) {

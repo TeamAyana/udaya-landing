@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -33,7 +34,9 @@ interface Category {
 }
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState('authors')
+  const searchParams = useSearchParams()
+  const tab = searchParams.get('tab')
+  const [activeTab, setActiveTab] = useState(tab || 'categories')
   const [authors, setAuthors] = useState<Author[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(false)
@@ -51,6 +54,12 @@ export default function SettingsPage() {
     fetchAuthors()
     fetchCategories()
   }, [])
+  
+  useEffect(() => {
+    if (tab) {
+      setActiveTab(tab)
+    }
+  }, [tab])
   
   const fetchAuthors = async () => {
     try {
@@ -185,8 +194,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-serif font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-2">Manage authors, categories, and site settings</p>
+        <h1 className="text-3xl font-serif font-bold text-gray-900">Blog Content Management</h1>
+        <p className="text-gray-600 mt-2">Manage categories and authors for your blog</p>
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -215,18 +224,6 @@ export default function SettingsPage() {
             >
               <Tag className="w-4 h-4 mr-2 inline" />
               Categories
-            </TabsTrigger>
-            <TabsTrigger
-              value="general"
-              className={cn(
-                "px-4 py-2 rounded-md font-medium transition-colors",
-                activeTab === 'general' 
-                  ? "bg-white text-udaya-sage shadow-sm" 
-                  : "text-gray-600 hover:text-gray-900"
-              )}
-            >
-              <Settings className="w-4 h-4 mr-2 inline" />
-              General
             </TabsTrigger>
           </TabsList>
         </div>
@@ -461,62 +458,6 @@ export default function SettingsPage() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        {/* General Settings Tab */}
-        <TabsContent value="general">
-          <Card>
-            <CardHeader>
-              <CardTitle>General Settings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-medium mb-4">Site Information</h3>
-                  <div className="grid gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Site Name</label>
-                      <input
-                        type="text"
-                        defaultValue="Udaya"
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Site Description</label>
-                      <textarea
-                        defaultValue="Cannabis-assisted, clinician-guided retreats in Thailand"
-                        rows={3}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium mb-4">Admin Settings</h3>
-                  <div className="grid gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Admin Email</label>
-                      <input
-                        type="email"
-                        defaultValue="admin@udaya.one"
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-udaya-sage focus:border-transparent relative z-10"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Change Password</label>
-                      <Button variant="outline" className="relative z-10">Update Password</Button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pt-4">
-                  <Button className="relative z-10">Save Settings</Button>
-                </div>
               </div>
             </CardContent>
           </Card>

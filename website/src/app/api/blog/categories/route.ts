@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAllCategories, createCategory } from '@/lib/blog-storage'
 import { getSession } from '@/lib/auth'
+import { getAllCategoriesAdmin, createCategoryAdmin } from '@/lib/blog-storage-admin'
 
 export async function GET(request: NextRequest) {
   try {
-    const categories = await getAllCategories()
+    const categories = await getAllCategoriesAdmin()
     return NextResponse.json({ categories })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 })
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Category name is required' }, { status: 400 })
     }
     
-    const newCategory = await createCategory(data.name)
+    const newCategory = await createCategoryAdmin({ name: data.name })
     
     return NextResponse.json({ category: newCategory })
   } catch (error) {

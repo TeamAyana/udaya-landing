@@ -8,14 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AdminLoginPage() {
   const router = useRouter()
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login form submitted', { username, password })
+    console.log('Login form submitted', { email, password })
     setError('')
     setLoading(true)
 
@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email, password })
       })
 
       console.log('Login response status:', response.status)
@@ -74,18 +74,18 @@ export default function AdminLoginPage() {
               )}
               
               <div className="space-y-2">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Username
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email
                 </label>
                 <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="block w-full px-4 py-3 border border-gray-300 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-udaya-sage transition-all hover:border-udaya-sage/50"
-                  placeholder="Enter username"
+                  placeholder="Enter email"
                   required
                   style={{ position: 'relative', zIndex: 20 }}
                 />
@@ -127,10 +127,10 @@ export default function AdminLoginPage() {
 
             <div className="mt-8 p-4 bg-gradient-to-br from-udaya-sage/5 to-udaya-cream/20 rounded-xl">
               <p className="text-center text-sm text-gray-600 font-medium mb-2">
-                Default credentials:
+                Default admin credentials:
               </p>
               <div className="text-center text-sm text-gray-600 space-y-1">
-                <p>Username: <span className="font-mono font-semibold text-udaya-sage">admin</span></p>
+                <p>Email: <span className="font-mono font-semibold text-udaya-sage">admin@udaya.one</span></p>
                 <p>Password: <span className="font-mono font-semibold text-udaya-sage">udaya2024</span></p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPostById, updatePost, deletePost, incrementPostViews } from '@/lib/blog-storage'
 import { getSession } from '@/lib/auth'
 import { calculateReadingTime } from '@/lib/blog-storage'
+import { getPostByIdAdmin, updatePostAdmin, deletePostAdmin, incrementPostViewsAdmin } from '@/lib/blog-storage-admin'
 
 export async function GET(
   request: NextRequest,
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const post = await getPostById(id)
+    const post = await getPostByIdAdmin(id)
     
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
@@ -17,7 +17,7 @@ export async function GET(
     
     // Increment views for published posts
     if (post.status === 'published') {
-      await incrementPostViews(id)
+      await incrementPostViewsAdmin(id)
     }
     
     return NextResponse.json({ post })
@@ -44,7 +44,8 @@ export async function PUT(
       data.readingTime = calculateReadingTime(data.content)
     }
     
-    const updatedPost = await updatePost(id, data)
+    await updatePostAdmin(id, data)
+    const updatedPost = await getPostByIdAdmin(id)
     
     if (!updatedPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
@@ -67,7 +68,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
-    const success = await deletePost(id)
+    await deletePostAdmin(id)
+    const success = true
     
     if (!success) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })

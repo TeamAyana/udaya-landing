@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { doc, deleteDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
-
-const AUTHORS_COLLECTION = 'authors'
+import { deleteAuthorAdmin } from '@/lib/blog-storage-admin'
 
 export async function DELETE(
   request: NextRequest,
@@ -17,8 +14,7 @@ export async function DELETE(
     
     const { id } = await params
     
-    const authorDoc = doc(db, AUTHORS_COLLECTION, id)
-    await deleteDoc(authorDoc)
+    await deleteAuthorAdmin(id)
     
     return NextResponse.json({ success: true })
   } catch (error) {

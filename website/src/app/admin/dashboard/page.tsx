@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FileText, Eye, TrendingUp, Users } from 'lucide-react'
+import { FileText, Eye, TrendingUp, Users, Mail, UserCheck } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
@@ -11,6 +11,8 @@ interface DashboardStats {
   publishedPosts: number
   draftPosts: number
   totalViews: number
+  waitlistCount: number
+  newsletterCount: number
 }
 
 export default function AdminDashboard() {
@@ -18,7 +20,9 @@ export default function AdminDashboard() {
     totalPosts: 0,
     publishedPosts: 0,
     draftPosts: 0,
-    totalViews: 0
+    totalViews: 0,
+    waitlistCount: 0,
+    newsletterCount: 0
   })
   const [recentPosts, setRecentPosts] = useState<any[]>([])
 
@@ -28,11 +32,16 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('/api/blog/posts')
-      const data = await response.json()
+      // Fetch posts data
+      const postsResponse = await fetch('/api/blog/posts')
+      const postsData = await postsResponse.json()
       
-      if (data.posts) {
-        const posts = data.posts
+      // Fetch subscriber data
+      const subscribersResponse = await fetch('/api/admin/subscribers')
+      const subscribersData = await subscribersResponse.json()
+      
+      if (postsData.posts) {
+        const posts = postsData.posts
         const published = posts.filter((p: any) => p.status === 'published')
         const drafts = posts.filter((p: any) => p.status === 'draft')
         const totalViews = posts.reduce((sum: number, p: any) => sum + (p.views || 0), 0)
@@ -41,7 +50,9 @@ export default function AdminDashboard() {
           totalPosts: posts.length,
           publishedPosts: published.length,
           draftPosts: drafts.length,
-          totalViews
+          totalViews,
+          waitlistCount: subscribersData.stats?.waitlistCount || 0,
+          newsletterCount: subscribersData.stats?.newsletterCount || 0
         })
         
         setRecentPosts(posts.slice(0, 5))
@@ -59,7 +70,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
@@ -107,6 +118,30 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold">{stats.totalViews}</div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Waitlist
+            </CardTitle>
+            <UserCheck className="h-5 w-5 text-purple-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.waitlistCount}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Newsletter
+            </CardTitle>
+            <Mail className="h-5 w-5 text-indigo-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.newsletterCount}</div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Recent Posts */}
@@ -143,9 +178,12 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Quick Actions */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         <Button asChild>
           <Link href="/admin/dashboard/posts/new">Create New Post</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/admin/dashboard/subscribers">View Subscribers</Link>
         </Button>
         <Button asChild variant="outline">
           <Link href="/blog" target="_blank">View Blog</Link>

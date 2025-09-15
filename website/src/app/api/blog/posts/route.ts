@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAllPosts, getPublishedPosts, createPost, initializeStorage } from '@/lib/blog-storage'
 import { getSession } from '@/lib/auth'
 import { generateSlug, calculateReadingTime } from '@/lib/blog-storage'
+import { getAllPostsAdmin, getPublishedPostsAdmin, createPostAdmin } from '@/lib/blog-storage-admin'
 
-// Initialize storage on startup
-initializeStorage()
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,7 +10,7 @@ export async function GET(request: NextRequest) {
     const isAdmin = !!session
     
     // Return all posts for admin, only published for public
-    const posts = isAdmin ? await getAllPosts() : await getPublishedPosts()
+    const posts = isAdmin ? await getAllPostsAdmin() : await getPublishedPostsAdmin()
     
     return NextResponse.json({ posts })
   } catch (error) {
@@ -29,7 +27,7 @@ export async function POST(request: NextRequest) {
     
     const data = await request.json()
     
-    const newPost = await createPost({
+    const newPost = await createPostAdmin({
       title: data.title,
       slug: data.slug || generateSlug(data.title),
       excerpt: data.excerpt,

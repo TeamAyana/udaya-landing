@@ -10,16 +10,34 @@ import {
   Menu, 
   X,
   Plus,
-  Settings
+  Settings,
+  BookOpen,
+  Users,
+  Mail,
+  ChevronDown,
+  ChevronRight,
+  Tag,
+  Shield,
+  BarChart3
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const sidebarItems = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'All Posts', href: '/admin/dashboard/posts', icon: FileText },
-  { name: 'New Post', href: '/admin/dashboard/posts/new', icon: Plus },
-  { name: 'Settings', href: '/admin/dashboard/settings', icon: Settings },
+  { 
+    name: 'Blog', 
+    icon: BookOpen,
+    submenu: [
+      { name: 'All Posts', href: '/admin/dashboard/posts', icon: FileText },
+      { name: 'New Post', href: '/admin/dashboard/posts/new', icon: Plus },
+      { name: 'Categories', href: '/admin/dashboard/settings?tab=categories', icon: Tag },
+      { name: 'Authors', href: '/admin/dashboard/settings?tab=authors', icon: Users },
+    ]
+  },
+  { name: 'Analytics', href: '/admin/dashboard/analytics', icon: BarChart3 },
+  { name: 'Subscribers', href: '/admin/dashboard/subscribers', icon: Mail },
+  { name: 'User Management', href: '/admin/dashboard/users', icon: Shield },
 ]
 
 export default function AdminLayout({
@@ -30,6 +48,7 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [expandedMenus, setExpandedMenus] = useState<string[]>(['Blog'])
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -66,25 +85,81 @@ export default function AdminLayout({
             <ul className="space-y-2">
               {sidebarItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname === item.href
                 
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors",
-                        isActive
-                          ? "bg-udaya-sage text-white"
-                          : "hover:bg-gray-100 text-gray-700"
+                if ('submenu' in item) {
+                  const isExpanded = expandedMenus.includes(item.name)
+                  const isChildActive = item.submenu.some(sub => pathname === sub.href)
+                  
+                  return (
+                    <li key={item.name}>
+                      <button
+                        onClick={() => {
+                          setExpandedMenus(prev =>
+                            isExpanded 
+                              ? prev.filter(name => name !== item.name)
+                              : [...prev, item.name]
+                          )
+                        }}
+                        className={cn(
+                          "w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors",
+                          isChildActive
+                            ? "bg-udaya-sage/10 text-udaya-sage"
+                            : "hover:bg-gray-100 text-gray-700"
+                        )}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="flex-1 text-left">{item.name}</span>
+                        {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                      </button>
+                      {isExpanded && (
+                        <ul className="mt-2 ml-6 space-y-1">
+                          {item.submenu.map((subItem) => {
+                            const SubIcon = subItem.icon
+                            const isActive = pathname === subItem.href
+                            
+                            return (
+                              <li key={subItem.href}>
+                                <Link
+                                  href={subItem.href}
+                                  className={cn(
+                                    "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm",
+                                    isActive
+                                      ? "bg-udaya-sage text-white"
+                                      : "hover:bg-gray-100 text-gray-700"
+                                  )}
+                                  onClick={() => setSidebarOpen(false)}
+                                >
+                                  <SubIcon className="w-4 h-4" />
+                                  <span>{subItem.name}</span>
+                                </Link>
+                              </li>
+                            )
+                          })}
+                        </ul>
                       )}
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      <Icon className="w-5 h-5" />
-                      <span>{item.name}</span>
-                    </Link>
-                  </li>
-                )
+                    </li>
+                  )
+                } else {
+                  const isActive = pathname === item.href
+                  
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors",
+                          isActive
+                            ? "bg-udaya-sage text-white"
+                            : "hover:bg-gray-100 text-gray-700"
+                        )}
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span>{item.name}</span>
+                      </Link>
+                    </li>
+                  )
+                }
               })}
             </ul>
           </nav>
