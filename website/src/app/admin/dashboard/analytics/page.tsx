@@ -58,6 +58,7 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true)
   const [dateRange, setDateRange] = useState('7days')
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [error, setError] = useState<string | null>(null)
   
   useEffect(() => {
     fetchAnalytics()
@@ -65,15 +66,19 @@ export default function AnalyticsPage() {
   
   const fetchAnalytics = async () => {
     try {
+      setError(null)
       const response = await fetch(`/api/admin/analytics?range=${dateRange}`)
       const data = await response.json()
       
       if (data.analytics) {
         setAnalytics(data.analytics)
         setLastUpdated(new Date())
+      } else if (data.error) {
+        setError(data.error)
       }
     } catch (error) {
       console.error('Failed to fetch analytics:', error)
+      setError('Failed to connect to analytics service')
     } finally {
       setLoading(false)
     }
@@ -104,18 +109,28 @@ export default function AnalyticsPage() {
             <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics Not Configured</h3>
             <p className="text-gray-600 mb-4">
-              Google Analytics is not configured. Please set up the following environment variables:
+              {error || 'Google Analytics is not configured. Please set up the following environment variables:'}
             </p>
-            <div className="text-left max-w-md mx-auto mb-4">
-              <code className="block bg-gray-100 p-3 rounded text-sm">
-                GA_PROPERTY_ID<br/>
-                GA_CLIENT_EMAIL<br/>
-                GA_PRIVATE_KEY
-              </code>
-            </div>
-            <p className="text-sm text-gray-500">
-              Contact your administrator to configure Google Analytics integration.
-            </p>
+            {!error && (
+              <>
+                <div className="text-left max-w-md mx-auto mb-4">
+                  <code className="block bg-gray-100 p-3 rounded text-sm">
+                    GA_PROPERTY_ID<br/>
+                    GA_CLIENT_EMAIL<br/>
+                    GA_PRIVATE_KEY
+                  </code>
+                </div>
+                <p className="text-sm text-gray-500">
+                  Contact your administrator to configure Google Analytics integration.
+                </p>
+              </>
+            )}
+            {error && (
+              <Button onClick={fetchAnalytics} variant="outline" size="sm">
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Try Again
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>
