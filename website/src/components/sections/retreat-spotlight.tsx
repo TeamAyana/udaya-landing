@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Calendar, MapPin, Users, Clock } from 'lucide-react'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -96,10 +97,13 @@ export function RetreatSpotlight() {
             {/* Right Image */}
             <ScrollAnimation animation="scale" delay={300}>
               <div className="relative h-full min-h-[400px] overflow-hidden rounded-2xl shadow-xl">
-                <img 
+                <Image 
                   src="/uploads/cancer_retreat.jpg"
                   alt="Cancer Retreat - Hua Hin"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-center"
+                  loading="lazy"
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-udaya-charcoal/80 via-transparent to-transparent" />

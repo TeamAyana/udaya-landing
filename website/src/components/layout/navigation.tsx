@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -56,11 +57,16 @@ export function Navigation() {
               href="/"
               className="flex items-center transition-all duration-300 hover:scale-105"
             >
-              <img 
-                src="/uploads/logo.png" 
-                alt="Udaya" 
-                className="h-9 w-auto"
-              />
+              <div className="relative h-9 w-24">
+                <Image 
+                  src="/uploads/logo.png" 
+                  alt="Udaya" 
+                  fill
+                  sizes="96px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </Link>
 
             {/* Desktop Navigation */}

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 
@@ -12,6 +13,8 @@ export function Hero() {
           loop
           muted
           playsInline
+          preload="auto"
+          poster="/uploads/video-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/uploads/video.mp4" type="video/mp4" />
@@ -51,11 +54,16 @@ export function Hero() {
         <div className="mx-auto max-w-4xl text-center">
           {/* Logo at the top */}
           <div className="mb-4 md:mb-6 animate-hero-scale-in">
-            <img 
-              src="/uploads/logo_mid.png" 
-              alt="Udaya Logo" 
-              className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto object-contain drop-shadow-2xl animate-breathing"
-            />
+            <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto relative">
+              <Image 
+                src="/uploads/logo_mid.png" 
+                alt="Udaya Logo" 
+                fill
+                sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, 192px"
+                className="object-contain drop-shadow-2xl animate-breathing"
+                priority
+              />
+            </div>
           </div>
           
           {/* Tagline after logo */}
