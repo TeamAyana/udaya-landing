@@ -86,7 +86,7 @@ export default function UserManagementPage() {
     password: '',
     role: 'author' as User['role']
   })
-  const [editedUser, setEditedUser] = useState<Partial<User>>({})
+  const [editedUser, setEditedUser] = useState<Partial<User & { password?: string }>>({})
   
   useEffect(() => {
     fetchUsers()
