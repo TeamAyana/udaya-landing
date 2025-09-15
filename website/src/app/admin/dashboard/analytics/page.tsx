@@ -104,13 +104,18 @@ export default function AnalyticsPage() {
             <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics Not Configured</h3>
             <p className="text-gray-600 mb-4">
-              Google Analytics is not set up yet. Follow the setup guide to enable analytics.
+              Google Analytics is not configured. Please set up the following environment variables:
             </p>
-            <Button asChild variant="outline">
-              <a href="/GOOGLE_ANALYTICS_SETUP.md" target="_blank">
-                View Setup Guide
-              </a>
-            </Button>
+            <div className="text-left max-w-md mx-auto mb-4">
+              <code className="block bg-gray-100 p-3 rounded text-sm">
+                GA_PROPERTY_ID<br/>
+                GA_CLIENT_EMAIL<br/>
+                GA_PRIVATE_KEY
+              </code>
+            </div>
+            <p className="text-sm text-gray-500">
+              Contact your administrator to configure Google Analytics integration.
+            </p>
           </CardContent>
         </Card>
       </div>

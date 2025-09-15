@@ -124,16 +124,6 @@ export default function AdminLoginPage() {
                 {loading ? 'Logging in...' : 'Login'}
               </button>
             </form>
-
-            <div className="mt-8 p-4 bg-gradient-to-br from-udaya-sage/5 to-udaya-cream/20 rounded-xl">
-              <p className="text-center text-sm text-gray-600 font-medium mb-2">
-                Default admin credentials:
-              </p>
-              <div className="text-center text-sm text-gray-600 space-y-1">
-                <p>Email: <span className="font-mono font-semibold text-udaya-sage">admin@udaya.one</span></p>
-                <p>Password: <span className="font-mono font-semibold text-udaya-sage">udaya2024</span></p>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </Container>

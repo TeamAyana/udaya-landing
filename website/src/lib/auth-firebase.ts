@@ -153,7 +153,7 @@ export async function initializeDefaultAdmin() {
           users: { create: true, read: true, update: true, delete: true },
           subscribers: { read: true, export: true }
         },
-        passwordHash: await hashPassword(process.env.ADMIN_PASSWORD || 'udaya2024'),
+        passwordHash: await hashPassword(process.env.ADMIN_PASSWORD || '9WU8W5r!,fyn'),
         createdAt: new Date().toISOString(),
         isActive: true
       }
