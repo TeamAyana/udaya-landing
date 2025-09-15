@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
           id: doc.id,
           ...userData
         }
-      }).sort((a, b) => {
+      }).sort((a: any, b: any) => {
         // Sort by createdAt if it exists
         const dateA = new Date(a.createdAt || 0)
         const dateB = new Date(b.createdAt || 0)
