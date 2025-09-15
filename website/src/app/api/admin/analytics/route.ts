@@ -205,19 +205,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ analytics: analyticsData })
     } catch (error: any) {
       console.error('Analytics API error:', error)
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        propertyId: process.env.GA_PROPERTY_ID,
+        clientEmail: process.env.GA_CLIENT_EMAIL
+      })
       
       // If it's a permission error, return a specific message
-      if (error.message?.includes('permission') || error.code === 7) {
+      if (error.message?.includes('permission') || error.code === 7 || error.code === 403) {
         return NextResponse.json({ 
           analytics: null,
-          error: 'Service account needs access to Google Analytics property. Please add the service account email to your GA property with Viewer permissions.'
+          error: `Service account needs access to Google Analytics property. Please add ${process.env.GA_CLIENT_EMAIL} to your GA property with Viewer permissions. Property ID: ${process.env.GA_PROPERTY_ID}`
         })
       }
       
-      // For other errors, return generic error
+      // If property not found
+      if (error.message?.includes('property') || error.code === 404) {
+        return NextResponse.json({ 
+          analytics: null,
+          error: `Google Analytics property not found. Please verify your GA_PROPERTY_ID (${process.env.GA_PROPERTY_ID}) is correct. For GA4, use just the numeric ID (e.g., 123456789), not the measurement ID (G-XXXXXX).`
+        })
+      }
+      
+      // For other errors, return more detailed error
       return NextResponse.json({ 
         analytics: null,
-        error: 'Failed to fetch analytics data. Please check your configuration.'
+        error: `Failed to fetch analytics data: ${error.message || 'Unknown error'}. Please check your configuration.`
       })
     }
   } catch (error) {
