@@ -10,6 +10,10 @@ const AUTHORS_COLLECTION = 'authors'
 // Blog post operations using Admin SDK
 export async function getAllPostsAdmin(): Promise<BlogPost[]> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return []
+    }
     const postsRef = adminDb.collection(POSTS_COLLECTION)
     const snapshot = await postsRef.orderBy('publishedAt', 'desc').get()
     
@@ -25,6 +29,10 @@ export async function getAllPostsAdmin(): Promise<BlogPost[]> {
 
 export async function getPublishedPostsAdmin(): Promise<BlogPost[]> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return []
+    }
     const postsRef = adminDb.collection(POSTS_COLLECTION)
     const snapshot = await postsRef
       .where('status', '==', 'published')
@@ -43,6 +51,10 @@ export async function getPublishedPostsAdmin(): Promise<BlogPost[]> {
 
 export async function getPostByIdAdmin(id: string): Promise<BlogPost | null> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return null
+    }
     const docRef = adminDb.collection(POSTS_COLLECTION).doc(id)
     const doc = await docRef.get()
     
@@ -62,6 +74,10 @@ export async function getPostByIdAdmin(id: string): Promise<BlogPost | null> {
 
 export async function getPostBySlugAdmin(slug: string): Promise<BlogPost | null> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return null
+    }
     const postsRef = adminDb.collection(POSTS_COLLECTION)
     const snapshot = await postsRef.where('slug', '==', slug).limit(1).get()
     
@@ -82,6 +98,10 @@ export async function getPostBySlugAdmin(slug: string): Promise<BlogPost | null>
 
 export async function createPostAdmin(post: Omit<BlogPost, 'id'>): Promise<BlogPost> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     const docRef = await adminDb.collection(POSTS_COLLECTION).add({
       ...post,
       createdAt: new Date().toISOString(),
@@ -103,6 +123,10 @@ export async function createPostAdmin(post: Omit<BlogPost, 'id'>): Promise<BlogP
 
 export async function updatePostAdmin(id: string, updates: Partial<BlogPost>): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     const docRef = adminDb.collection(POSTS_COLLECTION).doc(id)
     
     // If changing to published, set publishedAt
@@ -125,6 +149,10 @@ export async function updatePostAdmin(id: string, updates: Partial<BlogPost>): P
 
 export async function deletePostAdmin(id: string): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     await adminDb.collection(POSTS_COLLECTION).doc(id).delete()
   } catch (error) {
     console.error('Error deleting post:', error)
@@ -134,6 +162,10 @@ export async function deletePostAdmin(id: string): Promise<void> {
 
 export async function incrementPostViewsAdmin(id: string): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return
+    }
     const docRef = adminDb.collection(POSTS_COLLECTION).doc(id)
     await docRef.update({
       views: FieldValue.increment(1)
@@ -146,6 +178,10 @@ export async function incrementPostViewsAdmin(id: string): Promise<void> {
 // Category operations
 export async function getAllCategoriesAdmin(): Promise<BlogCategory[]> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return []
+    }
     const categoriesRef = adminDb.collection(CATEGORIES_COLLECTION)
     const snapshot = await categoriesRef.orderBy('name').get()
     
@@ -161,6 +197,10 @@ export async function getAllCategoriesAdmin(): Promise<BlogCategory[]> {
 
 export async function getCategoryByIdAdmin(id: string): Promise<BlogCategory | null> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return null
+    }
     const docRef = adminDb.collection(CATEGORIES_COLLECTION).doc(id)
     const doc = await docRef.get()
     
@@ -180,6 +220,10 @@ export async function getCategoryByIdAdmin(id: string): Promise<BlogCategory | n
 
 export async function createCategoryAdmin(category: Omit<BlogCategory, 'id'>): Promise<BlogCategory> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     const docRef = await adminDb.collection(CATEGORIES_COLLECTION).add(category)
     
     const newCategory = await getCategoryByIdAdmin(docRef.id)
@@ -196,6 +240,10 @@ export async function createCategoryAdmin(category: Omit<BlogCategory, 'id'>): P
 
 export async function updateCategoryAdmin(id: string, updates: Partial<BlogCategory>): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     await adminDb.collection(CATEGORIES_COLLECTION).doc(id).update(updates)
   } catch (error) {
     console.error('Error updating category:', error)
@@ -205,6 +253,10 @@ export async function updateCategoryAdmin(id: string, updates: Partial<BlogCateg
 
 export async function deleteCategoryAdmin(id: string): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     await adminDb.collection(CATEGORIES_COLLECTION).doc(id).delete()
   } catch (error) {
     console.error('Error deleting category:', error)
@@ -215,6 +267,10 @@ export async function deleteCategoryAdmin(id: string): Promise<void> {
 // Author operations
 export async function getAllAuthorsAdmin(): Promise<any[]> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return []
+    }
     const authorsRef = adminDb.collection(AUTHORS_COLLECTION)
     const snapshot = await authorsRef.orderBy('name').get()
     
@@ -230,6 +286,10 @@ export async function getAllAuthorsAdmin(): Promise<any[]> {
 
 export async function getAuthorByIdAdmin(id: string): Promise<any | null> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      return null
+    }
     const docRef = adminDb.collection(AUTHORS_COLLECTION).doc(id)
     const doc = await docRef.get()
     
@@ -249,6 +309,10 @@ export async function getAuthorByIdAdmin(id: string): Promise<any | null> {
 
 export async function createAuthorAdmin(author: any): Promise<any> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     const docRef = await adminDb.collection(AUTHORS_COLLECTION).add(author)
     
     const newAuthor = await getAuthorByIdAdmin(docRef.id)
@@ -265,6 +329,10 @@ export async function createAuthorAdmin(author: any): Promise<any> {
 
 export async function updateAuthorAdmin(id: string, updates: any): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     await adminDb.collection(AUTHORS_COLLECTION).doc(id).update(updates)
   } catch (error) {
     console.error('Error updating author:', error)
@@ -274,6 +342,10 @@ export async function updateAuthorAdmin(id: string, updates: any): Promise<void>
 
 export async function deleteAuthorAdmin(id: string): Promise<void> {
   try {
+    if (!adminDb) {
+      console.error('Firebase Admin not initialized')
+      throw new Error('Firebase Admin not initialized')
+    }
     await adminDb.collection(AUTHORS_COLLECTION).doc(id).delete()
   } catch (error) {
     console.error('Error deleting author:', error)
