@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       }))
       
       // Filter for newsletter subscribers (those with newsletter: true or who submitted via newsletter form)
-      newsletter = allContacts.filter(contact => 
+      newsletter = allContacts.filter((contact: any) => 
         contact.newsletter === true || contact.type === 'newsletter' || contact.source === 'blog'
       ).sort((a, b) => new Date(b.subscribedAt).getTime() - new Date(a.subscribedAt).getTime())
     } catch (error) {
