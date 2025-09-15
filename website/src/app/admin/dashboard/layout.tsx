@@ -86,7 +86,7 @@ export default function AdminLayout({
               {sidebarItems.map((item) => {
                 const Icon = item.icon
                 
-                if ('submenu' in item) {
+                if ('submenu' in item && item.submenu) {
                   const isExpanded = expandedMenus.includes(item.name)
                   const isChildActive = item.submenu.some(sub => pathname === sub.href)
                   
