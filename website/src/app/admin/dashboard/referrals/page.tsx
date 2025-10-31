@@ -449,7 +449,8 @@ export default function ReferralsPage() {
                           </Button>
                           <Button
                             size="sm"
-                            variant="destructive"
+                            variant="outline"
+                            className="border-red-600 text-red-600 hover:bg-red-50"
                             onClick={() => updateReferralStatus(referral.id, 'rejected')}
                           >
                             <XCircle className="w-4 h-4 mr-2" />

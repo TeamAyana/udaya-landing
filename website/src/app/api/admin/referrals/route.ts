@@ -117,7 +117,7 @@ export async function PATCH(request: NextRequest) {
     await adminDb.collection('referrals').doc(id).update({
       status,
       updatedAt: new Date().toISOString(),
-      updatedBy: session.user?.email || 'admin'
+      updatedBy: session.userId || 'admin'
     })
 
     console.log(`✅ Updated referral ${id} status to: ${status}`)

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-head-element */
+
 /**
  * Waitlist Admin Notification Email Template
  * Beautiful, consistent design for admin alerts

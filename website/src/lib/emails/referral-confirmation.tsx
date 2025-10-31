@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-head-element */
 /**
  * Referral Partnership Confirmation Email Template
  * Beautiful, consistent design with logo and Udaya branding

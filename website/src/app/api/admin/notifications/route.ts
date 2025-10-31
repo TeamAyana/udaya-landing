@@ -106,8 +106,8 @@ export async function PATCH(request: NextRequest) {
     if (ids && Array.isArray(ids)) {
       // Mark multiple notifications as read
       const batch = adminDb.batch()
-      ids.forEach(notificationId => {
-        const ref = adminDb.collection('notifications').doc(notificationId)
+      ids.forEach((notificationId: string) => {
+        const ref = adminDb!.collection('notifications').doc(notificationId)
         batch.update(ref, { read: true, readAt: new Date().toISOString() })
       })
       await batch.commit()

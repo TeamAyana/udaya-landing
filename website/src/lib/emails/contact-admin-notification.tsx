@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-head-element */
 /**
  * Contact Admin Notification Email Template
  * Beautiful, consistent design for admin alerts
