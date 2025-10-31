@@ -4,35 +4,36 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Calendar, MapPin, Clock, Users, CheckCircle, Download, Sun, Sunrise, Sunset, Moon } from 'lucide-react'
+import { Calendar, MapPin, Clock, Users, CheckCircle, Download, Sun, Sunrise, Sunset, Moon, Info, Heart } from 'lucide-react'
+import { RETREAT_DETAILS } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'Cancer Retreat - Hua Hin 2026',
-  description: 'Comprehensive 10-day medical cannabis retreat for those navigating cancer in Hua Hin, Thailand.',
+  title: 'Cancer Program - Thailand 2026',
+  description: 'Comprehensive 10-day medical cannabis program for those navigating cancer in Thailand.',
 }
 
 const includesItems = [
   'Private or shared accommodation',
   'All cancer-appropriate meals',
-  'Comprehensive medical assessment',
-  'All prescribed cannabis medicines',
+  'Comprehensive health assessment',
+  'All prescribed medical cannabis medicines',
   'Personalized cannabinoid protocol for cancer',
-  'Daily medical monitoring',
+  'Daily health check-ins',
   'All Udaya Method™ sessions',
   'Cancer support groups',
   'Individual counseling',
   'Caregiver workshop (if applicable)',
   'Airport transfers from Bangkok',
-  '24/7 medical support',
+  'Professional oversight',
   'Take-home protocols',
-  '6-month integration support',
+  '8 weeks post-program integration support',
   'Lifetime Udaya Circle™ membership'
 ]
 
 const whatYouLearn = {
   cannabisMastery: [
     'Optimal dosing for your symptoms',
-    'Managing chemo side effects',
+    'Managing treatment side effects',
     'THC/CBD balancing',
     'Drug interactions',
     'Home protocols'
@@ -51,7 +52,7 @@ const dailySchedule = [
   { time: '7:00 AM', activity: 'Morning medicine administration', icon: Sun },
   { time: '7:30 AM', activity: 'Optional gentle movement', icon: Sun },
   { time: '8:30 AM', activity: 'Nourishing breakfast', icon: Sun },
-  { time: '9:30 AM', activity: 'Medical rounds', icon: Sun },
+  { time: '9:30 AM', activity: 'Morning consultations', icon: Sun },
   { time: '10:30 AM', activity: 'Cancer education session', icon: Sun },
   { time: '11:30 AM', activity: 'Rest or pool therapy', icon: Sun },
   { time: '12:30 PM', activity: 'Lunch and medications', icon: Sun },
@@ -63,22 +64,67 @@ const dailySchedule = [
   { time: '9:00 PM', activity: 'Sleep support', icon: Moon }
 ]
 
-export default function CancerRetreatPage() {
+export default function CancerProgramPage() {
   return (
     <>
+      {/* Important Notice */}
+      <Section className="pt-32 pb-8">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-udaya-sage/5 via-white to-udaya-cream/30 border border-udaya-sage/20 shadow-sm">
+              {/* Decorative background elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-udaya-sage/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-udaya-gold/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+              <div className="relative px-8 py-10 md:px-12 md:py-12">
+                <div className="flex items-start gap-6">
+                  {/* Icon */}
+                  <div className="flex-shrink-0 hidden sm:block">
+                    <div className="w-14 h-14 rounded-full bg-udaya-sage/10 flex items-center justify-center">
+                      <Heart className="h-7 w-7 text-udaya-sage" />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <h3 className="font-serif text-2xl font-semibold text-udaya-charcoal mb-4 flex items-center gap-2">
+                      <Heart className="h-6 w-6 text-udaya-sage sm:hidden" />
+                      Our Commitment to Complementary Care
+                    </h3>
+                    <div className="space-y-3 text-udaya-charcoal/80 leading-relaxed">
+                      <p>
+                        This program is designed to <strong className="text-udaya-charcoal">complement your conventional cancer care</strong>—it
+                        is not a replacement for medical treatment.
+                      </p>
+                      <p>
+                        Udaya is <strong className="text-udaya-charcoal">not a hospital or primary care facility</strong>. We provide education
+                        and support for the therapeutic use of medical cannabis in conjunction with your existing treatment plan.
+                      </p>
+                      <p className="text-sm text-udaya-sage font-medium pt-2">
+                        We work alongside your healthcare team to support your whole-person healing journey.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
       {/* Hero Section */}
-      <Section className="pt-32 pb-16 bg-gradient-to-b from-udaya-cream to-white">
+      <Section className="pt-8 pb-16 bg-gradient-to-b from-udaya-cream to-white">
         <Container>
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="font-serif text-h1 font-bold text-udaya-charcoal mb-6">
-              Cancer Retreat — Hua Hin, Thailand (Q2 2026)
+              Cancer Program — {RETREAT_DETAILS.cancer.location_display}
             </h1>
             <p className="text-h3 font-light text-udaya-charcoal/80 mb-8">
-              Our inaugural retreat for those navigating cancer, with medical oversight.
+              Our inaugural program for those navigating cancer, with professional medical oversight.
             </p>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-udaya-sage/10 text-udaya-sage rounded-full text-sm font-medium">
               <span className="h-2 w-2 bg-udaya-sage rounded-full animate-pulse" />
-              Limited to 20 participants
+              Limited to {RETREAT_DETAILS.cancer.capacity} participants
             </div>
           </div>
         </Container>
@@ -92,31 +138,28 @@ export default function CancerRetreatPage() {
               <CardHeader className="text-center">
                 <CardTitle className="text-h2 font-serif">10-Day Comprehensive Cancer Program</CardTitle>
                 <CardDescription className="text-h3 text-udaya-sage font-bold mt-2">
-                  Investment: $12,000 USD
+                  Investment: {RETREAT_DETAILS.cancer.price}
                 </CardDescription>
               </CardHeader>
               <CardContent className="mt-6">
                 <p className="text-body-lg text-center mb-8">
-                  Specifically designed for those with cancer—all types, all stages. This carefully 
-                  calibrated 10-day journey provides optimal time for cannabis medicine initiation, 
+                  Specifically designed for those with cancer—all types, all stages. This carefully
+                  calibrated 10-day journey provides optimal time for medical cannabis initiation,
                   symptom management, and community building.
                 </p>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="font-semibold mb-4">Why We Chose Hua Hin</h3>
-                    <p className="text-sm text-udaya-charcoal/80">
-                      Located 200-220 km southwest of Bangkok (2.5-4 hour transfer), Hua Hin offers 
-                      the perfect balance of accessibility and tranquility. This royal seaside retreat 
-                      town has been Thailand's destination for healing and restoration for over a century.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-4">Climate Considerations</h3>
-                    <p className="text-sm text-udaya-charcoal/80">
-                      We schedule around the weather—cool mornings and restorative afternoons to manage 
-                      cancer-related fatigue. Target dates: late April, May, early June 2026.
-                    </p>
-                  </div>
+                <div className="space-y-4 text-center">
+                  <p className="text-sm text-udaya-charcoal/80">
+                    <strong>Small cohort (max {RETREAT_DETAILS.cancer.capacity})</strong> ensures personalized attention
+                  </p>
+                  <p className="text-sm text-udaya-charcoal/80">
+                    <strong>Nurse on staff</strong> for medical support
+                  </p>
+                  <p className="text-sm text-udaya-charcoal/80">
+                    <strong>Licensed Thai practitioner</strong> present for consultations
+                  </p>
+                  <p className="text-sm text-udaya-charcoal/80">
+                    <strong>Post-program support:</strong> {RETREAT_DETAILS.cancer.post_retreat_support}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -143,14 +186,15 @@ export default function CancerRetreatPage() {
         </Container>
       </Section>
 
-      {/* Daily Schedule */}
+      {/* Daily Structure */}
       <Section>
         <Container>
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-4">
-            Daily Schedule - Cancer Adapted
+            Daily Structure - Cancer Adapted
           </h2>
           <p className="text-center text-udaya-charcoal/70 mb-12 max-w-2xl mx-auto">
-            Carefully designed to honor cancer-related fatigue and treatment schedules
+            Carefully designed to honor cancer-related fatigue and treatment schedules.
+            {RETREAT_DETAILS.cancer.daily_structure}
           </p>
           <div className="max-w-3xl mx-auto space-y-2">
             {dailySchedule.map((item, index) => {
@@ -179,7 +223,7 @@ export default function CancerRetreatPage() {
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Cannabis Mastery for Cancer</CardTitle>
+                <CardTitle className="text-xl">Medical Cannabis Mastery for Cancer</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
@@ -219,9 +263,9 @@ export default function CancerRetreatPage() {
               Extending Your Stay
             </h2>
             <p className="text-body-lg text-udaya-charcoal/80 mb-8">
-              Need more time? Extensions available at $800/day including all meals, 
-              accommodation, and medical support. Perfect for those who need additional 
-              cannabis optimization or aren't ready to leave the sanctuary.
+              Need more time? Extensions available at $800/day including all meals,
+              accommodation, and medical support. Perfect for those who need additional
+              medical cannabis optimization or aren't ready to leave the sanctuary.
             </p>
           </div>
         </Container>
@@ -238,7 +282,9 @@ export default function CancerRetreatPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Base Program</CardTitle>
-                  <CardDescription className="text-2xl font-bold text-udaya-sage">$12,000 USD</CardDescription>
+                  <CardDescription className="text-2xl font-bold text-udaya-sage">
+                    {RETREAT_DETAILS.cancer.price}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-udaya-charcoal/80">10 days all-inclusive</p>
@@ -322,7 +368,7 @@ export default function CancerRetreatPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-udaya-charcoal">No active medical emergencies</h4>
-                      <p className="text-sm text-udaya-charcoal/60 mt-1">Stable condition suitable for retreat participation</p>
+                      <p className="text-sm text-udaya-charcoal/60 mt-1">Stable condition suitable for program participation</p>
                     </div>
                   </div>
                 </div>
@@ -343,13 +389,12 @@ export default function CancerRetreatPage() {
               Spaces are limited and filled on a best-fit basis. Join our waitlist to secure your spot.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+              <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90">
                 <Link href="/waitlist">Join Cancer Waitlist</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="#" className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Information Pack
+                <Link href="/contact">
+                  Schedule a Consultation
                 </Link>
               </Button>
             </div>

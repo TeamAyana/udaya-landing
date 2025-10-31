@@ -1,7 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
+import { SITE_CONFIG } from '@/lib/constants'
+import { trackEvent } from '@/lib/analytics'
 
 export function Hero() {
   return (
@@ -70,25 +74,19 @@ export function Hero() {
           <p className="mb-4 md:mb-6 text-lg sm:text-xl md:text-2xl font-light text-white/90 drop-shadow-lg animate-hero-slide-up animation-delay-200 px-4">
             A New Dawn for Your Health
           </p>
-          
-          <div className="mb-4 md:mb-6 animate-hero-slide-up animation-delay-300">
-            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 text-xs sm:text-sm font-medium text-white bg-udaya-sage/80 backdrop-blur-sm rounded-full">
-              Thailand's Premier Medical Cannabis Retreat
-            </span>
-          </div>
-          
+
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8">
             <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-400">
-              Beyond Treatment.
+              Natural therapy.
             </span>
             <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-500">
-              Toward Transformation.
+              Professional oversight.
             </span>
           </h1>
-          
+
           <div className="space-y-2 mb-8 md:mb-0">
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 drop-shadow-lg animate-hero-fade-in animation-delay-600 px-4">
-              Cannabis-assisted, clinician-guided retreats
+              Medical cannabis retreats in Thailand for people navigating cancer, chronic pain, and serious illness.
             </p>
             <p className="text-xs sm:text-sm text-white/80 drop-shadow-lg animate-hero-fade-in animation-delay-2000 px-4">
               จุดเริ่มต้นใหม่ของสุขภาพ • A new beginning for wellness
@@ -96,15 +94,29 @@ export function Hero() {
           </div>
 
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-float-in animation-delay-2000 px-4 sm:px-0">
-            <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90 text-white shadow-2xl transform transition-all duration-300 hover:scale-105 text-sm sm:text-base">
-              <Link href="/waitlist">
-                <span className="block sm:hidden">Join the Cancer Retreat</span>
-                <span className="hidden sm:block">Join the Cancer Retreat - Hua Hin Waitlist (Q2 2026)</span>
+            <Button
+              size="lg"
+              asChild
+              className="bg-udaya-sage hover:bg-udaya-sage/90 text-white shadow-2xl transform transition-all duration-300 hover:scale-105 text-sm sm:text-base"
+            >
+              <Link
+                href={SITE_CONFIG.hero.cta_primary_link}
+                onClick={() => trackEvent('hero_join_waitlist_clicked', { page: '/' })}
+              >
+                {SITE_CONFIG.hero.cta_primary_label}
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="bg-white/20 backdrop-blur-sm border-white/50 text-white hover:bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105 text-sm sm:text-base">
-              <Link href="/method">
-                Learn About Our Approach
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+              className="bg-white/20 backdrop-blur-sm border-white/50 text-white hover:bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105 text-sm sm:text-base"
+            >
+              <Link
+                href={SITE_CONFIG.hero.cta_secondary_link}
+                onClick={() => trackEvent('schedule_call_clicked', { page: '/' })}
+              >
+                {SITE_CONFIG.hero.cta_secondary_label}
               </Link>
             </Button>
           </div>

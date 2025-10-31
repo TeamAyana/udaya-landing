@@ -24,11 +24,11 @@ export default function HomePage() {
           {/* Header */}
           <div className="text-center mb-16 animate-fade-up">
             <h2 className="text-4xl md:text-5xl font-serif text-udaya-charcoal mb-6">
-              Where Healing Traditions Meet Modern Care
+              Where healing traditions meet modern support
             </h2>
             <p className="text-xl text-udaya-charcoal/70 max-w-3xl mx-auto">
-              A sanctuary for those navigating cancer, chronic pain, and serious illness—combining 
-              prescription-grade plant medicine with compassionate clinical support.
+              A sanctuary for those navigating cancer, chronic pain, and serious illness—combining
+              prescription-based medical cannabis with compassionate, holistic support.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Serious Illness Care</h3>
-              <p className="text-udaya-charcoal/60">Holistic support for complex conditions with 24/7 medical supervision</p>
+              <p className="text-udaya-charcoal/60">Holistic support for complex conditions with professional medical oversight</p>
             </div>
           </div>
 

@@ -51,7 +51,7 @@ export function RetreatSpotlight() {
                       <Calendar className="h-5 w-5 text-udaya-sage" />
                     </div>
                     <span className="text-udaya-charcoal font-medium">
-                      {cancerRetreat.date}
+                      {cancerRetreat.start_window}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 group">
@@ -59,7 +59,7 @@ export function RetreatSpotlight() {
                       <MapPin className="h-5 w-5 text-udaya-sage" />
                     </div>
                     <span className="text-udaya-charcoal font-medium">
-                      {cancerRetreat.location}
+                      {cancerRetreat.location_display}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 group">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FileText, Eye, TrendingUp, Users, Mail, UserCheck } from 'lucide-react'
+import { FileText, Eye, TrendingUp, Users, Mail, UserCheck, MessageSquare, Handshake } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
@@ -13,6 +13,8 @@ interface DashboardStats {
   totalViews: number
   waitlistCount: number
   newsletterCount: number
+  contactsCount: number
+  referralsCount: number
 }
 
 export default function AdminDashboard() {
@@ -22,7 +24,9 @@ export default function AdminDashboard() {
     draftPosts: 0,
     totalViews: 0,
     waitlistCount: 0,
-    newsletterCount: 0
+    newsletterCount: 0,
+    contactsCount: 0,
+    referralsCount: 0
   })
   const [recentPosts, setRecentPosts] = useState<any[]>([])
 
@@ -35,26 +39,36 @@ export default function AdminDashboard() {
       // Fetch posts data
       const postsResponse = await fetch('/api/blog/posts')
       const postsData = await postsResponse.json()
-      
+
       // Fetch subscriber data
       const subscribersResponse = await fetch('/api/admin/subscribers')
       const subscribersData = await subscribersResponse.json()
-      
+
+      // Fetch contacts data
+      const contactsResponse = await fetch('/api/admin/contacts')
+      const contactsData = await contactsResponse.json()
+
+      // Fetch referrals data
+      const referralsResponse = await fetch('/api/admin/referrals')
+      const referralsData = await referralsResponse.json()
+
       if (postsData.posts) {
         const posts = postsData.posts
         const published = posts.filter((p: any) => p.status === 'published')
         const drafts = posts.filter((p: any) => p.status === 'draft')
         const totalViews = posts.reduce((sum: number, p: any) => sum + (p.views || 0), 0)
-        
+
         setStats({
           totalPosts: posts.length,
           publishedPosts: published.length,
           draftPosts: drafts.length,
           totalViews,
           waitlistCount: subscribersData.stats?.waitlistCount || 0,
-          newsletterCount: subscribersData.stats?.newsletterCount || 0
+          newsletterCount: subscribersData.stats?.newsletterCount || 0,
+          contactsCount: contactsData.stats?.totalContacts || 0,
+          referralsCount: referralsData.stats?.totalReferrals || 0
         })
-        
+
         setRecentPosts(posts.slice(0, 5))
       }
     } catch (error) {
@@ -70,7 +84,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
@@ -142,6 +156,30 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold">{stats.newsletterCount}</div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Contacts
+            </CardTitle>
+            <MessageSquare className="h-5 w-5 text-teal-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.contactsCount}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Partnerships
+            </CardTitle>
+            <Handshake className="h-5 w-5 text-orange-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.referralsCount}</div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Recent Posts */}
@@ -183,7 +221,13 @@ export default function AdminDashboard() {
           <Link href="/admin/dashboard/posts/new">Create New Post</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/admin/dashboard/subscribers">View Subscribers</Link>
+          <Link href="/admin/dashboard/subscribers">View Waitlist</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/admin/dashboard/contacts">View Contact Forms</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/admin/dashboard/referrals">View Partnerships</Link>
         </Button>
         <Button asChild variant="outline">
           <Link href="/blog" target="_blank">View Blog</Link>

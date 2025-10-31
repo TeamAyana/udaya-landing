@@ -4,11 +4,12 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart, Eye, Target, Users, Sparkles, Globe } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'About Udaya',
-  description: 'Learn about our vision, mission, and the story behind Thailand\'s premier medical cannabis retreat.',
+  description: 'Learn about our vision, mission, and the story behind our medical cannabis retreats in Thailand.',
 }
 
 const values = [
@@ -31,6 +32,51 @@ const values = [
     icon: Globe,
     title: 'Accessible Excellence',
     description: 'Premium care shouldn\'t be limited to the wealthy.'
+  }
+]
+
+const teamMembers = [
+  {
+    name: 'Jean-Luc',
+    title: 'Education & Product',
+    bio: 'With over 10 years of experience in the Canadian medical cannabis industry, Jean-Luc brings deep knowledge of dosing protocols, patient education, and product development. He leads our curriculum design and ensures every protocol is evidence-based and compassionate.',
+    image: '/uploads/jean 2.jpg',
+    tbd: false
+  },
+  {
+    name: 'Andrey',
+    title: 'Operations & Co-Facilitation',
+    bio: 'Andrey oversees the day-to-day operations of Udaya retreats and co-facilitates healing circles and mindfulness sessions. His background in holistic wellness and program management ensures every retreat runs smoothly and safely.',
+    image: '/uploads/andrey 2.jpg',
+    tbd: false
+  },
+  {
+    name: 'Chris',
+    title: 'Retreat Manager',
+    bio: 'Chris manages all aspects of the retreat experience, from pre-arrival support to post-retreat integration. With a commitment to creating sanctuary spaces, Chris ensures every guest feels welcomed, supported, and cared for throughout their journey.',
+    image: '/uploads/chris 2.jpg',
+    tbd: false
+  },
+  {
+    name: 'Thai Assistant',
+    title: 'Guest Support',
+    bio: 'Coming soon',
+    image: '',
+    tbd: true
+  },
+  {
+    name: 'Licensed Thai Practitioner',
+    title: 'Medical Oversight',
+    bio: 'Coming soon',
+    image: '',
+    tbd: true
+  },
+  {
+    name: 'Registered Nurse',
+    title: 'Medical Support',
+    bio: 'Coming soon',
+    image: '',
+    tbd: true
   }
 ]
 
@@ -78,9 +124,9 @@ export default function AboutPage() {
               We Built the Place We Wished Existed
             </h1>
             <p className="text-body-lg text-udaya-charcoal/80">
-              Udaya brings together clinicians, counselors, and program designers who believe 
-              relief can be lawful, careful, and deeply human. We measure what we do, teach 
-              what works, and lead with respect. We're not a hospital or a promise we can't 
+              Udaya brings together healthcare practitioners, counselors, and program designers who believe
+              relief can be lawful, careful, and deeply human. We measure what we do, teach
+              what works, and lead with respect. We're not a hospital or a promise we can't
               keep—we're a steady hand and a safe plan.
             </p>
           </div>
@@ -135,35 +181,32 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-6 text-udaya-charcoal/80">
               <p className="text-body-lg">
-                Coming from the Canadian Medical cannabis regime with over 10 years of experiences 
-                helping and dosing Medical clients across Canada. We notice the lack of education 
-                and support from the conventional medical community. From a trip to Indonesia, a 
-                beautiful partnership began between Body and Mind. Udaya was born.
-              </p>
-              <p>
-                Udaya emerged from a simple observation: while medical cannabis was becoming legal 
-                worldwide, those who needed it most—people with cancer, chronic pain, neurological 
+                Udaya emerged from a simple observation: while medical cannabis was becoming legal
+                worldwide, those who needed it most—people with cancer, chronic pain, neurological
                 conditions—had nowhere to go to learn how to use it properly, safely, and transformatively.
               </p>
               <p>
-                We watched as patients received prescriptions with little guidance. We saw the 
-                isolation of serious illness compounded by confusion. We recognized that healing 
-                requires more than medicine—it requires environment, support, and integration.
+                Drawing on over 10 years of experience working with clients in the Canadian medical cannabis
+                industry, we noticed a consistent gap: patients received prescriptions with little guidance.
+                We saw the isolation of serious illness compounded by confusion. We recognized that healing
+                requires more than medicine—it requires environment, education, support, and integration.
               </p>
               <p>
-                Thailand, with its progressive cannabis laws, Buddhist healing traditions, and 
-                culture of compassionate care, became the natural home for our vision.
+                Thailand, with its progressive medical cannabis laws, Buddhist healing traditions, and
+                culture of compassionate care, became the natural home for our vision. Udaya was born
+                from a partnership between experienced practitioners committed to bridging the gap between
+                plant medicine and professional, holistic care.
               </p>
               <Card className="mt-8 bg-udaya-sage/5 border-udaya-sage/20">
                 <CardHeader>
-                  <CardTitle className="text-lg">Our hopes and dreams for the future:</CardTitle>
+                  <CardTitle className="text-lg">Our Vision for the Future</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-udaya-charcoal/80">
-                    That Medical cannabis can be accessible to anyone that needs the healing power 
-                    of this beautiful plant. Accessibility should not be dedicated to laws, race, 
-                    genders or economics, anyone who wishes to use this natural plant as medicine 
-                    should be able to do so without any restrictions.
+                    We believe medical cannabis should be accessible to anyone who needs the healing power
+                    of this plant. Access should not be limited by laws, race, gender, or economics. Anyone
+                    who wishes to use this natural plant as medicine should be able to do so safely, legally,
+                    and with proper professional support.
                   </p>
                 </CardContent>
               </Card>
@@ -172,8 +215,88 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Our Values */}
+      {/* Our Team */}
       <Section>
+        <Container>
+          <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-4">
+            Our Team
+          </h2>
+          <p className="text-center text-udaya-charcoal/70 mb-12 max-w-2xl mx-auto">
+            Meet the people dedicated to supporting your healing journey with expertise, compassion, and care.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {teamMembers.filter(m => !m.tbd).map((member, index) => (
+              <Card key={index} className="group hover:shadow-xl transition-shadow duration-300">
+                <CardHeader>
+                  <div className="mb-4">
+                    <div className="w-full aspect-square bg-gradient-to-br from-udaya-sage/20 to-udaya-gold/10 rounded-lg overflow-hidden relative group/image">
+                      {member.image ? (
+                        <>
+                          <Image
+                            src={member.image}
+                            alt={`${member.name} - ${member.title}`}
+                            fill
+                            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                          {/* Visible gradient overlay - sage to gold diagonal */}
+                          <div
+                            className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+                            style={{
+                              background: 'linear-gradient(135deg, rgba(92, 123, 101, 0.35) 0%, rgba(92, 123, 101, 0.15) 40%, transparent 50%, rgba(217, 164, 65, 0.15) 70%, rgba(217, 164, 65, 0.25) 100%)',
+                              mixBlendMode: 'multiply'
+                            }}
+                          />
+                          {/* Subtle vignette effect */}
+                          <div
+                            className="absolute inset-0 pointer-events-none"
+                            style={{
+                              background: 'radial-gradient(circle at center, transparent 40%, rgba(92, 123, 101, 0.15) 100%)'
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Users className="h-20 w-20 text-udaya-sage/40" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <CardTitle className="text-xl font-serif">
+                    {member.name}
+                  </CardTitle>
+                  <CardDescription className="text-udaya-sage font-medium">
+                    {member.title}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-udaya-charcoal/70">
+                    {member.bio}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* TBD Roles - Compact Format */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h3 className="font-serif text-xl font-semibold text-udaya-charcoal text-center mb-6">
+              Additional Team Members (Coming Soon)
+            </h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {teamMembers.filter(m => m.tbd).map((member, index) => (
+                <div key={index} className="text-center p-4 bg-udaya-sage/5 rounded-lg border border-udaya-sage/10">
+                  <p className="font-semibold text-udaya-charcoal mb-1">{member.name}</p>
+                  <p className="text-sm text-udaya-sage">{member.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Our Values */}
+      <Section variant="cream">
         <Container>
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-12">
             Our Values
@@ -196,7 +319,7 @@ export default function AboutPage() {
       </Section>
 
       {/* The Udaya Family */}
-      <Section variant="cream">
+      <Section>
         <Container>
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-12">
             The Udaya Family
@@ -236,7 +359,7 @@ export default function AboutPage() {
                 <Link href="/method">Learn About Our Method</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/retreats">View Retreats</Link>
+                <Link href="/programs">View Programs</Link>
               </Button>
             </div>
           </div>

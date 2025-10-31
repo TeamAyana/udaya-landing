@@ -8,7 +8,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
-import { NAVIGATION_ITEMS } from '@/lib/constants'
+import { NAVIGATION_ITEMS, SITE_CONFIG } from '@/lib/constants'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -109,8 +109,10 @@ export function Navigation() {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button asChild>
-              <Link href="/waitlist">Join Waitlist</Link>
+            <Button asChild className="bg-udaya-sage text-white hover:bg-udaya-sage/90">
+              <Link href={SITE_CONFIG.hero.cta_primary_link}>
+                {SITE_CONFIG.hero.cta_primary_label}
+              </Link>
             </Button>
           </div>
 
@@ -169,13 +171,23 @@ export function Navigation() {
               </div>
             ))}
             <div className="pt-4">
-              <Button asChild className="w-full">
-                <Link href="/waitlist">Join Waitlist</Link>
+              <Button asChild className="w-full bg-udaya-sage text-white hover:bg-udaya-sage/90">
+                <Link href={SITE_CONFIG.hero.cta_primary_link}>
+                  {SITE_CONFIG.hero.cta_primary_label}
+                </Link>
               </Button>
             </div>
           </div>
         </Container>
       </div>
+
+      {/* Mobile Floating CTA Button */}
+      <Link
+        href={SITE_CONFIG.hero.cta_primary_link}
+        className="lg:hidden fixed bottom-6 right-6 z-50 bg-udaya-sage text-white px-6 py-3 rounded-full shadow-lg hover:bg-udaya-sage/90 transition-all hover:scale-105 font-medium"
+      >
+        Join Waitlist
+      </Link>
     </header>
   )
 }

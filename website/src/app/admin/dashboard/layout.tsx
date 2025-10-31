@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { 
-  LayoutDashboard, 
-  FileText, 
-  LogOut, 
-  Menu, 
+import {
+  LayoutDashboard,
+  FileText,
+  LogOut,
+  Menu,
   X,
   Plus,
   Settings,
@@ -18,15 +18,18 @@ import {
   ChevronRight,
   Tag,
   Shield,
-  BarChart3
+  BarChart3,
+  MessageSquare,
+  Handshake
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { NotificationsBell } from '@/components/admin/notifications-bell'
 
 const sidebarItems = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { 
-    name: 'Blog', 
+  {
+    name: 'Blog',
     icon: BookOpen,
     submenu: [
       { name: 'All Posts', href: '/admin/dashboard/posts', icon: FileText },
@@ -36,7 +39,9 @@ const sidebarItems = [
     ]
   },
   { name: 'Analytics', href: '/admin/dashboard/analytics', icon: BarChart3 },
-  { name: 'Subscribers', href: '/admin/dashboard/subscribers', icon: Mail },
+  { name: 'Waitlist', href: '/admin/dashboard/subscribers', icon: Mail },
+  { name: 'Contact Forms', href: '/admin/dashboard/contacts', icon: MessageSquare },
+  { name: 'Partnerships', href: '/admin/dashboard/referrals', icon: Handshake },
   { name: 'User Management', href: '/admin/dashboard/users', icon: Shield },
 ]
 
@@ -179,6 +184,11 @@ export default function AdminLayout({
 
       {/* Main content */}
       <main className="lg:ml-64 relative z-10">
+        {/* Top Header with Notifications */}
+        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-end lg:justify-end">
+          <NotificationsBell />
+        </div>
+
         <div className="p-6 lg:p-8">
           {children}
         </div>

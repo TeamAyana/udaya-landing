@@ -109,8 +109,8 @@ export default function MedicalDisclaimerPage() {
               If you have any questions about this Medical Disclaimer, please contact us at:
             </p>
             <p className="text-body text-udaya-charcoal/80">
-              Email: info@udaya.health<br />
-              WhatsApp: +66 65 829 5454
+              Email: <a href="mailto:team@udaya.one" className="text-udaya-sage hover:underline">team@udaya.one</a><br />
+              WhatsApp: <a href="https://wa.me/16477730296" className="text-udaya-sage hover:underline">+1 (647) 773-0296</a>
             </p>
           </div>
         </Container>

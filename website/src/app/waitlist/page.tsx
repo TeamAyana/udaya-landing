@@ -44,6 +44,7 @@ type WaitlistFormData = z.infer<typeof waitlistSchema>
 export default function WaitlistPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [waitlistNumber, setWaitlistNumber] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   
   const {
@@ -81,6 +82,7 @@ export default function WaitlistPage() {
 
       const result = await response.json()
       console.log('Form submitted successfully:', result)
+      setWaitlistNumber(result.waitlistNumber || null)
       setIsSubmitted(true)
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -101,13 +103,19 @@ export default function WaitlistPage() {
             <h1 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
               Thank you. We see you.
             </h1>
+            {waitlistNumber && (
+              <div className="mb-6 p-4 bg-udaya-sage/10 rounded-lg border border-udaya-sage/20">
+                <p className="text-sm text-udaya-charcoal/70 mb-1">Your Waitlist Number</p>
+                <p className="text-3xl font-bold text-udaya-sage">#{waitlistNumber}</p>
+              </div>
+            )}
             <p className="text-body-lg text-udaya-charcoal/80 mb-8">
               You'll receive within 24 hours:
             </p>
             <ul className="text-left max-w-md mx-auto space-y-2 mb-8">
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
-                <span>Your waitlist number</span>
+                <span>Confirmation email with your waitlist details</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-udaya-sage mt-0.5 flex-shrink-0" />
@@ -123,7 +131,7 @@ export default function WaitlistPage() {
               </li>
             </ul>
             <p className="text-udaya-charcoal/70 mb-8">
-              Our clinical team reviews applications weekly. Expect an update within 10 days.
+              Our care team reviews applications weekly. Expect an update within 10 days.
             </p>
             <Button asChild>
               <Link href="/">Return to Home</Link>
@@ -141,14 +149,14 @@ export default function WaitlistPage() {
         <Container>
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="font-serif text-h1 font-bold text-udaya-charcoal mb-6">
-              Secure Your Place for Hua Hin (Q2 2026)
+              Secure Your Place for Thailand (Q2 2026)
             </h1>
             <p className="text-h3 font-light text-udaya-charcoal/80 mb-4">
               Priority dates, first pricing, and pre-opening Q&A.
             </p>
             <p className="text-body-lg text-udaya-charcoal/70">
-              Cohorts are small and fill from the waitlist. Add your name for early access 
-              to dates, pricing, and clinical intake. No obligation.
+              Cohorts are small and fill from the waitlist. Add your name for early access
+              to dates, pricing, and intake consultation. No obligation.
             </p>
           </div>
         </Container>
@@ -208,7 +216,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.fullName && (
-                          <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.fullName.message}</p>
                         )}
                       </div>
                       <div>
@@ -219,7 +227,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.email && (
-                          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.email.message}</p>
                         )}
                       </div>
                       <div>
@@ -229,7 +237,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.phone && (
-                          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.phone.message}</p>
                         )}
                       </div>
                       <div>
@@ -239,7 +247,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.country && (
-                          <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.country.message}</p>
                         )}
                       </div>
                       <div>
@@ -250,7 +258,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.age && (
-                          <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.age.message}</p>
                         )}
                       </div>
                     </div>
@@ -267,7 +275,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.diagnosis && (
-                          <p className="text-red-500 text-sm mt-1">{errors.diagnosis.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.diagnosis.message}</p>
                         )}
                       </div>
                       <div>
@@ -277,7 +285,7 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.diagnosisDate && (
-                          <p className="text-red-500 text-sm mt-1">{errors.diagnosisDate.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.diagnosisDate.message}</p>
                         )}
                       </div>
                       <div>
@@ -288,11 +296,11 @@ export default function WaitlistPage() {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
                         />
                         {errors.currentTreatments && (
-                          <p className="text-red-500 text-sm mt-1">{errors.currentTreatments.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.currentTreatments.message}</p>
                         )}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-2">Have you used cannabis medicinally or recreationally? *</label>
+                        <label className="block text-sm font-medium mb-2">Have you used medical cannabis or cannabis recreationally? *</label>
                         <select
                           {...register('cannabisExperience')}
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-udaya-sage"
@@ -300,10 +308,10 @@ export default function WaitlistPage() {
                           <option value="">Select...</option>
                           <option value="never">Never</option>
                           <option value="recreational">Recreationally only</option>
-                          <option value="medical">Medicinally</option>
+                          <option value="medical">Medical cannabis</option>
                         </select>
                         {errors.cannabisExperience && (
-                          <p className="text-red-500 text-sm mt-1">{errors.cannabisExperience.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.cannabisExperience.message}</p>
                         )}
                       </div>
                     </div>
@@ -324,7 +332,7 @@ export default function WaitlistPage() {
                           <option value="future-programs">Future programs</option>
                         </select>
                         {errors.retreatInterest && (
-                          <p className="text-red-500 text-sm mt-1">{errors.retreatInterest.message}</p>
+                          <p className="text-udaya-terracotta text-sm mt-1">{errors.retreatInterest.message}</p>
                         )}
                       </div>
                       {/* Additional fields continue... */}
@@ -340,21 +348,21 @@ export default function WaitlistPage() {
                         className="mt-1"
                       />
                       <label className="text-sm text-udaya-charcoal/80">
-                        By joining this waitlist, I understand that this is a medical program requiring 
-                        physician approval, I will need to provide complete medical records, cannabis 
-                        medicine is one component of a comprehensive program, this is not a replacement 
+                        By joining this waitlist, I understand that this is a medical program requiring
+                        physician approval, I will need to provide complete medical records, medical cannabis
+                        is one component of a comprehensive program, this is not a replacement
                         for conventional medical care, and spaces are limited and filled on a best-fit basis.
                       </label>
                     </div>
                     {errors.agreement && (
-                      <p className="text-red-500 text-sm mt-1">{errors.agreement.message}</p>
+                      <p className="text-udaya-terracotta text-sm mt-1">{errors.agreement.message}</p>
                     )}
                   </div>
 
                   {/* Error Message */}
                   {error && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                      <p className="text-red-600 text-sm">{error}</p>
+                    <div className="p-4 bg-udaya-terracotta/10 border border-udaya-terracotta/30 rounded-md">
+                      <p className="text-udaya-terracotta text-sm">{error}</p>
                     </div>
                   )}
 

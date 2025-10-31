@@ -24,11 +24,13 @@ export function Footer() {
         <div className="py-12">
           {/* Brand Section */}
           <div className="text-center mb-12">
-            <img 
-              src="/uploads/logo_mid.png" 
-              alt="Udaya" 
-              className="h-28 w-28 mx-auto rounded-lg object-contain"
-            />
+            <Link href="/" aria-label="Go to homepage">
+              <img
+                src="/uploads/logo_mid.png"
+                alt="Udaya"
+                className="h-28 w-28 mx-auto rounded-lg object-contain hover:opacity-90 transition-opacity cursor-pointer"
+              />
+            </Link>
           </div>
 
           {/* Main Footer Content */}
@@ -43,6 +45,14 @@ export function Footer() {
                     className="text-white/70 hover:text-white transition-colors duration-200 text-sm"
                   >
                     About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/blog"
+                    className="text-white/70 hover:text-white transition-colors duration-200 text-sm"
+                  >
+                    Blog
                   </Link>
                 </li>
                 <li>
@@ -82,6 +92,14 @@ export function Footer() {
                     className="text-white/70 hover:text-white transition-colors duration-200 text-sm"
                   >
                     WhatsApp: {SITE_CONFIG.links.whatsapp}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${SITE_CONFIG.links.blogEmail || 'team@udaya.one'}`}
+                    className="text-white/70 hover:text-white transition-colors duration-200 text-sm"
+                  >
+                    Email Us
                   </a>
                 </li>
                 <li className="pt-3">
@@ -134,22 +152,23 @@ export function Footer() {
                 <div>
                   <h4 className="font-semibold text-white/70 mb-2">Standards & Ethics</h4>
                   <p>
-                    Udaya adheres to Thai regulations: prescription-based access, 
-                    licensed dispensing, and restrictions on public use and advertising.
+                    Udaya operates under Thai regulations, following prescription-based access,
+                    licensed dispensing practices, and compliance with public use and advertising laws.
                   </p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-white/70 mb-2">Medical Disclaimer</h4>
                   <p>
-                    Udaya provides adjunctive supportive care. We do not diagnose, 
-                    treat, or cure disease. Participation is by clinical approval.
+                    We provide education and support for the therapeutic use of medical cannabis.
+                    We are not a hospital or primary care facility. Individual responses vary;
+                    medical cannabis complements conventional care.
                   </p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-white/70 mb-2">Your Privacy</h4>
                   <p>
-                    We safeguard your data with the highest standards. 
-                    You may request deletion at any time.
+                    We protect your personal information with industry-leading security standards.
+                    You may request data deletion at any time.
                   </p>
                 </div>
               </div>

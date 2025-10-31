@@ -8,19 +8,19 @@ export function TrustSection() {
       icon: Stethoscope,
       title: 'Medically Supervised',
       description:
-        'On-site medical professionals and registered nurses oversee prescription pathways, monitor responses, and adjust plans as needed.',
+        'Licensed practitioner oversight and a nurse on staff throughout your stay.',
     },
     {
       icon: Shield,
       title: 'Legally Compliant',
       description:
-        'We operate within Thailand\'s current medical cannabis regulations. Your safety is paramount.',
+        'Programs operate within Thailand\'s medical cannabis framework with prescription-based access.',
     },
     {
       icon: Heart,
       title: 'Deeply Compassionate',
       description:
-        'Udaya is not a hospital; it is a standards-driven, compassionate adjunct to your existing care.',
+        'Small cohorts (max 20) so every person feels seen and supported.',
     },
   ]
 
@@ -29,9 +29,7 @@ export function TrustSection() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">
-            Medically Supervised. Legally Compliant.
-            <br />
-            Deeply Compassionate.
+            Medically supervised. Legally compliant. Deeply compassionate.
           </h2>
         </div>
 

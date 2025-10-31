@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Mail, Phone, MessageSquare, MapPin, Clock, CheckCircle, Loader2, Send, Globe, Users } from 'lucide-react'
+import { Mail, Phone, MessageSquare, CheckCircle, Loader2, Send, Globe, Users, Clock } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/constants'
 
 const contactSchema = z.object({
@@ -48,23 +48,11 @@ const contactMethods = [
   }
 ]
 
-const specializedContacts = [
-  {
-    title: 'For Clinicians',
-    email: SITE_CONFIG.links.cliniciansEmail,
-    description: 'Referrals and clinical inquiries'
-  },
-  {
-    title: 'For Media',
-    email: SITE_CONFIG.links.pressEmail,
-    description: 'Press and media inquiries'
-  }
-]
-
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  
+  const [error, setError] = useState<string | null>(null)
+
   const {
     register,
     handleSubmit,
@@ -75,26 +63,41 @@ export default function ContactPage() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    console.log('Form submitted:', data)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (response.ok && result.success) {
+        setIsSubmitted(true)
+      } else {
+        throw new Error(result.error || 'Failed to submit form')
+      }
+    } catch (error) {
+      console.error('Contact form error:', error)
+      setError(error instanceof Error ? error.message : 'Failed to submit form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <>
       {/* Hero Section */}
-      <Section className="pt-32 pb-20 bg-gradient-to-br from-udaya-cream via-white to-udaya-sage/5 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 right-0 w-96 h-96 bg-udaya-gold/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-udaya-sage/10 rounded-full blur-3xl" />
-        </div>
-        <Container className="relative z-10">
+      <Section className="pt-32 pb-16 bg-gradient-to-b from-udaya-cream/30 to-white">
+        <Container>
           <div className="mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 bg-udaya-sage/10 text-udaya-sage px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Users className="h-4 w-4" />
-              <span>Available 24/7 for urgent inquiries</span>
+              <span>Available for urgent inquiries</span>
             </div>
             <h1 className="font-serif text-h1 font-bold text-udaya-charcoal mb-6">
               Let's Start Your Journey Together
@@ -122,10 +125,10 @@ export default function ContactPage() {
       </Section>
 
       {/* Contact Methods */}
-      <Section className="py-20">
+      <Section className="py-16">
         <Container>
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
                 Choose Your Preferred Way to Connect
               </h2>
@@ -133,20 +136,20 @@ export default function ContactPage() {
                 We're available through multiple channels to ensure you get the support you need
               </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="grid md:grid-cols-3 gap-8">
               {contactMethods.map((method, index) => {
                 const Icon = method.icon
                 return (
-                  <Card key={index} className="group hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border-2 hover:border-udaya-sage/30">
-                    <CardHeader className="text-center">
+                  <Card key={index} className="group hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border-2 hover:border-udaya-sage/30 h-full flex flex-col">
+                    <CardHeader className="text-center flex-grow">
                       <div className="mx-auto mb-4 h-16 w-16 bg-gradient-to-br from-udaya-sage/20 to-udaya-sage/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <Icon className="h-8 w-8 text-udaya-sage" />
                       </div>
                       <CardTitle className="text-xl mb-2">{method.title}</CardTitle>
                       <CardDescription className="text-base">{method.description}</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <a 
+                    <CardContent className="text-center">
+                      <a
                         href={method.href}
                         className="inline-flex items-center gap-2 text-udaya-sage hover:text-udaya-sage/80 font-semibold text-lg group-hover:underline"
                       >
@@ -158,43 +161,14 @@ export default function ContactPage() {
                 )
               })}
             </div>
-
-            {/* Specialized Contacts */}
-            <div className="bg-gradient-to-r from-udaya-cream/50 to-udaya-sage/10 rounded-2xl p-8">
-              <h3 className="font-serif text-h3 font-bold text-udaya-charcoal text-center mb-8">
-                Specialized Support Teams
-              </h3>
-              <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                {specializedContacts.map((contact, index) => (
-                  <Card key={index} className="bg-white hover:shadow-lg transition-shadow group cursor-pointer">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg group-hover:text-udaya-sage transition-colors">
-                        {contact.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <a 
-                        href={`mailto:${contact.email}`}
-                        className="text-udaya-sage hover:text-udaya-sage/80 font-medium block mb-2"
-                      >
-                        {contact.email}
-                      </a>
-                      <p className="text-sm text-udaya-charcoal/70">
-                        {contact.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
           </div>
         </Container>
       </Section>
 
       {/* Contact Form */}
-      <Section className="py-20 bg-gradient-to-b from-white to-udaya-cream/30 relative">
+      <Section className="py-16 bg-gradient-to-b from-white to-udaya-cream/30">
         <Container>
-          <div className="max-w-3xl mx-auto relative z-10" style={{ pointerEvents: 'auto' }}>
+          <div className="max-w-3xl mx-auto">
             {isSubmitted ? (
               <Card>
                 <CardContent className="py-16 text-center">
@@ -214,7 +188,7 @@ export default function ContactPage() {
               </Card>
             ) : (
               <div>
-                <div className="text-center mb-12">
+                <div className="text-center mb-10">
                   <div className="inline-flex items-center justify-center h-16 w-16 bg-udaya-sage/10 rounded-full mb-6">
                     <Send className="h-8 w-8 text-udaya-sage" />
                   </div>
@@ -222,23 +196,23 @@ export default function ContactPage() {
                     Send Us a Message
                   </h2>
                   <p className="text-body-lg text-udaya-charcoal/70 max-w-2xl mx-auto">
-                    Share your story and questions. Our clinical team will provide personalized guidance.
+                    Share your story and questions. Our care team will provide personalized guidance.
                   </p>
                 </div>
-                <Card className="shadow-xl border-0 relative z-10">
+                <Card className="shadow-xl border-0">
                   <CardContent className="p-8">
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-20" style={{ pointerEvents: 'auto' }}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label htmlFor="name" className="block text-sm font-semibold text-udaya-charcoal">Name *</label>
                           <input
                             id="name"
                             {...register('name')}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300 relative z-30 bg-white"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300"
                             placeholder="Your full name"
                           />
                           {errors.name && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                               <span className="text-xs">⚠</span> {errors.name.message}
                             </p>
                           )}
@@ -249,11 +223,11 @@ export default function ContactPage() {
                             id="email"
                             {...register('email')}
                             type="email"
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300 relative z-30 bg-white"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300"
                             placeholder="your@email.com"
                           />
                           {errors.email && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                               <span className="text-xs">⚠</span> {errors.email.message}
                             </p>
                           )}
@@ -266,11 +240,11 @@ export default function ContactPage() {
                           <input
                             id="country"
                             {...register('country')}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300 relative z-30 bg-white"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300"
                             placeholder="Your country or region"
                           />
                           {errors.country && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                               <span className="text-xs">⚠</span> {errors.country.message}
                             </p>
                           )}
@@ -280,7 +254,7 @@ export default function ContactPage() {
                           <select
                             id="userType"
                             {...register('userType')}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300 appearance-none bg-white cursor-pointer relative z-30"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300 appearance-none bg-white cursor-pointer"
                           >
                             <option value="">Select your role...</option>
                             <option value="patient">Patient</option>
@@ -289,7 +263,7 @@ export default function ContactPage() {
                             <option value="other">Other</option>
                           </select>
                           {errors.userType && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                               <span className="text-xs">⚠</span> {errors.userType.message}
                             </p>
                           )}
@@ -301,11 +275,11 @@ export default function ContactPage() {
                         <input
                           id="subject"
                           {...register('subject')}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300"
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300"
                           placeholder="What would you like to discuss?"
                         />
                         {errors.subject && (
-                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                          <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                             <span className="text-xs">⚠</span> {errors.subject.message}
                           </p>
                         )}
@@ -317,21 +291,30 @@ export default function ContactPage() {
                           id="message"
                           {...register('message')}
                           rows={6}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all duration-200 hover:border-gray-300 resize-none relative z-30 bg-white"
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-udaya-sage focus:border-transparent transition-all hover:border-gray-300 resize-none"
                           placeholder="Please share your questions, medical history, or any concerns you'd like to discuss..."
                         />
                         {errors.message && (
-                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                          <p className="text-udaya-terracotta text-sm mt-1 flex items-center gap-1">
                             <span className="text-xs">⚠</span> {errors.message.message}
                           </p>
                         )}
                       </div>
 
+                      {error && (
+                        <div className="bg-udaya-terracotta/10 border-2 border-udaya-terracotta/30 rounded-lg p-4">
+                          <p className="text-udaya-terracotta text-sm flex items-start gap-2">
+                            <span className="text-lg">⚠️</span>
+                            <span>{error}</span>
+                          </p>
+                        </div>
+                      )}
+
                       <div className="space-y-4">
-                        <Button 
-                          type="submit" 
-                          size="lg" 
-                          className="w-full py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                        <Button
+                          type="submit"
+                          size="lg"
+                          className="w-full"
                           disabled={isSubmitting}
                         >
                           {isSubmitting ? (
@@ -359,55 +342,6 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* Mailing Address & Additional Info */}
-      <Section className="py-20 bg-gradient-to-b from-white to-udaya-cream/20">
-        <Container>
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-h2 font-bold text-udaya-charcoal text-center mb-12">
-              Visit Us in Beautiful Hua Hin
-            </h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="group hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 bg-udaya-sage/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-udaya-sage" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">Retreat Location</h3>
-                      <p className="text-udaya-charcoal/80">Udaya Medical Cannabis Retreat</p>
-                      <p className="text-udaya-charcoal/80">Hua Hin, Prachuap Khiri Khan</p>
-                      <p className="text-udaya-charcoal/80">Thailand 77110</p>
-                      <p className="text-sm text-udaya-charcoal/60 mt-3">
-                        2.5 hours from Bangkok by car
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="group hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 bg-udaya-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-udaya-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">Office Hours</h3>
-                      <p className="text-udaya-charcoal/80">Monday - Friday: 9:00 AM - 6:00 PM ICT</p>
-                      <p className="text-udaya-charcoal/80">Saturday: 9:00 AM - 1:00 PM ICT</p>
-                      <p className="text-udaya-charcoal/80">Sunday: Closed</p>
-                      <p className="text-sm text-udaya-charcoal/60 mt-3">
-                        Emergency support available 24/7
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </Container>
-      </Section>
     </>
   )
 }

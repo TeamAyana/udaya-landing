@@ -18,17 +18,17 @@ export function MethodOverview() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">
-            A Comprehensive Path to Peace
+            A comprehensive path to holistic health
           </h2>
           <p className="mt-6 text-body-lg text-udaya-charcoal/80">
             The Udaya Method™ is an integrated framework for the whole person.
-            We weave together four pillars to support common cancer‑related
+            We weave together three pillars to support common cancer‑related
             challenges—scared of the unknown, anxiety, stress, pain, sleep
             disturbance, appetite, nausea and treatment side effects.
           </p>
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2">
+        <div className="mt-16 grid gap-8 md:grid-cols-3">
           {UDAYA_METHOD_PILLARS.map((pillar, index) => {
             const Icon = iconMap[pillar.icon as keyof typeof iconMap]
             return (

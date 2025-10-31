@@ -4,64 +4,59 @@ import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Leaf, Brain, Heart, Users, CheckCircle } from 'lucide-react'
+import { Leaf, Brain, Users, CheckCircle, Clock, UserCheck } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'The Udaya Method™',
-  description: 'An integrated framework for healing the whole person through medical cannabis, mindfulness, nutrition, and community.',
+  description: 'An integrated framework for whole-person healing via medical cannabis education, mindful support, and community.',
 }
 
 const methodPillars = [
   {
     icon: Leaf,
     title: 'Pillar 1 — Prescription Cannabinoid Care',
-    subtitle: 'Our approach to plant medicine is medical, precise, and personalized.',
+    subtitle: 'Education and application through physician-guided medical cannabis protocols.',
     includes: [
-      'Comprehensive consultation on arrival; review of medications and goals',
-      'Personalized plan using physician-prescribed cannabinoid medicines (e.g., FECO/RSO and other formulations when appropriate)',
-      'Daily nurse rounds, symptom tracking, and dose titration',
-      'Education on timing, interactions, and at-home continuation (where lawful)'
+      'Personalized dosing protocols using full-extract oils (FECO/RSO) and other formulations',
+      'Understanding the endocannabinoid system (ECS) and how it supports healing',
+      'Daily morning 1:1 check-ins with practitioners during the retreat',
+      'Education on timing, interactions, and safe use',
+      'Support for at-home continuation where lawful'
     ]
   },
   {
     icon: Brain,
     title: 'Pillar 2 — Mindfulness & Meaning-Centered Support',
-    subtitle: 'A diagnosis can bring our deepest fears to the surface. We create a safe space to meet them.',
+    subtitle: 'Meeting uncertainty and fear through presence, breath, and shared meaning.',
     includes: [
-      'Trauma-sensitive meditation and breathwork',
-      'Optional one-on-one counseling',
-      'Gentle practices (e.g., Yoga Nidra, sound rest, massage)'
-    ]
-  },
-  {
-    icon: Heart,
-    title: 'Pillar 3 — Metabolic & Body Nourishment',
-    subtitle: 'We believe food is medicine, and rest is revolutionary.',
-    includes: [
-      'Organic, anti-inflammatory menus; therapeutic diets accommodated',
-      'Doctor-supervised gentle fasting/refeeding for eligible guests',
-      'Hydration/rest protocols; digestive support and sleep hygiene'
+      'Meditation and breathwork sessions 2–3 times daily',
+      'Evening Yoga Nidra for deep rest and nervous system regulation',
+      'Group sharing circles to process experiences together',
+      'Meaning-centered support for embracing existential concerns and fear of death',
+      'Mindset shifts through compassionate self-inquiry'
     ]
   },
   {
     icon: Users,
-    title: 'Pillar 4 — Community & Sanctuary (Udaya Circle™)',
-    subtitle: 'Healing rarely happens in isolation. It takes a village...stronger together...',
+    title: 'Pillar 3 — Community Sanctuary (Udaya Circle)',
+    subtitle: 'Heal in company. Small cohorts and lasting connections.',
     includes: [
-      'Small cohorts; facilitated sharing circles',
-      'Caregiver programming and skills for communication and resilience',
-      'Post-retreat: monthly small-group calls, resources, referrals'
+      'Small retreat cohorts (20 participants or fewer) for intimate support',
+      'Facilitated sharing circles during the retreat',
+      'Post-retreat weekly check-ins to support integration',
+      'Help sourcing medicine legally at home after the retreat',
+      'Lifetime access to the Udaya Circle community'
     ]
   }
 ]
 
 const whoThisServes = [
   'Live with cancer, chronic pain, neurological conditions (e.g., Parkinson\'s), or autoimmune disorders',
-  'Seek evidence-informed cannabis medicine in a legal, supervised setting',
+  'Seek evidence-informed medical cannabis in a legal, supervised setting',
   'Want to address not only symptoms, but the fear, isolation, and existential weight of serious illness',
   'Are ready to complement conventional care with integrative practices',
-  'Value community with others walking similar paths',
-  'Need caregivers to be supported and included'
+  'Value healing in community with others walking similar paths',
+  'Want their caregivers to be supported and included in the journey'
 ]
 
 export default function MethodPage() {
@@ -75,7 +70,7 @@ export default function MethodPage() {
               The Udaya Method™
             </h1>
             <p className="text-body-lg text-udaya-charcoal/80">
-              An integrated path to peace, born from over 10 years of helping people navigate the complexities of serious illness. The Udaya Method™ addresses body, mind, and spirit with care that is both precise and profoundly humane.
+              The Udaya Method is an integrated framework for whole-person healing via medical cannabis education, mindful support, and community.
             </p>
           </div>
         </Container>
@@ -85,7 +80,7 @@ export default function MethodPage() {
       <Section className="py-24">
         <Container>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">A Four-Pillar Framework for Wholeness</h2>
+            <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">A Three-Pillar Framework for Wholeness</h2>
             <p className="text-body text-udaya-charcoal/80 mt-4">
               Our method is a comprehensive, evidence-informed system of care designed to support every aspect of your being.
             </p>
@@ -141,6 +136,68 @@ export default function MethodPage() {
         </Container>
       </div>
 
+      {/* Daily Structure Section */}
+      <Section className="py-24 bg-white">
+        <Container>
+          <div className="mx-auto max-w-4xl text-center mb-12">
+            <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">
+              Your Day at Udaya
+            </h2>
+            <p className="text-body-lg text-udaya-charcoal/80 mt-4">
+              Each day is designed to balance personalized care, group connection, and deep learning.
+            </p>
+          </div>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="bg-udaya-cream/30 border-udaya-sage/20">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 mt-1">
+                    <UserCheck className="h-8 w-8 text-udaya-sage" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-h4 font-bold text-udaya-charcoal mb-2">
+                      Morning: 1:1 Consultations
+                    </h3>
+                    <p className="text-body text-udaya-charcoal/80">
+                      Each morning begins with a personal check-in with your practitioner to review how you're feeling, adjust dosing, and address any questions or concerns.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-udaya-cream/30 border-udaya-sage/20">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 mt-1">
+                    <Clock className="h-8 w-8 text-udaya-sage" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-h4 font-bold text-udaya-charcoal mb-2">
+                      Evening: Education Workshops
+                    </h3>
+                    <p className="text-body text-udaya-charcoal/80">
+                      Evenings include 1–2 hour education sessions covering the endocannabinoid system, dosing strategies, symptom management, and how to continue your protocol at home.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="mt-12 max-w-3xl mx-auto bg-udaya-sage/10 border border-udaya-sage/20 rounded-lg p-6">
+            <p className="text-body text-udaya-charcoal/90 text-center">
+              <strong>Our Commitment:</strong> All retreats are designed for cohorts of 20 participants or fewer, with a registered nurse on staff to ensure your safety and comfort.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Divider */}
+      <div className="py-12">
+        <Container>
+          <div className="border-t border-udaya-sage/20 w-1/2 mx-auto"></div>
+        </Container>
+      </div>
+
       {/* Who This Serves Section */}
       <Section variant="cream" className="py-24">
         <Container>
@@ -166,7 +223,7 @@ export default function MethodPage() {
             <p className="text-body text-udaya-charcoal/80 mb-8">Ready to take the next step?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <Link href="/retreats">Explore Upcoming Retreats</Link>
+                <Link href="/programs">Explore Our Programs</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="/contact">Ask a Question</Link>

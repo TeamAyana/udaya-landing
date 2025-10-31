@@ -174,9 +174,9 @@ export default function PrivacyPolicyPage() {
               If you have questions about this Privacy Policy or wish to exercise your rights, please contact us:
             </p>
             <p className="text-body text-udaya-charcoal/80">
-              Email: privacy@udaya.health<br />
-              Phone: +66 65 829 5454<br />
-              Address: Hua Hin, Thailand
+              Email: <a href="mailto:team@udaya.one" className="text-udaya-sage hover:underline">team@udaya.one</a><br />
+              Phone: <a href="tel:+16477730296" className="text-udaya-sage hover:underline">+1 (647) 773-0296</a><br />
+              Address: Prachuap Khiri Khan Province, Thailand
             </p>
           </div>
         </Container>

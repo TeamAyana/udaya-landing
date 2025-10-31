@@ -23,7 +23,7 @@ const faqCategories = [
       },
       {
         question: 'What if I have a medical emergency?',
-        answer: 'We maintain 24/7 medical staff on-site. We\'re partnered with Hua Hin Hospital (10 minutes) and Bangkok Hospital Hua Hin for any advanced interventions.'
+        answer: 'We maintain professional medical staff on-site with a registered nurse on staff. We\'re partnered with nearby hospitals for any advanced interventions that may be needed.'
       },
       {
         question: 'Can I attend during chemotherapy or radiation?',
@@ -32,14 +32,14 @@ const faqCategories = [
     ]
   },
   {
-    title: 'Cannabis Medicine',
+    title: 'Medical Cannabis',
     questions: [
       {
-        question: 'What if I\'ve never used cannabis?',
-        answer: 'Perfect. We specialize in cannabis-naive patients. We start with micro-doses, educate thoroughly, and increase gradually under medical supervision.'
+        question: 'What if I\'ve never used medical cannabis?',
+        answer: 'Perfect. We specialize in medical cannabis-naive patients. We start with micro-doses, educate thoroughly, and increase gradually under medical supervision.'
       },
       {
-        question: 'What types of cannabis medicine?',
+        question: 'What types of medical cannabis?',
         answer: 'Primarily Rick Simpson Oil (RSO/FECO) for full-spectrum benefits, high-CBD formulations, CBG for inflammation. All administered as oils, capsules, or tinctures—no smoking required.'
       },
       {
