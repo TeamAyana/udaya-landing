@@ -90,11 +90,7 @@ export default function ReferralsPage() {
       const response = await fetch('/api/referrals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          type: 'professional_referral',
-          createdAt: new Date().toISOString(),
-        }),
+        body: JSON.stringify(formData),
       })
 
       const result = await response.json()
@@ -102,11 +98,11 @@ export default function ReferralsPage() {
       if (response.ok && result.success) {
         setIsSubmitted(true)
       } else {
-        throw new Error(result.message || 'Failed to submit')
+        throw new Error(result.message || result.error || 'Failed to submit')
       }
     } catch (error) {
-      console.error('Error:', error)
-      setError('Failed to submit. Please try again or email us directly.')
+      console.error('Referral form error:', error)
+      setError(error instanceof Error ? error.message : 'Failed to submit. Please try again or email us directly.')
     } finally {
       setIsSubmitting(false)
     }
