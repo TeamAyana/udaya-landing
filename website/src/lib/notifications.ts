@@ -6,7 +6,7 @@
 import { adminDb } from './firebase-admin'
 
 export interface CreateNotificationParams {
-  type: 'waitlist' | 'contact' | 'referral'
+  type: 'waitlist' | 'contact' | 'referral' | 'newsletter'
   title: string
   message: string
   link: string
@@ -118,6 +118,25 @@ export async function createReferralNotification(data: {
       email: data.email,
       role: data.role,
       organization: data.organization
+    }
+  })
+}
+
+/**
+ * Create newsletter subscription notification
+ */
+export async function createNewsletterNotification(data: {
+  email: string
+  source: string
+}) {
+  return createNotification({
+    type: 'newsletter',
+    title: 'New Newsletter Subscriber',
+    message: `${data.email} subscribed to the newsletter`,
+    link: '/admin/dashboard/subscribers',
+    data: {
+      email: data.email,
+      source: data.source
     }
   })
 }

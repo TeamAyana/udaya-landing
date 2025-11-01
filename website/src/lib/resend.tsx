@@ -11,6 +11,8 @@ import { ContactConfirmationEmail } from './emails/contact-confirmation'
 import { ContactAdminNotificationEmail } from './emails/contact-admin-notification'
 import { ReferralConfirmationEmail } from './emails/referral-confirmation'
 import { ReferralAdminNotificationEmail } from './emails/referral-admin-notification'
+import { NewsletterConfirmationEmail } from './emails/newsletter-confirmation'
+import { NewsletterAdminNotificationEmail } from './emails/newsletter-admin-notification'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -318,6 +320,91 @@ export async function sendReferralAdminNotification(
     return { success: true, messageId: response.data?.id }
   } catch (error) {
     console.error('❌ Error sending referral admin notification:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+/**
+ * Send confirmation email to newsletter subscriber
+ */
+export async function sendNewsletterConfirmation(
+  email: string,
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string; messageId?: string }> {
+  try {
+    const emailHtml = await render(
+      <NewsletterConfirmationEmail
+        email={email}
+        unsubscribeToken={unsubscribeToken}
+      />
+    )
+
+    const response = await resend.emails.send({
+      from: 'Udaya Wellness <team@udaya.one>',
+      to: email,
+      subject: 'Welcome to the Udaya Newsletter 🌿',
+      html: emailHtml,
+      replyTo: 'team@udaya.one',
+      tags: [
+        { name: 'type', value: 'newsletter-confirmation' },
+        { name: 'source', value: 'blog' }
+      ]
+    })
+
+    if (response.error) {
+      console.error('❌ Resend error (newsletter confirmation):', response.error)
+      return { success: false, error: response.error.message }
+    }
+
+    console.log('✅ Newsletter confirmation sent to:', email, 'ID:', response.data?.id)
+    return { success: true, messageId: response.data?.id }
+  } catch (error) {
+    console.error('❌ Error sending newsletter confirmation:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+/**
+ * Send admin notification for new newsletter subscription
+ */
+export async function sendNewsletterAdminNotification(
+  email: string,
+  subscribedAt: string,
+  source: string = 'blog',
+  totalSubscribers?: number,
+  adminEmail: string = 'team@udaya.one'
+): Promise<{ success: boolean; error?: string; messageId?: string }> {
+  try {
+    const emailHtml = await render(
+      <NewsletterAdminNotificationEmail
+        email={email}
+        subscribedAt={subscribedAt}
+        source={source}
+        totalSubscribers={totalSubscribers}
+      />
+    )
+
+    const response = await resend.emails.send({
+      from: 'Udaya Admin <team@udaya.one>',
+      to: adminEmail,
+      subject: `📧 New Newsletter Subscriber - ${email}`,
+      html: emailHtml,
+      replyTo: email,
+      tags: [
+        { name: 'type', value: 'newsletter-admin-notification' },
+        { name: 'source', value: source }
+      ]
+    })
+
+    if (response.error) {
+      console.error('❌ Resend error (newsletter admin):', response.error)
+      return { success: false, error: response.error.message }
+    }
+
+    console.log('✅ Newsletter admin notification sent to:', adminEmail, 'ID:', response.data?.id)
+    return { success: true, messageId: response.data?.id }
+  } catch (error) {
+    console.error('❌ Error sending newsletter admin notification:', error)
     return { success: false, error: String(error) }
   }
 }

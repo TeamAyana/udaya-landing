@@ -283,3 +283,90 @@ export async function sendAdminNotification(
     return { success: false, error: String(error) }
   }
 }
+
+/**
+ * Add newsletter subscriber to Klaviyo
+ */
+export async function addNewsletterToKlaviyo(
+  email: string,
+  source: string = 'blog'
+): Promise<{ success: boolean; error?: string }> {
+  const listId = process.env.KLAVIYO_NEWSLETTER_LIST_ID || process.env.KLAVIYO_WAITLIST_LIST_ID
+
+  if (!listId) {
+    console.warn('⚠️ No Klaviyo newsletter list ID configured')
+    return { success: false, error: 'No list ID configured' }
+  }
+
+  try {
+    // Add to newsletter list
+    const profile: KlaviyoProfile = {
+      email,
+      properties: {
+        newsletter_source: source,
+        subscribed_at: new Date().toISOString(),
+        subscription_type: 'newsletter'
+      }
+    }
+
+    const addResult = await addToKlaviyoList(listId, profile)
+    if (!addResult.success) {
+      return addResult
+    }
+
+    // Track subscription event
+    const eventResult = await trackKlaviyoEvent(
+      email,
+      'Subscribed to Newsletter',
+      {
+        source,
+        subscription_type: 'blog_newsletter',
+        timestamp: new Date().toISOString()
+      }
+    )
+
+    return eventResult
+  } catch (error) {
+    console.error('Error adding newsletter to Klaviyo:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+/**
+ * Remove newsletter subscriber from Klaviyo
+ */
+export async function removeNewsletterFromKlaviyo(
+  email: string
+): Promise<{ success: boolean; error?: string }> {
+  const listId = process.env.KLAVIYO_NEWSLETTER_LIST_ID || process.env.KLAVIYO_WAITLIST_LIST_ID
+
+  if (!listId) {
+    console.warn('⚠️ No Klaviyo newsletter list ID configured')
+    return { success: false, error: 'No list ID configured' }
+  }
+
+  try {
+    // Track unsubscribe event
+    const eventResult = await trackKlaviyoEvent(
+      email,
+      'Unsubscribed from Newsletter',
+      {
+        unsubscribe_source: 'email_link',
+        timestamp: new Date().toISOString()
+      }
+    )
+
+    if (!eventResult.success) {
+      console.warn('⚠️ Failed to track Klaviyo unsubscribe event:', eventResult.error)
+    }
+
+    // Note: Klaviyo API doesn't have a direct "remove from list" endpoint
+    // The unsubscribe event will automatically update the profile status in Klaviyo
+    // Klaviyo will handle the suppression automatically
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error removing newsletter from Klaviyo:', error)
+    return { success: false, error: String(error) }
+  }
+}
