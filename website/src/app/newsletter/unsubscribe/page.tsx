@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Container } from '@/components/ui/container'
@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, XCircle, Loader2, Mail, Heart, ArrowLeft } from 'lucide-react'
 
-export default function UnsubscribePage() {
+function UnsubscribeContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'already' | 'error'>('loading')
   const [message, setMessage] = useState('')
@@ -224,5 +224,35 @@ export default function UnsubscribePage() {
         </div>
       </Container>
     </Section>
+  )
+}
+
+export default function UnsubscribePage() {
+  return (
+    <Suspense
+      fallback={
+        <Section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-udaya-cream/30 to-white py-20">
+          <Container>
+            <div className="max-w-2xl mx-auto">
+              <Card className="text-center border-0 shadow-xl">
+                <CardContent className="py-16">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-udaya-sage/10 mb-6">
+                    <Loader2 className="w-8 h-8 text-udaya-sage animate-spin" />
+                  </div>
+                  <h1 className="text-2xl font-serif font-bold text-udaya-charcoal mb-3">
+                    Loading...
+                  </h1>
+                  <p className="text-udaya-charcoal/60">
+                    Please wait while we load your unsubscribe request.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </Container>
+        </Section>
+      }
+    >
+      <UnsubscribeContent />
+    </Suspense>
   )
 }

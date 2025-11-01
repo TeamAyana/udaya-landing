@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -37,13 +37,7 @@ export default function NewPostPage() {
     ogImage: ''
   })
 
-  useEffect(() => {
-    setMounted(true)
-    fetchCategories()
-    fetchAuthors()
-  }, [])
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch('/api/blog/categories')
       const data = await response.json()
@@ -51,9 +45,9 @@ export default function NewPostPage() {
     } catch (error) {
       console.error('Failed to fetch categories:', error)
     }
-  }
+  }, [])
 
-  const fetchAuthors = async () => {
+  const fetchAuthors = useCallback(async () => {
     try {
       const response = await fetch('/api/blog/authors')
       const data = await response.json()
@@ -65,7 +59,13 @@ export default function NewPostPage() {
     } catch (error) {
       console.error('Failed to fetch authors:', error)
     }
-  }
+  }, [formData.author])
+
+  useEffect(() => {
+    setMounted(true)
+    fetchCategories()
+    fetchAuthors()
+  }, [fetchCategories, fetchAuthors])
 
   const handleTitleChange = (title: string) => {
     setFormData({
