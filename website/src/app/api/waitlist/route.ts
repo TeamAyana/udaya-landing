@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
     sendAdminWaitlistNotification({
       ...data,
       waitlistNumber
-    }, ADMIN_EMAIL).then(result => {
+    } as any, ADMIN_EMAIL).then(result => {
       if (result.success) {
         console.log('✅ Admin notification sent via Resend:', result.messageId)
       } else {
