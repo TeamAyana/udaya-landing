@@ -390,7 +390,7 @@ export default function CancerProgramPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90">
-                <Link href="/waitlist">Join Cancer Waitlist</Link>
+                <Link href="/inquiry">Join Cancer Waitlist</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="/contact">

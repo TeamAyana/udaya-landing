@@ -24,7 +24,7 @@ export default function SchedulePage() {
     const initializeCalendly = () => {
       if (window.Calendly && document.getElementById('calendly-embed')) {
         window.Calendly.initInlineWidget({
-          url: 'https://calendly.com/udaya-intake/consultation', // Replace with actual Calendly URL
+          url: 'https://calendly.com/andreyd/udaya-consultation',
           parentElement: document.getElementById('calendly-embed'),
           prefill: {},
           utm: {}
@@ -52,7 +52,7 @@ export default function SchedulePage() {
           // Initialize Calendly widget after script loads
           if (window.Calendly && document.getElementById('calendly-embed')) {
             window.Calendly.initInlineWidget({
-              url: 'https://calendly.com/udaya-intake/consultation', // Replace with actual Calendly URL
+              url: 'https://calendly.com/andreyd/udaya-consultation',
               parentElement: document.getElementById('calendly-embed'),
               prefill: {},
               utm: {}

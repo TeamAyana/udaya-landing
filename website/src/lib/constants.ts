@@ -15,7 +15,7 @@ export const SITE_CONFIG = {
     h1: 'Natural therapy. Professional oversight.',
     subhead: 'Medical cannabis retreats in Thailand for people navigating cancer, chronic pain, and serious illness.',
     cta_primary_label: 'Get More Information',
-    cta_primary_link: '/waitlist',
+    cta_primary_link: '/inquiry',
     cta_secondary_label: 'Contact Us',
     cta_secondary_link: '/contact',
   },

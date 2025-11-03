@@ -164,7 +164,7 @@ export default function FAQPage() {
                 <Link href="/contact">Contact Us</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/waitlist">Join Waitlist</Link>
+                <Link href="/inquiry">Join Waitlist</Link>
               </Button>
             </div>
           </div>

@@ -86,7 +86,7 @@ export function RetreatSpotlight() {
                   </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/waitlist">Join the Waitlist</Link>
+                  <Link href="/inquiry">Join the Waitlist</Link>
                 </Button>
               </div>
             </div>

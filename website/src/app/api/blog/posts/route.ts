@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth-firebase'
 import { generateSlug, calculateReadingTime } from '@/lib/blog-storage'
 import { getAllPostsAdmin, getPublishedPostsAdmin, createPostAdmin } from '@/lib/blog-storage-admin'
+import { sanitizeRichText, sanitizePlainText } from '@/lib/sanitize'
 
 
 export async function GET(request: NextRequest) {
@@ -25,29 +26,34 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
-    const data = await request.json()
-    
+    const rawData = await request.json()
+
+    // Sanitize content to prevent XSS
+    const sanitizedContent = sanitizeRichText(rawData.content || '')
+    const sanitizedTitle = sanitizePlainText(rawData.title || '')
+    const sanitizedExcerpt = sanitizePlainText(rawData.excerpt || '')
+
     const newPost = await createPostAdmin({
-      title: data.title,
-      slug: data.slug || generateSlug(data.title),
-      excerpt: data.excerpt,
-      content: data.content,
-      author: data.author || 'Udaya Team',
-      category: data.category,
-      tags: data.tags || [],
-      featuredImage: data.featuredImage || '',
-      publishedAt: data.publishedAt || new Date().toISOString(),
+      title: sanitizedTitle,
+      slug: rawData.slug || generateSlug(sanitizedTitle),
+      excerpt: sanitizedExcerpt,
+      content: sanitizedContent,
+      author: sanitizePlainText(rawData.author || 'Udaya Team'),
+      category: sanitizePlainText(rawData.category || ''),
+      tags: Array.isArray(rawData.tags) ? rawData.tags.map((tag: string) => sanitizePlainText(tag)) : [],
+      featuredImage: rawData.featuredImage || '',
+      publishedAt: rawData.publishedAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      status: data.status || 'draft',
-      readingTime: calculateReadingTime(data.content),
+      status: rawData.status || 'draft',
+      readingTime: calculateReadingTime(sanitizedContent),
       views: 0,
-      // SEO fields
-      metaTitle: data.metaTitle || '',
-      metaDescription: data.metaDescription || '',
-      focusKeyword: data.focusKeyword || '',
-      ogTitle: data.ogTitle || '',
-      ogDescription: data.ogDescription || '',
-      ogImage: data.ogImage || ''
+      // SEO fields - sanitize these too
+      metaTitle: sanitizePlainText(rawData.metaTitle || ''),
+      metaDescription: sanitizePlainText(rawData.metaDescription || ''),
+      focusKeyword: sanitizePlainText(rawData.focusKeyword || ''),
+      ogTitle: sanitizePlainText(rawData.ogTitle || ''),
+      ogDescription: sanitizePlainText(rawData.ogDescription || ''),
+      ogImage: rawData.ogImage || ''
     })
     
     return NextResponse.json({ post: newPost })

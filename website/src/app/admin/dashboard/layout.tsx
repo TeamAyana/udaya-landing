@@ -25,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { NotificationsBell } from '@/components/admin/notifications-bell'
+import { ErrorBoundary } from '@/components/admin/error-boundary'
 
 const sidebarItems = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -190,7 +191,9 @@ export default function AdminLayout({
         </div>
 
         <div className="p-6 lg:p-8">
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </div>
       </main>
 

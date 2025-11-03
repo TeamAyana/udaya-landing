@@ -4,6 +4,8 @@ import { db } from '@/lib/firebase'
 import { addWaitlistToKlaviyo } from '@/lib/klaviyo'
 import { sendWaitlistConfirmation, sendAdminWaitlistNotification } from '@/lib/resend'
 import { createWaitlistNotification } from '@/lib/notifications'
+import { checkRateLimit, getClientIp, RateLimitPresets } from '@/lib/rate-limit'
+import { sanitizeFormData } from '@/lib/sanitize'
 
 const KLAVIYO_WAITLIST_LIST_ID = process.env.KLAVIYO_WAITLIST_LIST_ID || 'QTTZix'
 const ADMIN_EMAIL = 'team@udaya.one'
@@ -36,7 +38,33 @@ async function getNextWaitlistNumber(): Promise<number> {
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json()
+    // Check rate limit
+    const clientIp = getClientIp(request)
+    const rateLimitResult = checkRateLimit(clientIp, RateLimitPresets.FORM_SUBMISSION)
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests',
+          message: 'You have submitted too many forms. Please try again later.',
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset)
+          }
+        }
+      )
+    }
+
+    const rawData = await request.json()
+
+    // Sanitize input data
+    const data = sanitizeFormData(rawData)
 
     // Get next waitlist number
     const waitlistNumber = await getNextWaitlistNumber()

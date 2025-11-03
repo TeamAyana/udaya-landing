@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth-firebase'
 import { getAllCategoriesAdmin, createCategoryAdmin } from '@/lib/blog-storage-admin'
 
 export async function GET(request: NextRequest) {

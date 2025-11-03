@@ -55,7 +55,7 @@ export default function ProgramsPage() {
                   </p>
                 </div>
                 <Button asChild className="w-full bg-udaya-sage hover:bg-udaya-sage/90">
-                  <Link href="/programs/cancer">Join Waitlist</Link>
+                  <Link href="/programs/cancer">Explore This Program</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -124,7 +124,7 @@ export default function ProgramsPage() {
           </p>
           <div className="text-center">
             <Button asChild className="bg-udaya-sage hover:bg-udaya-sage/90">
-              <Link href="/waitlist">Join Our Mailing List</Link>
+              <Link href="/inquiry">Join Our Mailing List</Link>
             </Button>
           </div>
         </Container>

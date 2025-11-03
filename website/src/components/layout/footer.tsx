@@ -104,7 +104,7 @@ export function Footer() {
                 </li>
                 <li className="pt-3">
                   <Link
-                    href="/waitlist"
+                    href="/inquiry"
                     className="inline-block px-5 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm font-medium transition-colors duration-200"
                   >
                     Join Our Waitlist

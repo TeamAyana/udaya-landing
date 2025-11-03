@@ -1,0 +1,25 @@
+{
+  "disallowed": [
+    { "term": "weed", "suggest": "medical cannabis", "severity": "error" },
+    { "term": "marijuana", "suggest": "medical cannabis", "severity": "error" },
+    { "term": "pot", "suggest": "medical cannabis", "severity": "error" },
+    { "term": "cannabis medicine", "suggest": "medical cannabis", "severity": "warning" },
+    { "term": "clinical support", "suggest": "holistic support", "severity": "warning" },
+    { "term": "clinical guidance", "suggest": "holistic guidance", "severity": "warning" },
+    { "term": "clinician-guided", "suggest": "professionally guided", "severity": "warning" },
+    { "term": "24/7 medical", "suggest": "professional oversight", "severity": "error" },
+    { "term": "24/7", "suggest": "professional oversight", "severity": "error" },
+    { "term": "Thailand's premier", "suggest": "", "severity": "error" },
+    { "term": "Thailand's first", "suggest": "", "severity": "error" },
+    { "term": "cure cancer", "suggest": "support cancer care", "severity": "error" },
+    { "term": "cure", "suggest": "support", "severity": "warning" }
+  ],
+  "required_replacements": {
+    "cannabis": "medical cannabis"
+  },
+  "exceptions": [
+    "import",
+    "Cannabis sativa",
+    "endocannabinoid"
+  ]
+}

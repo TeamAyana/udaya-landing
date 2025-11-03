@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth-firebase'
 import { calculateReadingTime } from '@/lib/blog-storage'
 import { getPostByIdAdmin, updatePostAdmin, deletePostAdmin, incrementPostViewsAdmin } from '@/lib/blog-storage-admin'
 

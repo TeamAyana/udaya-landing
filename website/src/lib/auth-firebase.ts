@@ -3,7 +3,13 @@ import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import { adminDb } from './firebase-admin'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'udaya-admin-secret-key-change-in-production'
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production')
+  }
+  console.warn('⚠️ Using default JWT_SECRET in development. Set JWT_SECRET in production!')
+  return 'udaya-admin-dev-secret-DO-NOT-USE-IN-PRODUCTION'
+})()
 
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
   return bcrypt.compare(password, hashedPassword)
@@ -142,9 +148,18 @@ export async function initializeDefaultAdmin() {
       .get()
     
     if (adminsSnapshot.empty) {
+      // Get admin credentials from environment variables
+      const adminEmail = process.env.ADMIN_EMAIL
+      const adminPassword = process.env.ADMIN_PASSWORD
+
+      if (!adminEmail || !adminPassword) {
+        console.error('❌ Cannot create default admin: ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required')
+        return
+      }
+
       // Create default admin user
       const defaultAdmin = {
-        email: process.env.ADMIN_EMAIL || 'admin@udaya.one',
+        email: adminEmail,
         name: 'Admin',
         role: 'admin',
         permissions: {
@@ -153,7 +168,7 @@ export async function initializeDefaultAdmin() {
           users: { create: true, read: true, update: true, delete: true },
           subscribers: { read: true, export: true }
         },
-        passwordHash: await hashPassword(process.env.ADMIN_PASSWORD || '9WU8W5r!,fyn'),
+        passwordHash: await hashPassword(adminPassword),
         createdAt: new Date().toISOString(),
         isActive: true
       }

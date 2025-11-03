@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth-firebase'
 import { updateCategoryAdmin, deleteCategoryAdmin } from '@/lib/blog-storage-admin'
 
 export async function PUT(

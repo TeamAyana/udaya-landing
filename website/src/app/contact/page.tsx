@@ -10,9 +10,8 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Mail, Phone, MessageSquare, CheckCircle, Loader2, Send, Globe, Users, Clock, Calendar, Video } from 'lucide-react'
+import { Mail, Phone, MessageSquare, CheckCircle, Loader2, Send, Globe, Users, Clock } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/constants'
-import { InlineWidget } from 'react-calendly'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -50,7 +49,6 @@ const contactMethods = [
 ]
 
 export default function ContactPage() {
-  const [contactMethod, setContactMethod] = useState<'message' | 'booking'>('message')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -146,16 +144,7 @@ export default function ContactPage() {
                 return (
                   <Card
                     key={index}
-                    className="group hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border-2 hover:border-udaya-sage/30 h-full flex flex-col"
-                    onClick={() => {
-                      if (isScheduleCall) {
-                        setContactMethod('booking')
-                        // Scroll to the booking section
-                        setTimeout(() => {
-                          document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                        }, 100)
-                      }
-                    }}
+                    className="group hover:shadow-xl hover:scale-[1.02] transition-all duration-300 border-2 hover:border-udaya-sage/30 h-full flex flex-col"
                   >
                     <CardHeader className="text-center flex-grow">
                       <div className="mx-auto mb-4 h-16 w-16 bg-gradient-to-br from-udaya-sage/20 to-udaya-sage/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -165,21 +154,15 @@ export default function ContactPage() {
                       <CardDescription className="text-base">{method.description}</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center">
-                      {isScheduleCall ? (
-                        <button className="inline-flex items-center gap-2 text-udaya-sage hover:text-udaya-sage/80 font-semibold text-lg group-hover:underline">
-                          <span>{method.value}</span>
-                          <span className="text-sm opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </button>
-                      ) : (
-                        <a
-                          href={method.href}
-                          className="inline-flex items-center gap-2 text-udaya-sage hover:text-udaya-sage/80 font-semibold text-lg group-hover:underline"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <span>{method.value}</span>
-                          <span className="text-sm opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                      )}
+                      <a
+                        href={isScheduleCall ? 'https://calendly.com/andreyd/udaya-consultation' : method.href}
+                        target={isScheduleCall ? '_blank' : undefined}
+                        rel={isScheduleCall ? 'noopener noreferrer' : undefined}
+                        className="inline-flex items-center gap-2 text-udaya-sage hover:text-udaya-sage/80 font-semibold text-lg group-hover:underline"
+                      >
+                        <span>{method.value}</span>
+                        <span className="text-sm opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                      </a>
                     </CardContent>
                   </Card>
                 )
@@ -189,75 +172,40 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* Contact Form / Booking Section */}
+      {/* Contact Form Section */}
       <Section id="contact-section" className="py-16 bg-gradient-to-b from-white to-udaya-cream/30">
         <Container>
           <div className="max-w-3xl mx-auto">
-            {/* Tab Selector */}
-            <div className="flex justify-center mb-10">
-              <div className="inline-flex bg-gray-100 rounded-lg p-1 gap-1">
-                <button
-                  onClick={() => setContactMethod('message')}
-                  className={`
-                    px-6 py-3 rounded-md font-semibold text-sm transition-all duration-300 flex items-center gap-2
-                    ${contactMethod === 'message'
-                      ? 'bg-white text-udaya-sage shadow-md'
-                      : 'text-udaya-charcoal/60 hover:text-udaya-charcoal'
-                    }
-                  `}
-                >
-                  <Send className="h-4 w-4" />
-                  Send Message
-                </button>
-                <button
-                  onClick={() => setContactMethod('booking')}
-                  className={`
-                    px-6 py-3 rounded-md font-semibold text-sm transition-all duration-300 flex items-center gap-2
-                    ${contactMethod === 'booking'
-                      ? 'bg-white text-udaya-sage shadow-md'
-                      : 'text-udaya-charcoal/60 hover:text-udaya-charcoal'
-                    }
-                  `}
-                >
-                  <Video className="h-4 w-4" />
-                  Book Consultation
-                </button>
-              </div>
-            </div>
-
-            {/* Message Form */}
-            {contactMethod === 'message' && (
-              <>
-                {isSubmitted ? (
-                  <Card>
-                    <CardContent className="py-16 text-center">
-                      <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-udaya-sage text-white">
-                        <CheckCircle className="h-8 w-8" />
-                      </div>
-                      <h2 className="font-serif text-h3 font-bold text-udaya-charcoal mb-4">
-                        Message Sent Successfully
-                      </h2>
-                      <p className="text-body-lg text-udaya-charcoal/80 mb-8">
-                        Thank you for reaching out. A member of our team will respond within 48 hours.
-                      </p>
-                      <Button asChild>
-                        <Link href="/">Return to Home</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div>
-                    <div className="text-center mb-10">
-                      <div className="inline-flex items-center justify-center h-16 w-16 bg-udaya-sage/10 rounded-full mb-6">
-                        <Send className="h-8 w-8 text-udaya-sage" />
-                      </div>
-                      <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
-                        Send Us a Message
-                      </h2>
-                      <p className="text-body-lg text-udaya-charcoal/70 max-w-2xl mx-auto">
-                        Share your story and questions. Our care team will provide personalized guidance.
-                      </p>
-                    </div>
+            {isSubmitted ? (
+              <Card>
+                <CardContent className="py-16 text-center">
+                  <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-udaya-sage text-white">
+                    <CheckCircle className="h-8 w-8" />
+                  </div>
+                  <h2 className="font-serif text-h3 font-bold text-udaya-charcoal mb-4">
+                    Message Sent Successfully
+                  </h2>
+                  <p className="text-body-lg text-udaya-charcoal/80 mb-8">
+                    Thank you for reaching out. A member of our team will respond within 48 hours.
+                  </p>
+                  <Button asChild>
+                    <Link href="/">Return to Home</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div>
+                <div className="text-center mb-10">
+                  <div className="inline-flex items-center justify-center h-16 w-16 bg-udaya-sage/10 rounded-full mb-6">
+                    <Send className="h-8 w-8 text-udaya-sage" />
+                  </div>
+                  <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
+                    Send Us a Message
+                  </h2>
+                  <p className="text-body-lg text-udaya-charcoal/70 max-w-2xl mx-auto">
+                    Share your story and questions. Our care team will provide personalized guidance.
+                  </p>
+                </div>
                 <Card className="shadow-xl border-0">
                   <CardContent className="p-8">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -395,53 +343,6 @@ export default function ContactPage() {
                     </form>
                   </CardContent>
                 </Card>
-              </div>
-                )}
-              </>
-            )}
-
-            {/* Calendly Booking Widget */}
-            {contactMethod === 'booking' && (
-              <div>
-                <div className="text-center mb-10">
-                  <div className="inline-flex items-center justify-center h-16 w-16 bg-udaya-sage/10 rounded-full mb-6">
-                    <Video className="h-8 w-8 text-udaya-sage" />
-                  </div>
-                  <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
-                    Book Your Consultation
-                  </h2>
-                  <p className="text-body-lg text-udaya-charcoal/70 max-w-2xl mx-auto">
-                    Schedule a 30-minute video call with our care team to discuss your needs and answer your questions.
-                  </p>
-                </div>
-
-                <Card className="shadow-xl border-0 overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="bg-white rounded-lg">
-                      {/* Replace 'your-calendly-url' with your actual Calendly link */}
-                      <InlineWidget
-                        url="https://calendly.com/your-calendly-url"
-                        styles={{
-                          height: '700px',
-                          minWidth: '100%',
-                        }}
-                        pageSettings={{
-                          backgroundColor: 'ffffff',
-                          hideEventTypeDetails: false,
-                          hideLandingPageDetails: false,
-                          primaryColor: '5C7B65',
-                          textColor: '2B2B2B'
-                        }}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-udaya-charcoal/60">
-                    Can't find a suitable time? <button onClick={() => setContactMethod('message')} className="text-udaya-sage hover:underline font-semibold">Send us a message</button> instead.
-                  </p>
-                </div>
               </div>
             )}
           </div>

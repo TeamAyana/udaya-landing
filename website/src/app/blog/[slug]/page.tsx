@@ -215,7 +215,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       to know about our upcoming retreats.
                     </p>
                     <Button asChild size="lg" variant="secondary" className="w-full">
-                      <Link href="/waitlist">Join the Waitlist</Link>
+                      <Link href="/inquiry">Join the Waitlist</Link>
                     </Button>
                   </CardContent>
                 </Card>

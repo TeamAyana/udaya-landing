@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth-firebase'
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
 // Initialize the Google Analytics Data API client

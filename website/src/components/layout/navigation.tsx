@@ -32,7 +32,7 @@ export function Navigation() {
   const shouldShowButtonOnPage = React.useMemo(() => {
     // Pages where button should NEVER appear
     const neverShowPages = [
-      '/waitlist',      // Already on waitlist page
+      '/inquiry',       // Already on inquiry page
       '/contact',       // Has own form
       '/referrals',     // Different CTA (partnership)
       '/privacy',       // Legal pages - poor UX
@@ -269,7 +269,7 @@ export function Navigation() {
             <div className="pt-4">
               <Button asChild className="w-full bg-udaya-sage text-white hover:bg-udaya-sage/90">
                 <Link href={SITE_CONFIG.hero.cta_primary_link}>
-                  {SITE_CONFIG.hero.cta_primary_label}
+                  Get More Information
                 </Link>
               </Button>
             </div>
@@ -283,13 +283,13 @@ export function Navigation() {
       <Link
         href={SITE_CONFIG.hero.cta_primary_link}
         className={cn(
-          "lg:hidden fixed bottom-6 right-6 z-40 bg-udaya-sage text-white px-6 py-3 rounded-full shadow-lg hover:bg-udaya-sage/90 transition-all duration-300 font-medium",
+          "lg:hidden fixed bottom-6 right-6 z-40 bg-udaya-sage text-white px-6 py-3 rounded-full shadow-lg hover:bg-udaya-sage/90 transition-all duration-300 font-medium text-sm",
           showFloatingButton && !isOpen
             ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
             : "opacity-0 translate-y-4 pointer-events-none scale-95"
         )}
       >
-        Join Waitlist
+        Get More Information
       </Link>
     </>
   )

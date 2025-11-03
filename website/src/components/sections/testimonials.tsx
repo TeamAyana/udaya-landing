@@ -167,7 +167,7 @@ export function Testimonials() {
             </p>
             <div className="mt-6">
               <Button variant="outline" asChild>
-                <a href="/retreats">See if our program fits your needs →</a>
+                <a href="/inquiry">Get More Information</a>
               </Button>
             </div>
           </div>

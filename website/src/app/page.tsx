@@ -50,7 +50,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Chronic Pain Resolution</h3>
-              <p className="text-udaya-charcoal/60">Cannabis targets pain at its source while conventional medicine only masks symptoms. Whether it\'s neuropathy, fibromyalgia, arthritis, or injury - our medical protocols work with your endocannabinoid system to restore balance.</p>
+              <p className="text-udaya-charcoal/60">Cannabis targets pain at its source while conventional medicine only masks symptoms. Whether it's neuropathy, fibromyalgia, arthritis, or injury - our medical protocols work with your endocannabinoid system to restore balance.</p>
             </div>
 
             <div className="text-center group animate-fade-up animation-delay-300">
@@ -60,7 +60,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Chemotherapy & Radiation Recovery</h3>
-              <p className="text-udaya-charcoal/60">Your treatment shouldn\'t leave you unable to live. Medical Cannabis eases the harshest side effects while supporting immune function and cellular repair. Nausea vanishes, appetite returns, energy rebuilds.</p>
+              <p className="text-udaya-charcoal/60">Your treatment shouldn't leave you unable to live. Medical Cannabis eases the harshest side effects while supporting immune function and cellular repair. Nausea vanishes, appetite returns, energy rebuilds.</p>
             </div>
           </div>
 

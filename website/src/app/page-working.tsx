@@ -15,7 +15,7 @@ export default function WorkingHomePage() {
             Cannabis-assisted, clinician-guided retreats
           </p>
           <div className="flex gap-4 justify-center">
-            <a href="/waitlist" className="px-6 py-3 bg-udaya-sage text-white rounded-md hover:bg-udaya-sage/90">
+            <a href="/inquiry" className="px-6 py-3 bg-udaya-sage text-white rounded-md hover:bg-udaya-sage/90">
               Join the Cancer Retreat Waitlist
             </a>
             <a href="/method" className="px-6 py-3 border border-udaya-sage text-udaya-sage rounded-md hover:bg-udaya-sage hover:text-white">
