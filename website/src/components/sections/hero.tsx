@@ -89,7 +89,7 @@ export function Hero() {
               Medical cannabis retreats in Thailand for people navigating cancer, chronic pain, and serious illness.
             </p>
             <p className="text-xs sm:text-sm text-white/80 drop-shadow-lg animate-hero-fade-in animation-delay-2000 px-4">
-              จุดเริ่มต้นใหม่ของสุขภาพ • A new beginning for wellness
+              จุดเริ่มต้นใหม่ของการรักษา • Medicine that works with your body, not against it
             </p>
           </div>
 

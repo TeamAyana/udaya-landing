@@ -18,13 +18,10 @@ export function MethodOverview() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-h2 font-bold text-udaya-charcoal">
-            A comprehensive path to holistic health
+            Restore What Disease Disrupts
           </h2>
           <p className="mt-6 text-body-lg text-udaya-charcoal/80">
-            The Udaya Method™ is an integrated framework for the whole person.
-            We weave together three pillars to support common cancer‑related
-            challenges—scared of the unknown, anxiety, stress, pain, sleep
-            disturbance, appetite, nausea and treatment side effects.
+            The Udaya Method™ doesn\'t wage war on your body - it restores harmony within it. Medical cannabis for physical healing, mindfulness practices for mental clarity, community for spiritual connection. Three interwoven approaches that treat you as you actually are: complex, complete, and capable of profound healing.
           </p>
         </div>
 

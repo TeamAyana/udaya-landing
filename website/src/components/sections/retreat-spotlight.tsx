@@ -24,22 +24,19 @@ export function RetreatSpotlight() {
               <ScrollAnimation animation="slide-right" delay={100}>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-udaya-sage/10 text-udaya-sage rounded-full text-sm font-medium mb-4">
                   <span className="h-2 w-2 bg-udaya-sage rounded-full animate-pulse" />
-                  Now Accepting Applications
+                  Accepting Patients Now
                 </div>
               </ScrollAnimation>
-              
+
               <ScrollAnimation animation="slide-right" delay={200}>
                 <h2 className="font-serif text-h2 font-bold bg-gradient-to-r from-udaya-charcoal to-udaya-sage bg-clip-text text-transparent">
-                  Cancer Retreat Opening Q2 2026 - Hua Hin
+                  Cancer Treatment Program Opening Q2 2026 - Greater Pattaya Area
                 </h2>
               </ScrollAnimation>
-              
+
               <ScrollAnimation animation="slide-right" delay={300}>
                 <p className="mt-6 text-body-lg text-udaya-charcoal/80">
-                  The retreat focuses on comprehensive cancer care. Join an
-                  intimate group of others navigating cancer for 10 transformative
-                  days of medical cannabis therapy, community support, and
-                  renewal.
+                  Begin your healing journey where tomorrow looks brighter than today. Experience medical cannabis treatment that strengthens rather than weakens, energizes rather than exhausts. Extensions available for continued healing.
                 </p>
               </ScrollAnimation>
 

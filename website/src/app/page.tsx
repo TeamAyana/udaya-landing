@@ -24,11 +24,10 @@ export default function HomePage() {
           {/* Header */}
           <div className="text-center mb-16 animate-fade-up">
             <h2 className="text-4xl md:text-5xl font-serif text-udaya-charcoal mb-6">
-              Where healing traditions meet modern support
+              Where Healing Begins With Hope, Not Desperation
             </h2>
             <p className="text-xl text-udaya-charcoal/70 max-w-3xl mx-auto">
-              A sanctuary for those navigating cancer, chronic pain, and serious illness—combining
-              prescription-based medical cannabis with compassionate, holistic support.
+              Real healing happens when serious medicine meets holistic care. At Udaya, cannabis treatment protocols integrate with practices for mind and spirit. A sanctuary where medical care and human compassion create true transformation.
             </p>
           </div>
 
@@ -40,8 +39,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Cancer Support</h3>
-              <p className="text-udaya-charcoal/60">Comprehensive care programs designed to support your journey through treatment and recovery</p>
+              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Cancer Treatment</h3>
+              <p className="text-udaya-charcoal/60">Beyond managing symptoms - this is active treatment. Medical cannabis combined with mindfulness and community support addresses what cancer really is: a whole-person crisis requiring whole-person medicine.</p>
             </div>
 
             <div className="text-center group animate-fade-up animation-delay-200">
@@ -50,8 +49,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Chronic Pain Relief</h3>
-              <p className="text-udaya-charcoal/60">Evidence-based protocols combining cannabis medicine with integrative therapies</p>
+              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Chronic Pain Resolution</h3>
+              <p className="text-udaya-charcoal/60">Cannabis targets pain at its source while conventional medicine only masks symptoms. Whether it\'s neuropathy, fibromyalgia, arthritis, or injury - our medical protocols work with your endocannabinoid system to restore balance.</p>
             </div>
 
             <div className="text-center group animate-fade-up animation-delay-300">
@@ -60,8 +59,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Serious Illness Care</h3>
-              <p className="text-udaya-charcoal/60">Holistic support for complex conditions with professional medical oversight</p>
+              <h3 className="font-semibold text-xl mb-3 text-udaya-charcoal">Chemotherapy & Radiation Recovery</h3>
+              <p className="text-udaya-charcoal/60">Your treatment shouldn\'t leave you unable to live. Medical Cannabis eases the harshest side effects while supporting immune function and cellular repair. Nausea vanishes, appetite returns, energy rebuilds.</p>
             </div>
           </div>
 
