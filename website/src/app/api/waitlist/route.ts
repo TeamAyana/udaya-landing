@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       {
         ...data,
         waitlistNumber
-      },
+      } as any,
       KLAVIYO_WAITLIST_LIST_ID
     ).then(result => {
       if (result.success) {
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     sendWaitlistConfirmation({
       ...data,
       waitlistNumber
-    }).then(result => {
+    } as any).then(result => {
       if (result.success) {
         console.log('✅ Confirmation email sent via Resend:', result.messageId)
       } else {
