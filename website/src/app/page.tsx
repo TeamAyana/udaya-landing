@@ -4,8 +4,7 @@ import * as React from 'react'
 import Image from 'next/image'
 import { Hero } from '@/components/sections/hero'
 import { MethodOverview } from '@/components/sections/method-overview'
-import { RetreatSpotlight } from '@/components/sections/retreat-spotlight'
-import { TrustSection } from '@/components/sections/trust-section'
+import { ProgramsSection } from '@/components/sections/programs-section'
 import { Testimonials } from '@/components/sections/testimonials'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -102,52 +101,12 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Harmonious transition to cream section */}
-      <div className="relative bg-gradient-to-b from-white to-udaya-cream/40">
-        <SectionDivider 
-          variant="wave" 
-          color="#F6F2E6"
-          className="-mb-px" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-udaya-cream/20 to-transparent pointer-events-none" />
-      </div>
-      
       <MethodOverview />
       
-      {/* Harmonious transition to white section */}
-      <div className="relative bg-gradient-to-b from-udaya-cream/40 to-white">
-        <SectionDivider 
-          variant="lotus" 
-          color="#FFFFFF"
-          className="-mb-px transform rotate-180" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent pointer-events-none" />
-      </div>
-      
-      <RetreatSpotlight />
-      
-      {/* Harmonious transition to cream section */}
-      <div className="relative bg-gradient-to-b from-white to-udaya-cream/40">
-        <SectionDivider 
-          variant="wave" 
-          color="#F6F2E6"
-          className="-mb-px" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-udaya-cream/20 to-transparent pointer-events-none" />
-      </div>
-      
-      <TrustSection />
-      
-      {/* Harmonious transition to white section */}
-      <div className="relative bg-gradient-to-b from-udaya-cream/40 to-white">
-        <SectionDivider 
-          variant="lotus" 
-          color="#FFFFFF"
-          className="-mb-px" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent pointer-events-none" />
-      </div>
-      
+      <ProgramsSection />
+
+      <SectionDivider variant="wave" color="#FFFFFF" />
+
       <Testimonials />
 
       {/* Inquiry Modal */}

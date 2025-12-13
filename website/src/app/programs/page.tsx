@@ -1,10 +1,38 @@
+import Image from 'next/image'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { MapPin, Users, Calendar } from 'lucide-react'
+import { MapPin, Users } from 'lucide-react'
+
+const programs = [
+  {
+    title: 'Chronic Pain Program',
+    description: 'A 10-day, small-cohort retreat focused on education, safe protocols, and support for people navigating cancer.',
+    location: 'Thailand (final venue to be announced)',
+    participants: '1 / 20',
+    badge: 'Accepting Patients Now',
+    image: '/uploads/chronic.jpg',
+    link: '/programs/chronic-pain',
+  },
+  {
+    title: 'Cancer Retreat',
+    description: 'A 10-day, small-cohort retreat focused on education, safe protocols, and support for people navigating cancer.',
+    location: 'Thailand (final venue to be announced)',
+    participants: '6 / 20',
+    badge: 'Accepting Patients Now',
+    image: '/uploads/cancer_retreat.jpg',
+    link: '/programs/cancer-retreat',
+  },
+  {
+    title: 'Parkinson Retreat',
+    description: 'A 10-day, small-cohort retreat focused on education, safe protocols, and support for people navigating cancer.',
+    location: 'Thailand (final venue to be announced)',
+    participants: '2 / 20',
+    badge: 'Accepting Patients Now',
+    image: '/uploads/parkinsons.jpg',
+    link: '/programs/parkinson-retreat',
+  },
+]
 
 export default function ProgramsPage() {
   return (
@@ -20,112 +48,84 @@ export default function ProgramsPage() {
         </Container>
       </Section>
 
-      <Section>
+      <Section className="bg-udaya-cream/30">
         <Container>
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Cancer Program Card */}
-            <Card className="relative overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="absolute top-4 right-4">
-                <Badge className="bg-udaya-sage text-white">
-                  Now Accepting Waitlist
-                </Badge>
-              </div>
-              <CardHeader className="pt-12">
-                <CardTitle className="text-2xl font-serif text-udaya-charcoal">
-                  Cancer Program
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600 mb-4">
-                  A 10-day, small-cohort retreat focused on education, safe protocols,
-                  and support for people navigating cancer.
-                </CardDescription>
-                <div className="space-y-2 text-sm text-gray-500 mb-6">
-                  <p className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-udaya-sage flex-shrink-0" />
-                    <span>Location: Thailand (final venue to be announced)</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-udaya-sage flex-shrink-0" />
-                    <span>Cohort size: up to 20</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-udaya-sage flex-shrink-0" />
-                    <span>Opening 2026</span>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {programs.map((program, index) => (
+              <div
+                key={index}
+                className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+              >
+                {/* Content */}
+                <div className="p-6 pb-5">
+                  <h3 className="font-serif text-[22px] font-semibold text-udaya-charcoal mb-4 leading-tight">
+                    {program.title}
+                  </h3>
+                  <p className="text-[13px] text-udaya-charcoal/70 leading-relaxed">
+                    {program.description}
                   </p>
                 </div>
-                <Button asChild className="w-full bg-udaya-sage hover:bg-udaya-sage/90">
-                  <Link href="/programs/cancer">Explore This Program</Link>
-                </Button>
-              </CardContent>
-            </Card>
 
-            {/* Chronic Pain Program Card */}
-            <Card className="relative overflow-hidden opacity-75 hover:opacity-90 transition-opacity">
-              <div className="absolute top-4 right-4">
-                <Badge variant="outline">In Development</Badge>
-              </div>
-              <CardHeader className="pt-12">
-                <CardTitle className="text-2xl font-serif text-udaya-charcoal">
-                  Chronic Pain Program
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600 mb-4">
-                  Specialized support for those living with chronic pain conditions,
-                  combining medical cannabis education with integrative therapies.
-                </CardDescription>
-                <p className="text-sm text-gray-500 mb-6">
-                  Program details coming soon.
-                </p>
-                <Button disabled className="w-full">
-                  Coming Soon
-                </Button>
-              </CardContent>
-            </Card>
+                {/* Details */}
+                <div className="px-6 pb-5 space-y-2.5">
+                  <div className="flex items-start gap-2 text-xs text-udaya-charcoal/60">
+                    <MapPin className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-udaya-sage" />
+                    <span><strong>Location:</strong> {program.location}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs text-udaya-charcoal/60">
+                      <Users className="h-3.5 w-3.5 flex-shrink-0 text-udaya-sage" />
+                      <span><strong>Participant:</strong> {program.participants}</span>
+                    </div>
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-udaya-sage/10 rounded-full">
+                      <div className="w-1.5 h-1.5 rounded-full bg-udaya-sage" />
+                      <span className="text-xs text-udaya-sage font-medium">{program.badge}</span>
+                    </div>
+                  </div>
+                </div>
 
-            {/* Neurological Program Card */}
-            <Card className="relative overflow-hidden opacity-75 hover:opacity-90 transition-opacity">
-              <div className="absolute top-4 right-4">
-                <Badge variant="outline">In Development</Badge>
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden px-6 pb-5">
+                  <div className="relative h-full w-full rounded-xl overflow-hidden">
+                    <Image
+                      src={program.image}
+                      alt={program.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* View Details Button */}
+                <div className="px-6 pb-6">
+                  <Link
+                    href={program.link}
+                    className="block w-full text-center py-3 rounded-full border border-udaya-sage text-udaya-sage font-medium hover:bg-udaya-sage hover:text-white transition-all duration-300"
+                  >
+                    View Details
+                  </Link>
+                </div>
               </div>
-              <CardHeader className="pt-12">
-                <CardTitle className="text-2xl font-serif text-udaya-charcoal">
-                  Neurological Conditions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600 mb-4">
-                  Supporting individuals with neurological conditions through
-                  medical cannabis education and holistic wellness practices.
-                </CardDescription>
-                <p className="text-sm text-gray-500 mb-6">
-                  Program details coming soon.
-                </p>
-                <Button disabled className="w-full">
-                  Coming Soon
-                </Button>
-              </CardContent>
-            </Card>
+            ))}
           </div>
         </Container>
       </Section>
 
-      {/* Future Programs Section */}
-      <Section id="future" className="bg-gray-50">
+      {/* Mailing List Section */}
+      <Section className="bg-white">
         <Container>
-          <h2 className="text-3xl font-serif text-center mb-8 text-udaya-charcoal">
-            Future Programs in Development
-          </h2>
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-8">
-            We are actively developing additional programs to support various
-            health conditions. Join our mailing list to be notified when new
-            programs become available.
-          </p>
-          <div className="text-center">
-            <Button asChild className="bg-udaya-sage hover:bg-udaya-sage/90">
-              <Link href="/inquiry">Join Our Mailing List</Link>
-            </Button>
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-body-lg text-udaya-charcoal/80 mb-8 leading-relaxed">
+              We are actively developing additional programs to support various health conditions. Join our mailing list to be notified when new programs become available.
+            </p>
+            <Link
+              href="/inquiry"
+              className="inline-block bg-udaya-sage hover:bg-udaya-sage/90 text-white px-8 py-3.5 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              Join Our Mailing List
+            </Link>
           </div>
         </Container>
       </Section>
