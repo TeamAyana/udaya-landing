@@ -19,7 +19,7 @@ export function Hero() {
           playsInline
           preload="auto"
           poster="/uploads/video-poster.jpg"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-center"
         >
           <source src="/uploads/video.mp4" type="video/mp4" />
         </video>
@@ -75,12 +75,12 @@ export function Hero() {
             A New Dawn for Your Health
           </p>
 
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8">
-            <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-400">
-              Natural therapy.
+          <h1 className="font-serif font-bold mb-6 md:mb-8 flex flex-col items-center px-4 text-center">
+            <span className="text-white drop-shadow-2xl text-[clamp(2rem,8vw,76px)] leading-[1.13] animate-hero-slide-up animation-delay-400 md:whitespace-nowrap">
+              Healing Is Not a Destination
             </span>
-            <span className="text-white drop-shadow-2xl block animate-hero-slide-up animation-delay-500">
-              Professional oversight.
+            <span className="text-white drop-shadow-2xl text-[clamp(2rem,8vw,76px)] leading-[1.13] animate-hero-slide-up animation-delay-500 md:whitespace-nowrap">
+              It's a Journey Back to Yourself
             </span>
           </h1>
 

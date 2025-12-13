@@ -115,18 +115,18 @@ export function Navigation() {
       <Container>
         <nav className="flex h-20 items-center justify-between">
           {/* Logo and Navigation Group */}
-          <div className="flex items-center gap-12">
+          <div className="flex items-center gap-16">
             {/* Logo */}
             <Link
               href="/"
               className="flex items-center transition-all duration-300 hover:scale-105"
             >
-              <div className="relative h-9 w-24">
-                <Image 
-                  src="/uploads/logo.png" 
-                  alt="Udaya" 
+              <div className="relative h-11 w-28">
+                <Image
+                  src="/uploads/logo.png"
+                  alt="Udaya"
                   fill
-                  sizes="96px"
+                  sizes="112px"
                   className="object-contain"
                   priority
                 />

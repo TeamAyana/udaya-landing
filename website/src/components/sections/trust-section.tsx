@@ -41,10 +41,10 @@ export function TrustSection() {
                 <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-udaya-sage text-white">
                   <Icon className="h-8 w-8" />
                 </div>
-                <h3 className="font-serif text-xl font-semibold text-udaya-charcoal">
+                <h3 className="font-serif text-h3 font-semibold text-udaya-charcoal">
                   {feature.title}
                 </h3>
-                <p className="mt-3 text-udaya-charcoal/70">
+                <p className="mt-3 text-body text-udaya-charcoal/70">
                   {feature.description}
                 </p>
               </div>
