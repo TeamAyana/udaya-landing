@@ -135,13 +135,49 @@ export default function AnalyticsPage() {
     return num.toString()
   }
 
-  const deviceData = analytics ? [
-    { name: 'Desktop', value: analytics.devices.desktop, color: '#5C7B65', icon: Monitor },
-    { name: 'Mobile', value: analytics.devices.mobile, color: '#3B82F6', icon: Smartphone },
-    { name: 'Tablet', value: analytics.devices.tablet, color: '#8B5CF6', icon: Monitor },
-  ] : []
+  // Calculate actual percentages if the API returns raw counts instead of percentages
+  const totalDeviceCount = analytics
+    ? (analytics.devices.desktop || 0) + (analytics.devices.mobile || 0) + (analytics.devices.tablet || 0)
+    : 0
 
-  const totalDevices = deviceData.reduce((sum, d) => sum + d.value, 0)
+  // Check if values are already percentages (sum close to 100) or raw counts (sum much larger)
+  const valuesArePercentages = totalDeviceCount > 0 && totalDeviceCount <= 120 // Allow some rounding margin
+
+  const deviceData = analytics ? [
+    {
+      name: 'Desktop',
+      value: valuesArePercentages
+        ? analytics.devices.desktop
+        : totalDeviceCount > 0
+          ? Math.round((analytics.devices.desktop / totalDeviceCount) * 100)
+          : 0,
+      rawCount: analytics.devices.desktop,
+      color: '#5C7B65',
+      icon: Monitor
+    },
+    {
+      name: 'Mobile',
+      value: valuesArePercentages
+        ? analytics.devices.mobile
+        : totalDeviceCount > 0
+          ? Math.round((analytics.devices.mobile / totalDeviceCount) * 100)
+          : 0,
+      rawCount: analytics.devices.mobile,
+      color: '#3B82F6',
+      icon: Smartphone
+    },
+    {
+      name: 'Tablet',
+      value: valuesArePercentages
+        ? analytics.devices.tablet
+        : totalDeviceCount > 0
+          ? Math.round((analytics.devices.tablet / totalDeviceCount) * 100)
+          : 0,
+      rawCount: analytics.devices.tablet,
+      color: '#8B5CF6',
+      icon: Monitor
+    },
+  ] : []
 
   if (!analytics && !loading) {
     return (
@@ -426,7 +462,6 @@ export default function AnalyticsPage() {
                 <div className="grid grid-cols-3 gap-3 mt-4">
                   {deviceData.map((device) => {
                     const DeviceIcon = device.icon
-                    const percentage = totalDevices > 0 ? ((device.value / totalDevices) * 100).toFixed(1) : '0'
                     return (
                       <div key={device.name} className="flex flex-col items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
                         <div className="w-10 h-10 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: `${device.color}15` }}>
@@ -434,6 +469,9 @@ export default function AnalyticsPage() {
                         </div>
                         <span className="text-xs font-medium text-gray-600">{device.name}</span>
                         <span className="text-lg font-bold mt-1" style={{ color: device.color }}>{device.value}%</span>
+                        {device.rawCount > 0 && (
+                          <span className="text-xs text-gray-500 mt-0.5">{formatNumber(device.rawCount)} users</span>
+                        )}
                       </div>
                     )
                   })}
