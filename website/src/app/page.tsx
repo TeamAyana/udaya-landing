@@ -27,7 +27,7 @@ export default function HomePage() {
               <h2 className="font-serif font-bold text-udaya-charcoal mb-5 sm:mb-7 text-[clamp(1.875rem,5vw,2.75rem)] leading-[1.15] tracking-tight">
                 You Don't Have to Go Through This Alone
               </h2>
-              <p className="text-[15px] sm:text-[17px] md:text-lg text-udaya-charcoal/75 mb-7 sm:mb-9 leading-[1.7] font-light">
+              <p className="text-[15px] sm:text-[17px] md:text-lg text-udaya-charcoal/75 mb-7 sm:mb-9 leading-[1.7] font-normal">
                 Cancer, chronic pain, and serious illness can leave you tired, scared, and unsure of what comes next. It's more than just symptoms—it's the weight on your mind, your body, and your spirit. There is support that brings relief, steadiness, and genuine care. A path that eases pain, softens treatment side effects, and helps you feel like yourself again.
               </p>
               <button
@@ -58,7 +58,7 @@ export default function HomePage() {
             <h2 className="font-serif font-bold text-udaya-charcoal mb-4 sm:mb-5 text-[clamp(1.75rem,4.5vw,2.5rem)] leading-[1.2] tracking-tight">
               Care You Can Trust, Support You Can Feel
             </h2>
-            <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-light">
+            <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-normal">
               When you're facing something this heavy, you deserve a place that holds you with both compassion and professionalism. Every part of your experience is designed to keep you safe, supported, and truly seen.
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-serif text-xl sm:text-[22px] font-semibold text-udaya-charcoal mb-2.5 tracking-tight">Medically Supervised</h3>
-              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-light">
+              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-normal">
                 Licensed practitioners guide your care, with a nurse present throughout your stay to ensure comfort and safety.
               </p>
             </div>
@@ -84,7 +84,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-serif text-xl sm:text-[22px] font-semibold text-udaya-charcoal mb-2.5 tracking-tight">Legally Compliant</h3>
-              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-light">
+              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-normal">
                 All treatments follow Thailand's medical cannabis regulations, with prescriptions and protocols you can rely on.
               </p>
             </div>
@@ -96,7 +96,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-serif text-xl sm:text-[22px] font-semibold text-udaya-charcoal mb-2.5 tracking-tight">Deeply Compassionate</h3>
-              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-light">
+              <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-normal">
                 Small groups—no more than 20 people—so you receive the attention, presence, and understanding you deserve.
               </p>
             </div>

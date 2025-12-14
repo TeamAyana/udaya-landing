@@ -50,7 +50,7 @@ export function ProgramsSection({ onScheduleConsultation }: ProgramsSectionProps
           <h2 className="font-serif font-bold text-udaya-charcoal mb-4 sm:mb-5 text-[clamp(1.75rem,4.5vw,2.5rem)] leading-[1.2] tracking-tight">
             Programs
           </h2>
-          <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-light">
+          <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-normal">
             At Udaya, we offer several medical cannabis retreats in Thailand, each carefully designed to support individuals seeking holistic relief, guided wellness, and evidence-informed care.
           </p>
         </div>
@@ -68,7 +68,7 @@ export function ProgramsSection({ onScheduleConsultation }: ProgramsSectionProps
                 <h3 className="font-serif text-xl sm:text-[22px] font-semibold text-udaya-charcoal mb-4 leading-tight tracking-tight">
                   {program.title}
                 </h3>
-                <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-light">
+                <p className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-normal">
                   {program.description}
                 </p>
               </div>

@@ -20,7 +20,7 @@ export function MethodOverview() {
           <h2 className="font-serif font-bold text-udaya-charcoal mb-4 sm:mb-5 text-[clamp(1.75rem,4.5vw,2.5rem)] leading-[1.2] tracking-tight">
             Restore What Disease Disrupts
           </h2>
-          <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-light">
+          <p className="text-[15px] sm:text-base md:text-[17px] text-udaya-charcoal/70 max-w-3xl mx-auto leading-[1.65] font-normal">
             The Udaya Method™ doesn't wage war on your body—it restores harmony within it. Medical cannabis for physical healing, mindfulness practices for mental clarity, community for spiritual connection. Three interwoven approaches that treat you as you actually are: complex, complete, and capable of profound healing.
           </p>
         </div>
@@ -45,7 +45,7 @@ export function MethodOverview() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-light">
+                  <CardDescription className="text-[14px] sm:text-[15px] text-udaya-charcoal/65 leading-relaxed font-normal">
                     {pillar.description}
                   </CardDescription>
                 </CardContent>
