@@ -133,8 +133,8 @@ export default function SubscribersPage() {
       .replace('considering', 'Considering it')
   }
 
-  const handleExport = (type: 'waitlist' | 'newsletter') => {
-    const data = type === 'waitlist' ? waitlist : newsletter
+  const handleExport = (type: 'waitlist' | 'newsletter' | 'abandoned') => {
+    const data = type === 'waitlist' ? waitlist : type === 'newsletter' ? newsletter : partialSubmissions
     const headers = type === 'waitlist'
       ? [
           'Waitlist #', 'Name', 'Email', 'Phone', 'Age', 'Country',
@@ -144,7 +144,9 @@ export default function SubscribersPage() {
           'Treatment Philosophy', 'Caregiver', 'How Heard', 'Retreat Interest',
           'Status', 'Date'
         ]
-      : ['Email', 'Source', 'Status', 'Date']
+      : type === 'newsletter'
+      ? ['Email', 'Source', 'Status', 'Date']
+      : ['Name', 'Email', 'Phone', 'Age', 'Country', 'Step Completed', 'Abandoned At']
 
     let csv = headers.join(',') + '\n'
 
@@ -175,11 +177,21 @@ export default function SubscribersPage() {
             item.status,
             formatDate((item as WaitlistEntry).createdAt)
           ]
-        : [
+        : type === 'newsletter'
+        ? [
             item.email,
             (item as NewsletterContact).source,
             item.status,
             formatDate((item as NewsletterContact).subscribedAt)
+          ]
+        : [
+            (item as PartialSubmission).fullName,
+            (item as PartialSubmission).email,
+            (item as PartialSubmission).phone || '',
+            (item as PartialSubmission).age,
+            (item as PartialSubmission).country,
+            (item as PartialSubmission).stepCompleted,
+            formatDate((item as PartialSubmission).abandonedAt)
           ]
 
       csv += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',') + '\n'
@@ -487,6 +499,10 @@ export default function SubscribersPage() {
                 <CardTitle>Abandoned Form Submissions</CardTitle>
                 <p className="text-sm text-gray-600 mt-1">Users who started but didn't complete the consultation form</p>
               </div>
+              <Button onClick={() => handleExport('abandoned')} size="sm">
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
             </CardHeader>
             <CardContent>
               {loading ? (

@@ -55,34 +55,56 @@ export default function AdminLayout({
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<string[]>(['Blog'])
+  const [showBlogMenu, setShowBlogMenu] = useState(false)
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
     router.push('/admin/login')
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Mobile sidebar toggle */}
-      <div className={cn(
-        "lg:hidden fixed top-4 z-50 transition-all",
-        sidebarOpen ? "left-[220px]" : "left-4"
-      )}>
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 bg-white rounded-lg shadow-md"
-        >
-          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
+  const mainNavItems = sidebarItems.filter(item => !('submenu' in item))
+  const blogItem = sidebarItems.find(item => item.name === 'Blog')
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform lg:translate-x-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
+  return (
+    <div className="min-h-screen bg-gray-50 pb-20 lg:pb-0">
+      {/* Mobile Blog Menu Modal */}
+      {showBlogMenu && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setShowBlogMenu(false)}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg">Blog Management</h3>
+              <button onClick={() => setShowBlogMenu(false)} className="p-2">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {blogItem && 'submenu' in blogItem && blogItem.submenu?.map((subItem) => {
+                const SubIcon = subItem.icon
+                const isActive = pathname === subItem.href
+                return (
+                  <Link
+                    key={subItem.href}
+                    href={subItem.href}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                      isActive
+                        ? "bg-udaya-sage text-white"
+                        : "hover:bg-gray-100 text-gray-700"
+                    )}
+                    onClick={() => setShowBlogMenu(false)}
+                  >
+                    <SubIcon className="w-5 h-5" />
+                    <span>{subItem.name}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar - Hidden on mobile */}
+      <aside className="hidden lg:block fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg">
         <div className="h-full flex flex-col">
           <div className="p-6 border-b">
             <h2 className="text-2xl font-serif font-bold text-udaya-sage">
@@ -187,25 +209,160 @@ export default function AdminLayout({
       </aside>
 
       {/* Main content */}
-      <main className="lg:ml-64 relative">
-        {/* Top Header with Notifications */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-end lg:justify-end">
+      <main className="lg:ml-64 relative min-h-screen">
+        {/* Top Header with Notifications and Title */}
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <h1 className="text-lg sm:text-xl font-serif font-bold text-udaya-sage lg:hidden">Udaya Admin</h1>
           <NotificationsBell />
         </div>
 
-        <div className="p-6 lg:p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           <ErrorBoundary>
             {children}
           </ErrorBoundary>
         </div>
       </main>
 
-      {/* Mobile overlay */}
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg">
+        <div className="grid grid-cols-5 gap-1 px-2 py-2">
+          {/* Dashboard */}
+          <Link
+            href="/admin/dashboard"
+            className={cn(
+              "flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors",
+              pathname === '/admin/dashboard'
+                ? "bg-udaya-sage/10 text-udaya-sage"
+                : "text-gray-600 hover:bg-gray-100"
+            )}
+          >
+            <LayoutDashboard className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Home</span>
+          </Link>
+
+          {/* Blog */}
+          <button
+            onClick={() => setShowBlogMenu(true)}
+            className={cn(
+              "flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors",
+              pathname.includes('/admin/dashboard/posts') || pathname.includes('/admin/dashboard/settings')
+                ? "bg-udaya-sage/10 text-udaya-sage"
+                : "text-gray-600 hover:bg-gray-100"
+            )}
+          >
+            <BookOpen className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Blog</span>
+          </button>
+
+          {/* Waitlist */}
+          <Link
+            href="/admin/dashboard/subscribers"
+            className={cn(
+              "flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors",
+              pathname === '/admin/dashboard/subscribers'
+                ? "bg-udaya-sage/10 text-udaya-sage"
+                : "text-gray-600 hover:bg-gray-100"
+            )}
+          >
+            <Mail className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Waitlist</span>
+          </Link>
+
+          {/* Analytics */}
+          <Link
+            href="/admin/dashboard/analytics"
+            className={cn(
+              "flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors",
+              pathname === '/admin/dashboard/analytics'
+                ? "bg-udaya-sage/10 text-udaya-sage"
+                : "text-gray-600 hover:bg-gray-100"
+            )}
+          >
+            <BarChart3 className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Stats</span>
+          </Link>
+
+          {/* More Menu */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            <Menu className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">More</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile "More" Menu Overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setSidebarOpen(false)}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[70vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg">More Options</h3>
+              <button onClick={() => setSidebarOpen(false)} className="p-2">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {/* Contact Forms */}
+              <Link
+                href="/admin/dashboard/contacts"
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  pathname === '/admin/dashboard/contacts'
+                    ? "bg-udaya-sage text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                )}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span>Contact Forms</span>
+              </Link>
+
+              {/* Partnerships */}
+              <Link
+                href="/admin/dashboard/referrals"
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  pathname === '/admin/dashboard/referrals'
+                    ? "bg-udaya-sage text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                )}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <Handshake className="w-5 h-5" />
+                <span>Partnerships</span>
+              </Link>
+
+              {/* User Management */}
+              <Link
+                href="/admin/dashboard/users"
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  pathname === '/admin/dashboard/users'
+                    ? "bg-udaya-sage text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                )}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <Shield className="w-5 h-5" />
+                <span>User Management</span>
+              </Link>
+
+              {/* Logout */}
+              <button
+                onClick={() => {
+                  setSidebarOpen(false)
+                  handleLogout()
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
