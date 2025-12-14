@@ -136,10 +136,12 @@ export default function AnalyticsPage() {
   }
 
   const deviceData = analytics ? [
-    { name: 'Desktop', value: analytics.devices.desktop, color: COLORS.blue },
-    { name: 'Mobile', value: analytics.devices.mobile, color: COLORS.green },
-    { name: 'Tablet', value: analytics.devices.tablet, color: COLORS.purple },
+    { name: 'Desktop', value: analytics.devices.desktop, color: '#5C7B65', icon: Monitor },
+    { name: 'Mobile', value: analytics.devices.mobile, color: '#3B82F6', icon: Smartphone },
+    { name: 'Tablet', value: analytics.devices.tablet, color: '#8B5CF6', icon: Monitor },
   ] : []
+
+  const totalDevices = deviceData.reduce((sum, d) => sum + d.value, 0)
 
   if (!analytics && !loading) {
     return (
@@ -388,7 +390,7 @@ export default function AnalyticsPage() {
               </CardContent>
             </Card>
 
-            {/* Device Distribution Pie Chart */}
+            {/* Device Distribution Donut Chart */}
             <Card>
               <CardHeader>
                 <CardTitle>Device Distribution</CardTitle>
@@ -401,26 +403,40 @@ export default function AnalyticsPage() {
                       data={deviceData}
                       cx="50%"
                       cy="50%"
-                      labelLine={false}
-                      label={({ name, value }) => `${name}: ${value}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={2}
                       dataKey="value"
                     >
                       {deviceData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '8px',
+                        padding: '8px 12px'
+                      }}
+                      formatter={(value: number) => `${value}%`}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
-                <div className="flex justify-center gap-4 mt-4">
-                  {deviceData.map((device) => (
-                    <div key={device.name} className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: device.color }} />
-                      <span className="text-sm text-gray-600">{device.name}</span>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-3 gap-3 mt-4">
+                  {deviceData.map((device) => {
+                    const DeviceIcon = device.icon
+                    const percentage = totalDevices > 0 ? ((device.value / totalDevices) * 100).toFixed(1) : '0'
+                    return (
+                      <div key={device.name} className="flex flex-col items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: `${device.color}15` }}>
+                          <DeviceIcon className="w-5 h-5" style={{ color: device.color }} />
+                        </div>
+                        <span className="text-xs font-medium text-gray-600">{device.name}</span>
+                        <span className="text-lg font-bold mt-1" style={{ color: device.color }}>{device.value}%</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
