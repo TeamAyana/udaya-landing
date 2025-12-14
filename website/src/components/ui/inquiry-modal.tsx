@@ -131,12 +131,13 @@ export function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
   const handleModalClose = async () => {
     // Save partial data if user completed step 1 but didn't submit
     if (currentStep > 0 && !isSubmitted) {
-      const step1Data = getValues(['fullName', 'email', 'phone', 'age', 'country'])
+      // Get all form values
+      const formData = getValues()
 
       // Validate step 1 data
       const isStep1Valid = await trigger(['fullName', 'email', 'phone', 'age', 'country'])
 
-      if (isStep1Valid && step1Data.fullName && step1Data.email) {
+      if (isStep1Valid && formData.fullName && formData.email) {
         try {
           // Save partial submission
           await fetch('/api/waitlist/partial', {
@@ -145,11 +146,11 @@ export function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              fullName: step1Data.fullName,
-              email: step1Data.email,
-              phone: step1Data.phone,
-              age: step1Data.age,
-              country: step1Data.country,
+              fullName: formData.fullName,
+              email: formData.email,
+              phone: formData.phone,
+              age: formData.age,
+              country: formData.country,
               status: 'partial',
               abandonedAt: new Date().toISOString(),
               stepCompleted: currentStep,
