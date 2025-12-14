@@ -7,7 +7,11 @@ import { Container } from '@/components/ui/container'
 import { SITE_CONFIG } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
 
-export function Hero() {
+interface HeroProps {
+  onBookConsultation?: () => void
+}
+
+export function Hero({ onBookConsultation }: HeroProps = {}) {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Video Background */}
@@ -77,10 +81,10 @@ export function Hero() {
 
           <h1 className="font-serif font-bold mb-6 md:mb-8 flex flex-col items-center px-4 text-center">
             <span className="text-white drop-shadow-2xl text-[clamp(2rem,8vw,76px)] leading-[1.13] animate-hero-slide-up animation-delay-400 md:whitespace-nowrap">
-              Healing Is Not a Destination
+              Natural therapy.
             </span>
             <span className="text-white drop-shadow-2xl text-[clamp(2rem,8vw,76px)] leading-[1.13] animate-hero-slide-up animation-delay-500 md:whitespace-nowrap">
-              It's a Journey Back to Yourself
+              Professional oversight.
             </span>
           </h1>
 
@@ -96,15 +100,13 @@ export function Hero() {
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-float-in animation-delay-2000 px-4 sm:px-0">
             <Button
               size="lg"
-              asChild
+              onClick={() => {
+                trackEvent('hero_book_consultation_clicked', { page: '/' })
+                onBookConsultation?.()
+              }}
               className="bg-udaya-sage hover:bg-udaya-sage/90 text-white shadow-2xl transform transition-all duration-300 hover:scale-105 text-sm sm:text-base"
             >
-              <Link
-                href={SITE_CONFIG.hero.cta_primary_link}
-                onClick={() => trackEvent('hero_join_waitlist_clicked', { page: '/' })}
-              >
-                {SITE_CONFIG.hero.cta_primary_label}
-              </Link>
+              {SITE_CONFIG.hero.cta_primary_label}
             </Button>
             <Button
               size="lg"

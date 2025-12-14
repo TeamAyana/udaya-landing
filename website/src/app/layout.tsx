@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display, Space_Grotesk } from 'next/font/google'
 import Script from 'next/script'
-import { Navigation } from '@/components/layout/navigation'
-import { Footer } from '@/components/layout/footer'
-import { CookieConsent } from '@/components/ui/cookie-consent'
+import { LayoutWrapper } from '@/components/layout/layout-wrapper'
 import { SITE_CONFIG } from '@/lib/constants'
 import './globals.css'
 
@@ -101,10 +99,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
-        <Navigation />
-        <main className="min-h-screen pt-20">{children}</main>
-        <Footer />
-        <CookieConsent />
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   )

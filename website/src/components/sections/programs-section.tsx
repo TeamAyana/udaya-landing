@@ -7,6 +7,10 @@ import { MapPin, Users, Calendar } from 'lucide-react'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 
+interface ProgramsSectionProps {
+  onScheduleConsultation?: () => void
+}
+
 const programs = [
   {
     title: 'Chronic Pain Program',
@@ -37,13 +41,13 @@ const programs = [
   },
 ]
 
-export function ProgramsSection() {
+export function ProgramsSection({ onScheduleConsultation }: ProgramsSectionProps = {}) {
   return (
-    <Section variant="cream">
+    <Section variant="cream" className="py-12 sm:py-16 md:py-20">
       <Container>
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-up">
-          <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-4">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 animate-fade-up px-4">
+          <h2 className="font-serif text-h2 font-bold text-udaya-charcoal mb-3 sm:mb-4">
             Programs
           </h2>
           <p className="text-body text-udaya-charcoal/70 max-w-3xl mx-auto">
@@ -52,7 +56,7 @@ export function ProgramsSection() {
         </div>
 
         {/* Program Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-10 animate-fade-up animation-delay-200">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8 sm:mb-10 animate-fade-up animation-delay-200 px-4 sm:px-0">
           {programs.map((program, index) => (
             <div
               key={index}
@@ -105,13 +109,13 @@ export function ProgramsSection() {
         </div>
 
         {/* CTA Button */}
-        <div className="text-center animate-fade-up animation-delay-500">
-          <Link
-            href="/inquiry"
-            className="inline-block bg-udaya-sage hover:bg-udaya-sage/90 text-white px-8 py-3.5 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg"
+        <div className="text-center animate-fade-up animation-delay-500 px-4">
+          <button
+            onClick={onScheduleConsultation}
+            className="inline-block bg-udaya-sage hover:bg-udaya-sage/90 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg text-sm sm:text-base"
           >
-            Schedule Consultation
-          </Link>
+            Book Consultation
+          </button>
         </div>
       </Container>
     </Section>

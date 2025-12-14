@@ -10,7 +10,11 @@ import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { NAVIGATION_ITEMS, SITE_CONFIG } from '@/lib/constants'
 
-export function Navigation() {
+interface NavigationProps {
+  onBookConsultation?: () => void
+}
+
+export function Navigation({ onBookConsultation }: NavigationProps = {}) {
   const [isOpen, setIsOpen] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
@@ -173,10 +177,11 @@ export function Navigation() {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button asChild className="bg-udaya-sage text-white hover:bg-udaya-sage/90">
-              <Link href={SITE_CONFIG.hero.cta_primary_link}>
-                {SITE_CONFIG.hero.cta_primary_label}
-              </Link>
+            <Button
+              onClick={onBookConsultation}
+              className="bg-udaya-sage text-white hover:bg-udaya-sage/90"
+            >
+              {SITE_CONFIG.hero.cta_primary_label}
             </Button>
           </div>
 
@@ -267,10 +272,11 @@ export function Navigation() {
               </div>
             ))}
             <div className="pt-4">
-              <Button asChild className="w-full bg-udaya-sage text-white hover:bg-udaya-sage/90">
-                <Link href={SITE_CONFIG.hero.cta_primary_link}>
-                  Get More Information
-                </Link>
+              <Button
+                onClick={onBookConsultation}
+                className="w-full bg-udaya-sage text-white hover:bg-udaya-sage/90"
+              >
+                Get More Information
               </Button>
             </div>
           </div>
@@ -280,8 +286,8 @@ export function Navigation() {
 
       {/* Mobile Floating CTA Button - Outside header for proper z-index stacking */}
       {/* Shows after scrolling past hero, hides near footer and when menu is open */}
-      <Link
-        href={SITE_CONFIG.hero.cta_primary_link}
+      <button
+        onClick={onBookConsultation}
         className={cn(
           "lg:hidden fixed bottom-6 right-6 z-40 bg-udaya-sage text-white px-6 py-3 rounded-full shadow-lg hover:bg-udaya-sage/90 transition-all duration-300 font-medium text-sm",
           showFloatingButton && !isOpen
@@ -290,7 +296,7 @@ export function Navigation() {
         )}
       >
         Get More Information
-      </Link>
+      </button>
     </>
   )
 }

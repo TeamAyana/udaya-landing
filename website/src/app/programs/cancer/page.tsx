@@ -1,4 +1,6 @@
-import { Metadata } from 'next'
+'use client'
+
+import * as React from 'react'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,11 +8,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Calendar, MapPin, Clock, Users, CheckCircle, Download, Sun, Sunrise, Sunset, Moon, Info, Heart } from 'lucide-react'
 import { RETREAT_DETAILS } from '@/lib/constants'
-
-export const metadata: Metadata = {
-  title: 'Cancer Program - Thailand 2026',
-  description: 'Comprehensive 10-day medical cannabis program for those navigating cancer in Thailand.',
-}
+import { InquiryModal } from '@/components/ui/inquiry-modal'
 
 const includesItems = [
   'Private or shared accommodation',
@@ -65,6 +63,8 @@ const dailySchedule = [
 ]
 
 export default function CancerProgramPage() {
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+
   return (
     <>
       {/* Important Notice */}
@@ -386,21 +386,21 @@ export default function CancerProgramPage() {
               Ready to Begin Your Journey?
             </h2>
             <p className="text-body-lg text-udaya-charcoal/80 mb-8">
-              Spaces are limited and filled on a best-fit basis. Join our waitlist to secure your spot.
+              Spaces are limited and filled on a best-fit basis. Book a consultation to learn more.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="bg-udaya-sage hover:bg-udaya-sage/90">
-                <Link href="/inquiry">Join Cancer Waitlist</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">
-                  Schedule a Consultation
-                </Link>
-              </Button>
-            </div>
+            <Button
+              size="lg"
+              onClick={() => setIsModalOpen(true)}
+              className="bg-udaya-sage hover:bg-udaya-sage/90"
+            >
+              Book Consultation
+            </Button>
           </div>
         </Container>
       </Section>
+
+      {/* Inquiry Modal */}
+      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   )
 }

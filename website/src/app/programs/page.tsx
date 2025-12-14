@@ -1,8 +1,12 @@
+'use client'
+
+import * as React from 'react'
 import Image from 'next/image'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import Link from 'next/link'
 import { MapPin, Users } from 'lucide-react'
+import { InquiryModal } from '@/components/ui/inquiry-modal'
 
 const programs = [
   {
@@ -35,6 +39,8 @@ const programs = [
 ]
 
 export default function ProgramsPage() {
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+
   return (
     <>
       <Section className="pt-32 pb-12 bg-gradient-to-b from-white to-udaya-cream/20">
@@ -120,15 +126,18 @@ export default function ProgramsPage() {
             <p className="text-body-lg text-udaya-charcoal/80 mb-8 leading-relaxed">
               We are actively developing additional programs to support various health conditions. Join our mailing list to be notified when new programs become available.
             </p>
-            <Link
-              href="/inquiry"
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="inline-block bg-udaya-sage hover:bg-udaya-sage/90 text-white px-8 py-3.5 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg"
             >
               Join Our Mailing List
-            </Link>
+            </button>
           </div>
         </Container>
       </Section>
+
+      {/* Inquiry Modal */}
+      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   )
 }
