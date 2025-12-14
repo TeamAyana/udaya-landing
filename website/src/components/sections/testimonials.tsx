@@ -28,7 +28,11 @@ const testimonials = [
   },
 ]
 
-export function Testimonials() {
+interface TestimonialsProps {
+  onBookConsultation?: () => void
+}
+
+export function Testimonials({ onBookConsultation }: TestimonialsProps = {}) {
   const [currentIndex, setCurrentIndex] = React.useState(0)
   const [mounted, setMounted] = React.useState(false)
   const [isAutoPlaying, setIsAutoPlaying] = React.useState(true)
@@ -79,33 +83,33 @@ export function Testimonials() {
   }
 
   return (
-    <Section>
+    <Section className="py-12 sm:py-16 md:py-20">
       <Container>
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl px-4">
           <div className="text-center">
-            <Quote className="mx-auto h-12 w-12 text-udaya-sage/20" />
+            <Quote className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-udaya-sage/20" />
           </div>
 
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             {/* Testimonial Content */}
             <div className="relative overflow-hidden">
-              <div 
+              <div
                 className={cn(
-                  "text-center min-h-[200px] flex flex-col justify-center transition-all duration-300",
+                  "text-center min-h-[180px] sm:min-h-[200px] flex flex-col justify-center transition-all duration-300",
                   isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
                 )}
               >
-                <blockquote className="text-h3 font-serif italic text-udaya-charcoal">
+                <blockquote className="text-h3 font-serif italic text-udaya-charcoal px-4">
                   "{testimonials[currentIndex].quote}"
                 </blockquote>
-                <p className="mt-6 text-udaya-charcoal/70">
+                <p className="mt-4 sm:mt-6 text-sm sm:text-base text-udaya-charcoal/70">
                   — {testimonials[currentIndex].author}, {testimonials[currentIndex].condition}
                 </p>
               </div>
             </div>
 
             {/* Navigation */}
-            <div className="mt-12 flex items-center justify-center gap-4">
+            <div className="mt-8 sm:mt-10 md:mt-12 flex items-center justify-center gap-4">
               <Button
                 variant="ghost"
                 size="icon"
@@ -160,14 +164,18 @@ export function Testimonials() {
             </div>
           </div>
 
-          <div className="mt-12 text-center">
-            <p className="text-sm text-udaya-charcoal/60">
+          <div className="mt-8 sm:mt-10 md:mt-12 text-center px-4">
+            <p className="text-xs sm:text-sm text-udaya-charcoal/60">
               Illustrative voices; individual experiences vary. Udaya makes no
               cure claims.
             </p>
-            <div className="mt-6">
-              <Button variant="outline" asChild>
-                <a href="/inquiry">Get More Information</a>
+            <div className="mt-4 sm:mt-6">
+              <Button
+                variant="outline"
+                className="text-sm sm:text-base"
+                onClick={onBookConsultation}
+              >
+                Get More Information
               </Button>
             </div>
           </div>

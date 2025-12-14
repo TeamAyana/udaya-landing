@@ -25,11 +25,11 @@ export function Footer({ onJoinWaitlist }: FooterProps = {}) {
       </div>
       
       <Container className="relative z-10">
-        <div className="pt-16 pb-12">
+        <div className="pt-24 pb-12">
           {/* Main Footer Content */}
           <div className="grid gap-12 md:grid-cols-3 max-w-5xl mx-auto">
             {/* Navigation Links */}
-            <div className="text-center md:text-left">
+            <div className="text-center md:text-left order-2 md:order-1">
               <h3 className="mb-4 font-serif text-base text-white/90">Explore</h3>
               <ul className="space-y-2">
                 <li>
@@ -68,15 +68,15 @@ export function Footer({ onJoinWaitlist }: FooterProps = {}) {
             </div>
 
             {/* Center Column - Logo and Contact */}
-            <div className="text-center flex flex-col items-center gap-3">
-              <Link href="/" aria-label="Go to homepage" className="mb-2">
+            <div className="text-center flex flex-col items-center order-1 md:order-2">
+              <Link href="/" aria-label="Go to homepage" className="md:-mt-12 mb-3">
                 <img
                   src="/uploads/logo_mid.png"
                   alt="Udaya"
-                  className="h-28 w-28 mx-auto rounded-lg object-contain hover:opacity-90 transition-opacity cursor-pointer"
+                  className="h-24 w-24 mx-auto rounded-lg object-contain hover:opacity-90 transition-opacity cursor-pointer"
                 />
               </Link>
-              <h3 className="font-serif text-base text-white/90">Connect With Us</h3>
+              <h3 className="mb-4 font-serif text-base text-white/90">Connect With Us</h3>
               <button
                 onClick={onJoinWaitlist}
                 className="px-5 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm font-medium transition-colors duration-200"
@@ -86,7 +86,7 @@ export function Footer({ onJoinWaitlist }: FooterProps = {}) {
             </div>
 
             {/* Legal Links */}
-            <div className="text-center md:text-right">
+            <div className="text-center md:text-right order-3">
               <h3 className="mb-4 font-serif text-base text-white/90">Legal</h3>
               <ul className="space-y-2">
                 <li>
