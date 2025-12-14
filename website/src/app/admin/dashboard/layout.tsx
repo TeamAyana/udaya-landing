@@ -211,9 +211,13 @@ export default function AdminLayout({
       {/* Main content */}
       <main className="lg:ml-64 relative min-h-screen">
         {/* Top Header with Notifications and Title */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-          <h1 className="text-lg sm:text-xl font-serif font-bold text-udaya-sage lg:hidden">Udaya Admin</h1>
-          <NotificationsBell />
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg sm:text-xl font-serif font-bold text-udaya-sage lg:hidden">Udaya Admin</h1>
+            <div className="lg:ml-auto">
+              <NotificationsBell />
+            </div>
+          </div>
         </div>
 
         <div className="p-4 sm:p-6 lg:p-8">
