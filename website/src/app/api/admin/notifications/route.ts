@@ -157,13 +157,32 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id, deleteAll } = await request.json()
+    const { id, deleteAll, clearAll } = await request.json()
 
     if (!adminDb) {
       return NextResponse.json(
         { error: 'Firebase Admin not initialized' },
         { status: 503 }
       )
+    }
+
+    if (clearAll) {
+      // Delete ALL notifications
+      const snapshot = await adminDb
+        .collection('notifications')
+        .get()
+
+      const batch = adminDb.batch()
+      snapshot.docs.forEach(doc => {
+        batch.delete(doc.ref)
+      })
+      await batch.commit()
+
+      console.log(`✅ Cleared all ${snapshot.size} notifications`)
+      return NextResponse.json({
+        success: true,
+        message: `Cleared all ${snapshot.size} notifications`
+      })
     }
 
     if (deleteAll) {
@@ -202,7 +221,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: 'Must provide id or deleteAll' },
+      { error: 'Must provide id, deleteAll, or clearAll' },
       { status: 400 }
     )
   } catch (error) {

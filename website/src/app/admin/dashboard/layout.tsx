@@ -64,7 +64,10 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      <div className={cn(
+        "lg:hidden fixed top-4 z-50 transition-all",
+        sidebarOpen ? "left-[220px]" : "left-4"
+      )}>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 bg-white rounded-lg shadow-md"
@@ -184,9 +187,9 @@ export default function AdminLayout({
       </aside>
 
       {/* Main content */}
-      <main className="lg:ml-64 relative z-10">
+      <main className="lg:ml-64 relative">
         {/* Top Header with Notifications */}
-        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-end lg:justify-end">
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-end lg:justify-end">
           <NotificationsBell />
         </div>
 

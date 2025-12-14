@@ -66,6 +66,7 @@ export function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     formState: { errors },
     trigger,
     reset,
+    getValues,
   } = useForm<FullFormData>({
     resolver: zodResolver(fullFormSchema),
     mode: 'onBlur',
@@ -127,7 +128,40 @@ export function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     }
   }
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
+    // Save partial data if user completed step 1 but didn't submit
+    if (currentStep > 0 && !isSubmitted) {
+      const step1Data = getValues(['fullName', 'email', 'phone', 'age', 'country'])
+
+      // Validate step 1 data
+      const isStep1Valid = await trigger(['fullName', 'email', 'phone', 'age', 'country'])
+
+      if (isStep1Valid && step1Data.fullName && step1Data.email) {
+        try {
+          // Save partial submission
+          await fetch('/api/waitlist/partial', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fullName: step1Data.fullName,
+              email: step1Data.email,
+              phone: step1Data.phone,
+              age: step1Data.age,
+              country: step1Data.country,
+              status: 'partial',
+              abandonedAt: new Date().toISOString(),
+              stepCompleted: currentStep,
+            }),
+          })
+          console.log('Partial form data saved')
+        } catch (error) {
+          console.error('Error saving partial form data:', error)
+        }
+      }
+    }
+
     setCurrentStep(0)
     setIsSubmitted(false)
     setError(null)

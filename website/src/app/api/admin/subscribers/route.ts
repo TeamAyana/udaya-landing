@@ -15,10 +15,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         waitlist: [],
         newsletter: [],
+        partialSubmissions: [],
         stats: {
           waitlistCount: 0,
           newsletterCount: 0,
-          totalContacts: 0
+          totalContacts: 0,
+          partialCount: 0
         }
       })
     }
@@ -62,14 +64,29 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       console.error('Error fetching total contacts:', error)
     }
-    
+
+    // Fetch partial submissions (abandoned forms)
+    let partialSubmissions: any[] = []
+    try {
+      const partialSnapshot = await adminDb.collection('waitlist_partial').get()
+      partialSubmissions = partialSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        abandonedAt: doc.data().abandonedAt || doc.data().createdAt || new Date().toISOString()
+      })).sort((a, b) => new Date(b.abandonedAt).getTime() - new Date(a.abandonedAt).getTime())
+    } catch (error) {
+      console.error('Error fetching partial submissions:', error)
+    }
+
     return NextResponse.json({
       waitlist,
       newsletter,
+      partialSubmissions,
       stats: {
         waitlistCount: waitlist.length,
         newsletterCount: newsletter.length,
-        totalContacts: totalContacts
+        totalContacts: totalContacts,
+        partialCount: partialSubmissions.length
       }
     })
   } catch (error) {

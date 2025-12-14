@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { UserCheck, Mail, Calendar, Download, Search, ChevronDown, ChevronUp } from 'lucide-react'
+import { UserCheck, Mail, Calendar, Download, Search, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 
@@ -53,10 +53,24 @@ interface NewsletterContact {
   subscribedAt: string
 }
 
+interface PartialSubmission {
+  id: string
+  fullName: string
+  email: string
+  phone: string
+  age: string
+  country: string
+  status: string
+  stepCompleted: number
+  abandonedAt: string
+  createdAt: string
+}
+
 export default function SubscribersPage() {
   const [activeTab, setActiveTab] = useState('waitlist')
   const [waitlist, setWaitlist] = useState<WaitlistEntry[]>([])
   const [newsletter, setNewsletter] = useState<NewsletterContact[]>([])
+  const [partialSubmissions, setPartialSubmissions] = useState<PartialSubmission[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedEntry, setExpandedEntry] = useState<string | null>(null)
@@ -72,6 +86,7 @@ export default function SubscribersPage() {
 
       setWaitlist(data.waitlist || [])
       setNewsletter(data.newsletter || [])
+      setPartialSubmissions(data.partialSubmissions || [])
     } catch (error) {
       console.error('Failed to fetch subscribers:', error)
     } finally {
@@ -190,6 +205,12 @@ export default function SubscribersPage() {
     entry.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const filteredPartial = partialSubmissions.filter(entry =>
+    entry.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    entry.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    entry.country.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   const toggleExpanded = (id: string) => {
     setExpandedEntry(expandedEntry === id ? null : id)
   }
@@ -238,6 +259,18 @@ export default function SubscribersPage() {
             >
               <Mail className="w-4 h-4 mr-2 inline" />
               Newsletter ({newsletter.length})
+            </TabsTrigger>
+            <TabsTrigger
+              value="abandoned"
+              className={cn(
+                "px-4 py-2 rounded-md font-medium transition-colors",
+                activeTab === 'abandoned'
+                  ? "bg-white text-udaya-sage shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              )}
+            >
+              <AlertCircle className="w-4 h-4 mr-2 inline" />
+              Abandoned ({partialSubmissions.length})
             </TabsTrigger>
           </TabsList>
         </div>
@@ -436,6 +469,71 @@ export default function SubscribersPage() {
                         <div className="text-sm text-gray-500 flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           {formatDate(contact.subscribedAt)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Abandoned Forms Tab */}
+        <TabsContent value="abandoned">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Abandoned Form Submissions</CardTitle>
+                <p className="text-sm text-gray-600 mt-1">Users who started but didn't complete the consultation form</p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <p className="text-gray-500 text-center py-8">Loading...</p>
+              ) : filteredPartial.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">
+                  {searchQuery ? 'No matching abandoned forms found.' : 'No abandoned forms yet.'}
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {filteredPartial.map((entry) => (
+                    <div key={entry.id} className="border border-orange-200 bg-orange-50/30 rounded-lg p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-900">{entry.fullName}</p>
+                            <span className="px-2 py-1 text-xs rounded-full bg-orange-100 text-orange-800">
+                              Step {entry.stepCompleted} of 2
+                            </span>
+                          </div>
+                          <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Email:</span>{' '}
+                              <a href={`mailto:${entry.email}`} className="text-udaya-sage hover:underline">
+                                {entry.email}
+                              </a>
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Phone:</span> {entry.phone || 'Not provided'}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Age:</span> {entry.age}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Country:</span> {entry.country}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right text-sm text-gray-500 ml-4">
+                          <div className="flex items-center gap-1 justify-end mb-1">
+                            <AlertCircle className="w-4 h-4 text-orange-600" />
+                            <span className="font-medium text-orange-600">Abandoned</span>
+                          </div>
+                          <div className="flex items-center gap-1 justify-end">
+                            <Calendar className="w-4 h-4" />
+                            {formatDate(entry.abandonedAt)}
+                          </div>
                         </div>
                       </div>
                     </div>

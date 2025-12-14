@@ -130,6 +130,26 @@ export function NotificationsBell() {
     }
   }
 
+  // Clear all notifications
+  const handleClearAll = async () => {
+    try {
+      setLoading(true)
+      await fetch('/api/admin/notifications', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clearAll: true })
+      })
+
+      // Update local state
+      setNotifications([])
+      setUnreadCount(0)
+    } catch (error) {
+      console.error('Failed to clear all notifications:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'waitlist':
@@ -181,7 +201,17 @@ export function NotificationsBell() {
           {/* Header */}
           <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">Notifications</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {notifications.length > 0 && (
+                <button
+                  onClick={handleClearAll}
+                  disabled={loading}
+                  className="text-xs text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  Clear all
+                </button>
+              )}
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
@@ -215,7 +245,7 @@ export function NotificationsBell() {
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
                     className={cn(
-                      'px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors relative',
+                      'group px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors relative',
                       !notification.read && 'bg-blue-50/50'
                     )}
                   >
