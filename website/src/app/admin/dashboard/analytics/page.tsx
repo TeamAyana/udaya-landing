@@ -67,20 +67,17 @@ interface AnalyticsData {
     users: number
     sessions: number
   }>
+  timeSeries?: Array<{
+    name: string
+    date: string
+    dayName: string
+    users: number
+    pageViews: number
+    sessions: number
+  }>
   realtime: {
     activeUsers: number
   }
-}
-
-// Mock time series data for charts
-const generateTimeSeriesData = () => {
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  return days.map((day, i) => ({
-    name: day,
-    users: Math.floor(Math.random() * 500) + 100,
-    pageViews: Math.floor(Math.random() * 1200) + 300,
-    sessions: Math.floor(Math.random() * 800) + 200,
-  }))
 }
 
 const COLORS = {
@@ -101,7 +98,6 @@ export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState('7days')
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [timeSeriesData] = useState(generateTimeSeriesData())
 
   useEffect(() => {
     fetchAnalytics()
@@ -346,7 +342,7 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent className="pl-2">
                 <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={timeSeriesData}>
+                  <AreaChart data={analytics.timeSeries || []}>
                     <defs>
                       <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.3}/>

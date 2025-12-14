@@ -149,6 +149,38 @@ async function processAnalyticsData(propertyId: string, dateRange: string, clien
       sessions: parseInt(row.metricValues?.[1]?.value || '0')
     }))
 
+    // Get time series data for charts
+    const [timeSeriesResponse] = await client.runReport({
+      property: `properties/${propertyId}`,
+      dateRanges: [{ startDate: getStartDate(dateRange), endDate: 'today' }],
+      dimensions: [{ name: 'date' }],
+      metrics: [
+        { name: 'totalUsers' },
+        { name: 'screenPageViews' },
+        { name: 'sessions' }
+      ],
+      orderBys: [{ dimension: { dimensionName: 'date' }, desc: false }]
+    })
+
+    const timeSeries = (timeSeriesResponse.rows || []).map(row => {
+      const dateStr = row.dimensionValues?.[0]?.value || ''
+      // Format date from YYYYMMDD to readable format
+      const year = dateStr.substring(0, 4)
+      const month = dateStr.substring(4, 6)
+      const day = dateStr.substring(6, 8)
+      const date = new Date(`${year}-${month}-${day}`)
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' })
+
+      return {
+        name: `${month}/${day}`,
+        date: dateStr,
+        dayName,
+        users: parseInt(row.metricValues?.[0]?.value || '0'),
+        pageViews: parseInt(row.metricValues?.[1]?.value || '0'),
+        sessions: parseInt(row.metricValues?.[2]?.value || '0')
+      }
+    })
+
     // Get realtime data (if available)
     let realtimeUsers = 0
     try {
@@ -167,6 +199,7 @@ async function processAnalyticsData(propertyId: string, dateRange: string, clien
       trafficSources,
       devices,
       countries,
+      timeSeries,
       realtime: {
         activeUsers: realtimeUsers
       }
