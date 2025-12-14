@@ -99,10 +99,10 @@ export function Testimonials({ onBookConsultation }: TestimonialsProps = {}) {
                   isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
                 )}
               >
-                <blockquote className="text-h3 font-serif italic text-udaya-charcoal px-4">
+                <blockquote className="text-[clamp(1.25rem,3.5vw,1.75rem)] font-serif italic text-udaya-charcoal px-4 leading-[1.4] font-light">
                   "{testimonials[currentIndex].quote}"
                 </blockquote>
-                <p className="mt-4 sm:mt-6 text-sm sm:text-base text-udaya-charcoal/70">
+                <p className="mt-4 sm:mt-6 text-[14px] sm:text-[15px] text-udaya-charcoal/65 font-light">
                   — {testimonials[currentIndex].author}, {testimonials[currentIndex].condition}
                 </p>
               </div>
